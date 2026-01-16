@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -60,24 +59,32 @@
             transition: 0.3s;
         }
 
-        .anime-gallery img:hover {
-            transform: scale(1.05);
-            border-color: #ff0000;
-        }
+        .anime-gallery img:hover { transform: scale(1.05); border-color: #ff0000; }
 
-        .music-player {
+        /* NAYA MUSIC PLAYER STYLE */
+        .music-card {
+            background: rgba(40, 0, 0, 0.6);
+            border: 2px solid #ff0000;
+            border-radius: 15px;
+            padding: 15px;
             margin-top: 30px;
-            background: #ffcc0011;
-            padding: 10px;
-            border-radius: 50px;
+            box-shadow: 0 0 15px rgba(255, 0, 0, 0.5);
         }
 
-        .status-blink {
-            animation: blink 1s infinite;
-            color: #ffcc00;
-            font-weight: bold;
+        .song-title { color: #ffffff; font-size: 24px; margin: 5px 0; text-shadow: 0 0 10px #ff0000; }
+
+        .pulse-ring {
+            width: 10px; height: 10px; background: #ff0000; border-radius: 50%;
+            margin: 0 auto 10px; animation: pulse 1.5s infinite;
         }
 
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.8); }
+            70% { box-shadow: 0 0 0 15px rgba(255, 0, 0, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(255, 0, 0, 0); }
+        }
+
+        .status-blink { animation: blink 1s infinite; color: #ffcc00; font-weight: bold; }
         @keyframes blink { 0% {opacity: 1;} 50% {opacity: 0.2;} 100% {opacity: 1;} }
     </style>
 </head>
@@ -91,21 +98,37 @@
         </div>
 
         <div class="anime-gallery">
-            <img src="1.jpg" alt="My Photo 1">
-            <img src="2.jpg" alt="My Photo 2">
-            <img src="3.jpg" alt="My Photo 3">
-            <img src="4.jpg" alt="My Photo 4">
+            <img src="1.jpg" alt="Photo 1">
+            <img src="2.jpg" alt="Photo 2">
+            <img src="3.jpg" alt="Photo 3">
+            <img src="4.jpg" alt="Photo 4">
         </div>
 
-        <div class="music-player">
-            <p style="color: #ffcc00; margin-bottom: 5px;">Now Playing: MAFIA</p>
-            <audio id="myAudio" controls style="width: 100%;">
-                <source src="Mafia.mp3" type="audio/mpeg">
+        <div class="music-card" onclick="startMusic()">
+            <div class="pulse-ring"></div>
+            <p style="color: #ffcc00; font-size: 12px; margin: 0;">SYSTEM AUDIO</p>
+            <h2 class="song-title">LOL</h2>
+            <p id="instruction" style="color: #fff; font-size: 10px; opacity: 0.7;">TAP TO INITIALIZE MUSIC</p>
+            
+            <audio id="myAudio" loop>
+                <source src="lol.mp3" type="audio/mpeg">
             </audio>
         </div>
-    </div>
+        </div>
+
+    <script>
+        function startMusic() {
+            var audio = document.getElementById("myAudio");
+            var instruction = document.getElementById("instruction");
+            
+            audio.play().then(() => {
+                instruction.innerText = "MUSIC ACTIVE - ENJOY SENSEI";
+                instruction.style.color = "#00ff00";
+            }).catch(error => {
+                console.log("Autoplay blocked. Click again!");
+            });
+        }
+    </script>
 
 </body>
-</html>
-
-MADE BY AARTHAV 
+</html>        
