@@ -3,205 +3,93 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SENSEI WORLD</title>
+    <title>SENSEI VIRTUAL WORLD</title>
     <style>
-        :root {
-            --neon-blue: #00d2ff;
-            --neon-pink: #ff0055;
-        }
+        :root { --neon-blue: #00d2ff; --neon-pink: #ff0055; }
+        body, html { margin: 0; padding: 0; height: 100%; font-family: 'Segoe UI', sans-serif; background-color: #000; color: white; overflow-x: hidden; }
 
-        body, html {
-            margin: 0; padding: 0;
-            height: 100%;
-            font-family: 'Segoe UI', sans-serif;
-            background-color: #000;
-            color: white;
-            overflow-x: hidden;
-        }
-
-        /* --- VIDEO BACKGROUND --- */
+        /* Video Background Fix */
         #bg-video {
-            position: fixed;
-            right: 0; bottom: 0;
-            min-width: 100%; min-height: 100%;
-            z-index: -1; /* Piche chala jayega */
-            object-fit: cover;
-            filter: brightness(0.4); /* Text dikhne ke liye thoda dark */
+            position: fixed; right: 0; bottom: 0; min-width: 100%; min-height: 100%;
+            z-index: -1; object-fit: cover; filter: brightness(0.3);
         }
 
-        /* --- LOCK SCREEN --- */
-        #lock-screen {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: #000;
-            display: flex; justify-content: center; align-items: center;
-            z-index: 10000;
-        }
+        #lock-screen { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; display: flex; justify-content: center; align-items: center; z-index: 10000; }
+        .cyber-box { background: rgba(0, 20, 40, 0.9); border: 2px solid var(--neon-blue); padding: 40px; text-align: center; width: 300px; box-shadow: 0 0 20px var(--neon-blue); }
+        #pass-input { width: 80%; padding: 10px; background: none; border: none; border-bottom: 2px solid var(--neon-pink); color: #fff; font-size: 24px; text-align: center; outline: none; letter-spacing: 5px; }
 
-        .cyber-box {
-            background: rgba(0, 20, 40, 0.9);
-            border: 2px solid var(--neon-blue);
-            padding: 40px; text-align: center; width: 300px;
-            box-shadow: 0 0 20px var(--neon-blue);
-        }
+        #main-wrapper { display: none; padding: 40px 20px; }
+        .main-container { max-width: 800px; margin: auto; background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(15px); padding: 30px; border-radius: 20px; border: 1px solid rgba(0, 210, 255, 0.3); text-align: center; }
 
-        #pass-input {
-            width: 80%; padding: 10px; background: none; border: none;
-            border-bottom: 2px solid var(--neon-pink); color: #fff;
-            font-size: 24px; text-align: center; outline: none; letter-spacing: 5px;
-        }
-
-        /* --- MAIN CONTENT --- */
-        #main-wrapper {
-            display: none;
-            padding: 40px 20px;
-        }
-
-        .main-container {
-            max-width: 800px;
-            margin: auto;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(10px);
-            padding: 30px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 210, 255, 0.3);
-        }
-
-        /* 2-Column Gallery with 7 Images */
-        .anime-gallery {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin: 20px 0;
-        }
-
-        .anime-gallery img {
-            width: 100%; height: 200px; object-fit: cover;
-            border-radius: 12px; border: 2px solid var(--neon-blue);
-            cursor: pointer; transition: 0.3s;
-        }
-
-        .anime-gallery img:hover { transform: scale(1.03); box-shadow: 0 0 15px var(--neon-blue); }
-
-        /* External Links Section */
-        .portal-section {
-            margin-top: 30px;
-            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
-        }
-
-        .portal-btn {
-            background: transparent;
-            border: 1px solid var(--neon-pink);
-            color: var(--neon-pink);
-            padding: 10px 20px;
-            text-decoration: none;
-            border-radius: 5px;
-            font-size: 14px;
-            transition: 0.3s;
-        }
-
-        .portal-btn:hover { background: var(--neon-pink); color: white; box-shadow: 0 0 10px var(--neon-pink); }
-
-        /* Modal */
-        .modal {
-            display: none; position: fixed; z-index: 11000; left: 0; top: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-        }
-        .modal-content { margin: auto; display: block; width: 90%; max-width: 700px; margin-top: 50px; border: 2px solid var(--neon-blue); }
-        .close { position: absolute; top: 20px; right: 35px; color: white; font-size: 40px; cursor: pointer; }
-
-        .shake { animation: shake 0.3s; }
-        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-10px)} 75%{transform:translateX(10px)} }
+        .anime-gallery { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin: 20px 0; }
+        
+        /* Hyperlink styling for images */
+        .image-card { position: relative; text-decoration: none; display: block; overflow: hidden; border-radius: 12px; border: 2px solid var(--neon-blue); transition: 0.3s; }
+        .image-card img { width: 100%; height: 220px; object-fit: cover; display: block; }
+        .image-card:hover { transform: scale(1.03); box-shadow: 0 0 20px var(--neon-blue); }
+        .image-label { position: absolute; bottom: 0; background: rgba(0,0,0,0.7); width: 100%; color: var(--neon-blue); font-size: 12px; padding: 5px 0; }
     </style>
 </head>
 <body>
 
-    <video autoplay muted loop id="bg-video">
+    <video muted loop id="bg-video">
         <source src="smooth.mp4" type="video/mp4">
     </video>
 
     <div id="lock-screen">
         <div class="cyber-box" id="auth-box">
-            <h2 style="color: var(--neon-blue);">SENSEI LOCK</h2>
+            <h2 style="color: var(--neon-blue);">SENSEI SYSTEM</h2>
             <input type="password" id="pass-input" placeholder="••••••" maxlength="6" oninput="autoCheck(this)">
-            <p id="cooldown-msg" style="color:var(--neon-pink); display:none; font-size:12px; margin-top:10px;">LOCKED: <span id="timer">10</span>s</p>
+            <p style="font-size: 10px; color: gray; margin-top: 10px;">ENTER CODE TO SYNC VIDEO & ACCESS</p>
         </div>
     </div>
 
     <div id="main-wrapper">
         <div class="main-container">
-            <h1>SENSEI SYSTEM <span style="font-size: 12px; color: var(--neon-blue);">v4.0</span></h1>
+            <h1>SENSEI SYSTEM <span style="font-size: 12px; color: var(--neon-blue);">v5.0</span></h1>
             
             <div class="anime-gallery">
-                <img src="1.jpg" onclick="openModal(this.src)">
-                <img src="2.jpg" onclick="openModal(this.src)">
-                <img src="3.jpg" onclick="openModal(this.src)">
-                <img src="4.jpg" onclick="openModal(this.src)">
-                <img src="5.jpg" onclick="openModal(this.src)">
-                <img src="6.jpg" onclick="openModal(this.src)">
-                <img src="7.jpg" onclick="openModal(this.src)">
-            </div>
-
-            <div style="border-top: 1px solid var(--neon-blue); padding-top: 20px;">
-                <audio id="myAudio" loop><source src="lol.mp3" type="audio/mpeg"></audio>
-                <button onclick="playMusic()" style="background:none; border:1px solid #00d2ff; color:#00d2ff; padding:10px; cursor:pointer;">PLAY MUSIC</button>
-                <button onclick="stopMusic()" style="background:none; border:1px solid #ff0055; color:#ff0055; padding:10px; cursor:pointer;">STOP</button>
-            </div>
-
-            <h3 style="margin-top: 40px; color: var(--neon-blue);">WEB PORTALS</h3>
-            <div class="portal-section">
-                <a href="https://www.google.com" target="_blank" class="portal-btn">GOOGLE</a>
-                <a href="https://www.youtube.com" target="_blank" class="portal-btn">YOUTUBE</a>
-                <a href="https://www.instagram.com" target="_blank" class="portal-btn">INSTAGRAM</a>
+                <a href="info1.html" target="_blank" class="image-card">
+                    <img src="1.jpg"><div class="image-label">OPEN BIOGRAPHY 1</div>
+                </a>
+                <a href="info2.html" target="_blank" class="image-card">
+                    <img src="2.jpg"><div class="image-label">OPEN BIOGRAPHY 2</div>
+                </a>
+                <a href="info3.html" target="_blank" class="image-card">
+                    <img src="3.jpg"><div class="image-label">OPEN BIOGRAPHY 3</div>
+                </a>
+                <a href="info4.html" target="_blank" class="image-card">
+                    <img src="4.jpg"><div class="image-label">OPEN BIOGRAPHY 4</div>
+                </a>
+                <a href="info5.html" target="_blank" class="image-card">
+                    <img src="5.jpg"><div class="image-label">OPEN BIOGRAPHY 5</div>
+                </a>
+                <a href="info6.html" target="_blank" class="image-card">
+                    <img src="6.jpg"><div class="image-label">OPEN BIOGRAPHY 6</div>
+                </a>
+                <a href="info7.html" target="_blank" class="image-card" style="grid-column: span 2;">
+                    <img src="7.jpg" style="height: 300px;"><div class="image-label">OPEN BIOGRAPHY 7</div>
+                </a>
             </div>
         </div>
     </div>
 
-    <div id="myModal" class="modal">
-        <span class="close" onclick="closeModal()">&times;</span>
-        <img class="modal-content" id="img-target">
-    </div>
-
     <script>
-        let wrongAttempts = 0;
-        let isCooldown = false;
-
         function autoCheck(el) {
-            if (isCooldown) return;
             if (el.value.length === 6) {
-                setTimeout(() => {
-                    if (el.value === "862012") {
-                        document.getElementById("lock-screen").style.display = "none";
-                        document.getElementById("main-wrapper").style.display = "block";
-                        playMusic();
-                    } else {
-                        wrongAttempts++;
-                        document.getElementById("auth-box").classList.add("shake");
-                        setTimeout(() => document.getElementById("auth-box").classList.remove("shake"), 300);
-                        el.value = "";
-                        if (wrongAttempts >= 3) startCooldown();
-                    }
-                }, 200);
+                if (el.value === "862012") {
+                    document.getElementById("lock-screen").style.display = "none";
+                    document.getElementById("main-wrapper").style.display = "block";
+                    
+                    // Video Play Fix: Password dalte hi video chalu hoga
+                    var video = document.getElementById("bg-video");
+                    video.play(); 
+                } else {
+                    el.value = "";
+                    alert("WRONG CODE");
+                }
             }
         }
-
-        function startCooldown() {
-            isCooldown = true; wrongAttempts = 0;
-            const msg = document.getElementById("cooldown-msg");
-            const input = document.getElementById("pass-input");
-            msg.style.display = "block"; input.disabled = true;
-            let time = 10;
-            let cd = setInterval(() => {
-                time--; document.getElementById("timer").innerText = time;
-                if(time <= 0){ clearInterval(cd); isCooldown = false; msg.style.display = "none"; input.disabled = false; }
-            }, 1000);
-        }
-
-        function openModal(src) { document.getElementById("myModal").style.display = "block"; document.getElementById("img-target").src = src; }
-        function closeModal() { document.getElementById("myModal").style.display = "none"; }
-        var audio = document.getElementById("myAudio");
-        function playMusic() { audio.play(); }
-        function stopMusic() { audio.pause(); audio.currentTime = 0; }
     </script>
 </body>
 </html>
