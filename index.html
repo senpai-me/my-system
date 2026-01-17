@@ -3,189 +3,135 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SENSEI CYBER-SYSTEM</title>
+    <title>SENSEI WORLD</title>
     <style>
         :root {
             --neon-blue: #00d2ff;
             --neon-pink: #ff0055;
-            --cyber-dark: #050505;
         }
 
-        body { 
-            background: var(--cyber-dark); 
-            color: #ffffff; 
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow: hidden; /* Lock screen ke waqt scroll na ho */
+        body, html {
+            margin: 0; padding: 0;
+            height: 100%;
+            font-family: 'Segoe UI', sans-serif;
+            background-color: #000;
+            color: white;
+            overflow-x: hidden;
         }
 
-        /* --- CYBER LOCK SCREEN --- */
+        /* --- VIDEO BACKGROUND --- */
+        #bg-video {
+            position: fixed;
+            right: 0; bottom: 0;
+            min-width: 100%; min-height: 100%;
+            z-index: -1; /* Piche chala jayega */
+            object-fit: cover;
+            filter: brightness(0.4); /* Text dikhne ke liye thoda dark */
+        }
+
+        /* --- LOCK SCREEN --- */
         #lock-screen {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: radial-gradient(circle, #001f3f, #000);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            background: #000;
+            display: flex; justify-content: center; align-items: center;
             z-index: 10000;
         }
 
         .cyber-box {
-            background: rgba(0, 10, 20, 0.95);
+            background: rgba(0, 20, 40, 0.9);
             border: 2px solid var(--neon-blue);
-            padding: 40px 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 30px var(--neon-blue);
-            text-align: center;
-            width: 320px;
-        }
-
-        .cyber-box h2 {
-            margin: 0 0 20px;
-            letter-spacing: 5px;
-            color: var(--neon-blue);
-            text-transform: uppercase;
-        }
-
-        #pass-input {
-            width: 80%;
-            padding: 12px;
-            background: rgba(0,0,0,0.6);
-            border: none;
-            border-bottom: 3px solid var(--neon-pink);
-            color: var(--neon-pink);
-            font-size: 30px;
-            letter-spacing: 8px;
-            text-align: center;
-            outline: none;
-            font-weight: bold;
-        }
-
-        .barcode-deco {
-            width: 80%;
-            height: 10px;
-            margin: 15px auto;
-            background: repeating-linear-gradient(90deg, var(--neon-blue), var(--neon-blue) 2px, transparent 2px, transparent 8px);
-            opacity: 0.4;
-        }
-
-        /* --- MAIN CONTENT (RE-DESIGNED & CLEAN) --- */
-        #main-wrapper {
-            display: none; 
-            padding: 40px 10px;
-            background: #000428;
-            min-height: 100vh;
-            overflow-y: auto;
-        }
-
-        .main-container {
-            max-width: 750px; /* Thoda aur narrow kiya clean look ke liye */
-            margin: auto;
-            background: rgba(255, 255, 255, 0.02);
-            border: 1px solid rgba(0, 210, 255, 0.2);
-            padding: 30px;
-            border-radius: 25px;
-            backdrop-filter: blur(10px);
-        }
-
-        .header-title {
-            font-size: 2.2rem;
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue);
-            margin-bottom: 5px;
-        }
-
-        /* 2-Image Grid (Amazing Layout) */
-        .anime-gallery {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin: 30px 0;
-        }
-
-        .anime-gallery img {
-            width: 100%;
-            height: 220px;
-            object-fit: cover;
-            border-radius: 15px;
-            border: 2px solid rgba(0, 210, 255, 0.3);
-            transition: 0.4s ease;
-            cursor: pointer;
-        }
-
-        .anime-gallery img:hover {
-            transform: scale(1.03);
-            border-color: var(--neon-blue);
+            padding: 40px; text-align: center; width: 300px;
             box-shadow: 0 0 20px var(--neon-blue);
         }
 
-        .video-wrapper {
+        #pass-input {
+            width: 80%; padding: 10px; background: none; border: none;
+            border-bottom: 2px solid var(--neon-pink); color: #fff;
+            font-size: 24px; text-align: center; outline: none; letter-spacing: 5px;
+        }
+
+        /* --- MAIN CONTENT --- */
+        #main-wrapper {
+            display: none;
+            padding: 40px 20px;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: auto;
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            padding: 30px;
             border-radius: 20px;
-            overflow: hidden;
-            border: 2px solid var(--neon-pink);
-            margin-bottom: 30px;
-            box-shadow: 0 0 15px rgba(255, 0, 85, 0.2);
+            border: 1px solid rgba(0, 210, 255, 0.3);
         }
 
-        video { width: 100%; display: block; }
-
-        .audio-hub {
-            background: rgba(0, 210, 255, 0.05);
-            padding: 20px;
-            border-radius: 15px;
-            border: 1px solid var(--neon-blue);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+        /* 2-Column Gallery with 7 Images */
+        .anime-gallery {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
         }
 
-        .cyber-btn {
+        .anime-gallery img {
+            width: 100%; height: 200px; object-fit: cover;
+            border-radius: 12px; border: 2px solid var(--neon-blue);
+            cursor: pointer; transition: 0.3s;
+        }
+
+        .anime-gallery img:hover { transform: scale(1.03); box-shadow: 0 0 15px var(--neon-blue); }
+
+        /* External Links Section */
+        .portal-section {
+            margin-top: 30px;
+            display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+        }
+
+        .portal-btn {
             background: transparent;
-            border: 1px solid var(--neon-blue);
-            color: var(--neon-blue);
-            padding: 8px 20px;
+            border: 1px solid var(--neon-pink);
+            color: var(--neon-pink);
+            padding: 10px 20px;
+            text-decoration: none;
             border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
+            font-size: 14px;
             transition: 0.3s;
         }
 
-        .cyber-btn:hover { background: var(--neon-blue); color: #000; }
+        .portal-btn:hover { background: var(--neon-pink); color: white; box-shadow: 0 0 10px var(--neon-pink); }
 
         /* Modal */
         .modal {
-            display: none;
-            position: fixed; z-index: 11000; left: 0; top: 0; width: 100%; height: 100%;
+            display: none; position: fixed; z-index: 11000; left: 0; top: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.9);
         }
-        .modal-content { margin: auto; display: block; width: 90%; max-width: 700px; margin-top: 60px; border-radius: 10px; border: 2px solid var(--neon-blue); }
+        .modal-content { margin: auto; display: block; width: 90%; max-width: 700px; margin-top: 50px; border: 2px solid var(--neon-blue); }
         .close { position: absolute; top: 20px; right: 35px; color: white; font-size: 40px; cursor: pointer; }
 
-        /* Animations */
         .shake { animation: shake 0.3s; }
-        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-8px)} 75%{transform:translateX(8px)} }
+        @keyframes shake { 0%,100%{transform:translateX(0)} 25%{transform:translateX(-10px)} 75%{transform:translateX(10px)} }
     </style>
 </head>
 <body>
 
+    <video autoplay muted loop id="bg-video">
+        <source src="smooth.mp4" type="video/mp4">
+    </video>
+
     <div id="lock-screen">
         <div class="cyber-box" id="auth-box">
-            <h2>SYSTEM LOCK</h2>
-            <input type="password" id="pass-input" placeholder="••••••" maxlength="6" autocomplete="off" oninput="autoCheck(this)">
-            <div class="barcode-deco"></div>
-            <p id="cooldown-msg" style="color:var(--neon-pink); display:none; font-size:12px; margin-top:10px;">
-                SECURITY BLOCK: <span id="timer">10</span>s
-            </p>
-            <p id="hint" style="font-size: 10px; opacity: 0.5; margin-top: 10px;">ENTER 6-DIGIT AUTHORIZATION KEY</p>
+            <h2 style="color: var(--neon-blue);">SENSEI LOCK</h2>
+            <input type="password" id="pass-input" placeholder="••••••" maxlength="6" oninput="autoCheck(this)">
+            <p id="cooldown-msg" style="color:var(--neon-pink); display:none; font-size:12px; margin-top:10px;">LOCKED: <span id="timer">10</span>s</p>
         </div>
     </div>
 
     <div id="main-wrapper">
         <div class="main-container">
-            <h1 class="header-title">SENSEI SYSTEM</h1>
-            <p style="color: var(--neon-pink); font-size: 12px; letter-spacing: 3px; margin-bottom: 30px;">[ ACCESS GRANTED: AARTHAV ]</p>
-
+            <h1>SENSEI SYSTEM <span style="font-size: 12px; color: var(--neon-blue);">v4.0</span></h1>
+            
             <div class="anime-gallery">
                 <img src="1.jpg" onclick="openModal(this.src)">
                 <img src="2.jpg" onclick="openModal(this.src)">
@@ -193,21 +139,20 @@
                 <img src="4.jpg" onclick="openModal(this.src)">
                 <img src="5.jpg" onclick="openModal(this.src)">
                 <img src="6.jpg" onclick="openModal(this.src)">
+                <img src="7.jpg" onclick="openModal(this.src)">
             </div>
 
-            <div class="video-wrapper">
-                <video controls>
-                    <source src="smooth.mp4" type="video/mp4">
-                </video>
-            </div>
-
-            <div class="audio-hub">
-                <span style="font-size: 14px; color: var(--neon-blue);">AUDIO DRIVE: CLASH</span>
+            <div style="border-top: 1px solid var(--neon-blue); padding-top: 20px;">
                 <audio id="myAudio" loop><source src="lol.mp3" type="audio/mpeg"></audio>
-                <div>
-                    <button class="cyber-btn" onclick="playMusic()">PLAY</button>
-                    <button class="cyber-btn" onclick="stopMusic()" style="border-color:var(--neon-pink); color:var(--neon-pink); margin-left:10px;">STOP</button>
-                </div>
+                <button onclick="playMusic()" style="background:none; border:1px solid #00d2ff; color:#00d2ff; padding:10px; cursor:pointer;">PLAY MUSIC</button>
+                <button onclick="stopMusic()" style="background:none; border:1px solid #ff0055; color:#ff0055; padding:10px; cursor:pointer;">STOP</button>
+            </div>
+
+            <h3 style="margin-top: 40px; color: var(--neon-blue);">WEB PORTALS</h3>
+            <div class="portal-section">
+                <a href="https://www.google.com" target="_blank" class="portal-btn">GOOGLE</a>
+                <a href="https://www.youtube.com" target="_blank" class="portal-btn">YOUTUBE</a>
+                <a href="https://www.instagram.com" target="_blank" class="portal-btn">INSTAGRAM</a>
             </div>
         </div>
     </div>
@@ -221,74 +166,42 @@
         let wrongAttempts = 0;
         let isCooldown = false;
 
-        // Auto-check function
         function autoCheck(el) {
             if (isCooldown) return;
-            
-            // Jaise hi 6 digits honge
             if (el.value.length === 6) {
-                // Chhota sa delay taaki UI update ho jaye
                 setTimeout(() => {
-                    verifyPass(el.value);
-                }, 150);
-            }
-        }
-
-        function verifyPass(val) {
-            const input = document.getElementById("pass-input");
-            const box = document.getElementById("auth-box");
-
-            if (val === "862012") {
-                document.getElementById("lock-screen").style.display = "none";
-                document.getElementById("main-wrapper").style.display = "block";
-                document.body.style.overflow = "auto"; // Scroll on karo
-                playMusic();
-            } else {
-                wrongAttempts++;
-                box.classList.add("shake");
-                setTimeout(() => box.classList.remove("shake"), 300);
-                input.value = "";
-                
-                if (wrongAttempts >= 3) {
-                    startCooldown();
-                }
+                    if (el.value === "862012") {
+                        document.getElementById("lock-screen").style.display = "none";
+                        document.getElementById("main-wrapper").style.display = "block";
+                        playMusic();
+                    } else {
+                        wrongAttempts++;
+                        document.getElementById("auth-box").classList.add("shake");
+                        setTimeout(() => document.getElementById("auth-box").classList.remove("shake"), 300);
+                        el.value = "";
+                        if (wrongAttempts >= 3) startCooldown();
+                    }
+                }, 200);
             }
         }
 
         function startCooldown() {
-            isCooldown = true;
-            wrongAttempts = 0;
+            isCooldown = true; wrongAttempts = 0;
             const msg = document.getElementById("cooldown-msg");
             const input = document.getElementById("pass-input");
-            msg.style.display = "block";
-            input.disabled = true;
+            msg.style.display = "block"; input.disabled = true;
             let time = 10;
-            
             let cd = setInterval(() => {
-                time--;
-                document.getElementById("timer").innerText = time;
-                if(time <= 0){
-                    clearInterval(cd);
-                    isCooldown = false;
-                    msg.style.display = "none";
-                    input.disabled = false;
-                    input.focus();
-                }
+                time--; document.getElementById("timer").innerText = time;
+                if(time <= 0){ clearInterval(cd); isCooldown = false; msg.style.display = "none"; input.disabled = false; }
             }, 1000);
         }
 
-        function openModal(src) { 
-            document.getElementById("myModal").style.display = "block"; 
-            document.getElementById("img-target").src = src; 
-        }
-        function closeModal() { 
-            document.getElementById("myModal").style.display = "none"; 
-        }
-
+        function openModal(src) { document.getElementById("myModal").style.display = "block"; document.getElementById("img-target").src = src; }
+        function closeModal() { document.getElementById("myModal").style.display = "none"; }
         var audio = document.getElementById("myAudio");
-        function playMusic() { audio.play().catch(e => console.log("Manual play needed")); }
+        function playMusic() { audio.play(); }
         function stopMusic() { audio.pause(); audio.currentTime = 0; }
     </script>
 </body>
 </html>
-
