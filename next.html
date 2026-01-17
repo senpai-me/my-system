@@ -19,19 +19,25 @@
             overflow-x: hidden;
         }
 
-        /* Background Gradient (Same as Index) */
+        /* Fixed Background */
         .bg-container {
             position: fixed; 
             top: 0; left: 0; width: 100vw; height: 100vh;
             background: linear-gradient(135deg, #87CEEB 0%, #00d2ff 100%);
-            z-index: -1;
+            z-index: -1; /* Piche rahega */
         }
 
-        #main-wrapper { padding: 40px 15px; position: relative; z-index: 1; }
+        /* Main Content Wrapper */
+        #main-wrapper { 
+            padding: 40px 15px; 
+            position: relative; 
+            z-index: 10; /* Sabse upar dikhega */
+        }
         
         .main-container { 
-            max-width: 800px; margin: auto; 
-            background: rgba(0, 0, 0, 0.5); 
+            max-width: 800px; 
+            margin: auto; 
+            background: rgba(0, 0, 0, 0.6); 
             backdrop-filter: blur(15px); 
             -webkit-backdrop-filter: blur(15px);
             padding: 30px; 
@@ -40,7 +46,6 @@
             text-align: center;
         }
 
-        /* 10 Photo Grid Layout */
         .anime-gallery { 
             display: grid; 
             grid-template-columns: repeat(2, 1fr); 
@@ -64,23 +69,20 @@
             height: 180px; 
             object-fit: cover; 
             display: block; 
-            opacity: 0.9;
         }
 
         .image-card:hover { 
-            transform: scale(1.03); 
+            transform: scale(1.05); 
             box-shadow: 0 0 15px var(--neon-blue); 
-            z-index: 2;
         }
 
         .label { 
             position: absolute; 
-            bottom: 0; 
-            width: 100%; 
+            bottom: 0; width: 100%; 
             background: rgba(0,0,0,0.8); 
             font-size: 11px; 
             color: var(--neon-blue); 
-            padding: 6px 0; 
+            padding: 8px 0; 
             font-weight: bold; 
         }
 
@@ -102,6 +104,65 @@
             letter-spacing: 1px;
             transition: 0.3s;
             text-align: center;
+            display: block;
         }
 
-        .
+        .prev-btn {
+            border: 2px solid var(--neon-pink);
+            color: white;
+            background: rgba(255, 0, 85, 0.2);
+        }
+
+        .next-btn {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulse-animation { animation: pulse 2s infinite; }
+
+        @media (max-width: 500px) {
+            .image-card img { height: 140px; }
+            .nav-btn { font-size: 12px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="bg-container"></div>
+
+    <div id="main-wrapper">
+        <div class="main-container">
+            <h1 style="font-size: 2rem; margin: 0; color: var(--neon-blue);">MYTHICAL GALLERY</h1>
+            <p style="color: var(--neon-pink); font-size: 10px; letter-spacing: 3px; margin-bottom: 30px;">COLLECTION - PAGE 02</p>
+            
+            <div class="anime-gallery">
+                <a href="#" class="image-card"><img src="8.jpg"><div class="label">08</div></a>
+                <a href="#" class="image-card"><img src="9.jpg"><div class="label">09</div></a>
+                <a href="#" class="image-card"><img src="10.jpg"><div class="label">10</div></a>
+                <a href="#" class="image-card"><img src="11.jpg"><div class="label">11</div></a>
+                <a href="#" class="image-card"><img src="12.jpg"><div class="label">12</div></a>
+                <a href="#" class="image-card"><img src="13.jpg"><div class="label">13</div></a>
+                <a href="#" class="image-card"><img src="14.jpg"><div class="label">14</div></a>
+                <a href="#" class="image-card"><img src="15.jpg"><div class="label">15</div></a>
+                <a href="#" class="image-card"><img src="16.jpg"><div class="label">16</div></a>
+                <a href="#" class="image-card"><img src="17.jpg"><div class="label">17</div></a>
+            </div>
+
+            <div class="nav-container">
+                <a href="index.html" class="nav-btn prev-btn">← PREVIOUS</a>
+                <a href="next1.html" class="nav-btn next-btn pulse-animation">NEXT PAGE →</a>
+            </div>
+
+            <p style="font-size: 11px; opacity: 0.5; margin-top: 40px;">Designed for Sensei World Experience<br>BY AARTHAV</p>
+        </div>
+    </div>
+
+</body>
+</html>
