@@ -14,19 +14,18 @@
             overflow-x: hidden;
         }
 
-        /* 1. Background Image (Fixed and Full Screen) */
+        /* 1. Background Image Fix */
         .bg-container {
             position: fixed; 
             top: 0; 
             left: 0; 
             width: 100vw; 
             height: 100vh;
-            /* Yahan ./ use kiya hai GitHub ke liye */
-            background: <img src= "oh.jpg"> no-repeat center center; 
+            /* Correct CSS Syntax: url('./oh.jpg') */
+            background: url('./oh.jpg') no-repeat center center; 
             background-size: cover;
             filter: brightness(0.4); 
             z-index: -1;
-            /* Image loading fallback */
             background-color: #000; 
         }
 
@@ -41,7 +40,7 @@
             max-width: 700px; margin: auto; 
             background: rgba(0, 0, 0, 0.6); 
             backdrop-filter: blur(10px); 
-            -webkit-backdrop-filter: blur(10px); /* For Safari */
+            -webkit-backdrop-filter: blur(10px);
             padding: 30px; 
             border-radius: 30px; 
             border: 1px solid rgba(0, 210, 255, 0.2); 
@@ -71,7 +70,7 @@
         .full-width { grid-column: span 2; }
         .full-width img { height: 280px; }
 
-        /* 4. Social Links */
+        /* 4. Social Links Styling */
         .social-links {
             margin-top: 40px; padding-top: 20px;
             border-top: 1px solid rgba(255, 255, 255, 0.2);
@@ -126,10 +125,10 @@
             </div>
 
             <div class="social-links">
-                <a href="#" class="social-btn">YOUTUBE</a>
-                <a href="#" class="social-btn">INSTAGRAM</a>
-                <a href="#" class="social-btn">TWITTER</a>
-                <a href="#" class="social-btn" style="border-color: var(--neon-blue);">GITHUB</a>
+                <a href="https://www.youtube.com" target="_blank" class="social-btn">YOUTUBE</a>
+                <a href="https://www.instagram.com" target="_blank" class="social-btn">INSTAGRAM</a>
+                <a href="https://www.twitter.com" target="_blank" class="social-btn">TWITTER</a>
+                <a href="https://www.github.com" target="_blank" class="social-btn" style="border-color: var(--neon-blue);">GITHUB</a>
             </div>
 
             <p style="font-size: 11px; opacity: 0.5; margin-top: 30px;">Designed for Sensei World Experience</p>
