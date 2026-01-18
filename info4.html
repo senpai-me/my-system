@@ -1,23 +1,151 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio Page</title>
+    <title>The Colosseum - Rome's Eternal Arena</title>
     <style>
-        body { background: #000; color: #00d2ff; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; }
-        .bio-container { border: 2px solid #ff0055; padding: 20px; border-radius: 20px; background: rgba(255, 255, 255, 0.05); }
-        img { width: 100%; max-width: 350px; border-radius: 15px; border: 2px solid #00d2ff; margin-bottom: 20px; }
-        h1 { text-shadow: 0 0 10px #ff0055; }
-        p { color: #fff; line-height: 1.6; font-size: 1.1rem; }
-        .back-btn { display: inline-block; margin-top: 20px; padding: 10px 25px; background: #00d2ff; color: #000; text-decoration: none; font-weight: bold; border-radius: 5px; }
+        :root { 
+            --neon-blue: #00d2ff; 
+            --neon-orange: #ff6a00; 
+            --neon-red: #ff0000;
+        }
+        
+        body { 
+            background: #000; 
+            color: #fff; 
+            font-family: 'Segoe UI', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex;
+            justify-content: center;
+        }
+
+        .bio-container { 
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--neon-orange);
+            padding: 30px; 
+            border-radius: 30px; 
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(255, 106, 0, 0.1);
+        }
+
+        .hero-img { 
+            width: 100%; 
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 20px; 
+            border: 2px solid var(--neon-orange); 
+            margin-bottom: 30px; 
+            box-shadow: 0 0 20px var(--neon-orange);
+        }
+
+        h1 { 
+            color: var(--neon-orange);
+            text-shadow: 0 0 10px var(--neon-orange);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .intro-text {
+            color: var(--neon-red);
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .history-box {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .point-card {
+            background: rgba(255, 106, 0, 0.05);
+            border-left: 4px solid var(--neon-red);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 15px 15px 0;
+            transition: 0.3s;
+        }
+
+        .point-card:hover {
+            background: rgba(255, 106, 0, 0.1);
+            transform: translateX(10px);
+        }
+
+        .point-card h3 {
+            margin: 0 0 10px 0;
+            color: var(--neon-blue);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .point-card h3 span {
+            background: var(--neon-orange);
+            color: black;
+            padding: 2px 10px;
+            border-radius: 5px;
+            margin-right: 15px;
+            font-size: 1rem;
+        }
+
+        .point-card p {
+            margin: 0;
+            line-height: 1.6;
+            font-size: 1.05rem;
+            color: #ddd;
+        }
+
+        .back-btn { 
+            display: inline-block; 
+            margin-top: 30px; 
+            padding: 15px 40px; 
+            background: var(--neon-orange); 
+            color: #000; 
+            text-decoration: none; 
+            font-weight: bold; 
+            border-radius: 50px; 
+            box-shadow: 0 0 15px var(--neon-orange);
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+            background: #fff;
+        }
     </style>
 </head>
 <body>
+
     <div class="bio-container">
-        <img src="4.jpg" alt="Character 1">
-        <h1>CHARACTER NAME 1</h1>
-        <p>pending....</p>
-        <a href="index.html" class="back-btn">GO BACK</a>
-    </div>
-</body>
-</html>
+        <img src="4.jpg" alt="The Colosseum" class="hero-img">
+        <h1>The Colosseum</h1>
+        <p class="intro-text">The Grand Arena of Gladiators & Empire</p>
+
+        <div class="history-box">
+            <div class="point-card">
+                <h3><span>1</span> The Flavian Amphitheatre</h3>
+                <p>Built between 70-80 AD under Emperor Vespasian and his son Titus, it is the largest ancient amphitheatre ever built. It was a gift to the Roman people, constructed on the site of a former lake from Emperor Nero's palace.</p>
+            </div>
+
+            <div class="point-card">
+                <h3><span>2</span> Massive Capacity</h3>
+                <p>The arena could hold an estimated 50,000 to 80,000 spectators. It had 80 entrances, allowing the massive crowd to enter and exit in just minutes—a design so efficient that modern stadiums still use it today.</p>
+            </div>
+
+            <div class="point-card">
+                <h3><span>3</span> The Hypogeum (Underground)</h3>
+                <p>Beneath the arena floor was a complex network of tunnels and cages called the Hypogeum. Here, gladiators and wild animals (lions, tigers, bears) were kept before being lifted by manual elevators to surprise the audience.</p>
+            </div>
+
+            <div class="point-card">
+                <h3><span>4</span> Mock Naval Battles</h3>
+                <p>In its early years, the Colosseum could actually be flooded with water! They used complex plumbing to fill the arena and stage "Naumachia" or mock sea battles with real ships for the entertainment of the public.</p>
+            </div>
+
+            <div class="point-card">
+                <h3><span>5</span> Free Entry & "Bread and Circuses"</h3>
+                <p>Entry to the Colosseum was free for all Roman citizens. The Emperors used these bloody games and free
