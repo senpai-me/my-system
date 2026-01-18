@@ -1,23 +1,164 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bio Page</title>
+    <title>The Great Wall - China's Stone Dragon</title>
     <style>
-        body { background: #000; color: #00d2ff; font-family: 'Segoe UI', sans-serif; text-align: center; padding: 20px; }
-        .bio-container { border: 2px solid #ff0055; padding: 20px; border-radius: 20px; background: rgba(255, 255, 255, 0.05); }
-        img { width: 100%; max-width: 350px; border-radius: 15px; border: 2px solid #00d2ff; margin-bottom: 20px; }
-        h1 { text-shadow: 0 0 10px #ff0055; }
-        p { color: #fff; line-height: 1.6; font-size: 1.1rem; }
-        .back-btn { display: inline-block; margin-top: 20px; padding: 10px 25px; background: #00d2ff; color: #000; text-decoration: none; font-weight: bold; border-radius: 5px; }
+        :root { 
+            --neon-blue: #00d2ff; 
+            --neon-red: #ff0000; 
+            --neon-gold: #ffcc00;
+        }
+        
+        body { 
+            background: #000; 
+            color: #fff; 
+            font-family: 'Segoe UI', sans-serif; 
+            margin: 0; 
+            padding: 20px; 
+            display: flex;
+            justify-content: center;
+        }
+
+        .bio-container { 
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--neon-red);
+            padding: 30px; 
+            border-radius: 30px; 
+            backdrop-filter: blur(10px);
+            box-shadow: 0 0 30px rgba(255, 0, 0, 0.1);
+        }
+
+        .hero-img { 
+            width: 100%; 
+            max-height: 400px;
+            object-fit: cover;
+            border-radius: 20px; 
+            border: 2px solid var(--neon-red); 
+            margin-bottom: 30px; 
+            box-shadow: 0 0 20px var(--neon-red);
+        }
+
+        h1 { 
+            color: var(--neon-red);
+            text-shadow: 0 0 10px var(--neon-red);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .intro-text {
+            color: var(--neon-gold);
+            font-weight: bold;
+            letter-spacing: 2px;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+        }
+
+        .history-box {
+            text-align: left;
+            margin-top: 20px;
+        }
+
+        .point-card {
+            background: rgba(255, 0, 0, 0.05);
+            border-left: 4px solid var(--neon-gold);
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 0 15px 15px 0;
+            transition: 0.3s;
+        }
+
+        .point-card:hover {
+            background: rgba(255, 0, 0, 0.1);
+            transform: translateX(10px);
+        }
+
+        .point-card h3 {
+            margin: 0 0 10px 0;
+            color: var(--neon-blue);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .point-card h3 span {
+            background: var(--neon-red);
+            color: white;
+            padding: 2px 10px;
+            border-radius: 5px;
+            margin-right: 15px;
+            font-size: 1rem;
+        }
+
+        .point-card p {
+            margin: 0;
+            line-height: 1.6;
+            font-size: 1.05rem;
+            color: #ddd;
+        }
+
+        .back-btn { 
+            display: inline-block; 
+            margin-top: 30px; 
+            padding: 15px 40px; 
+            background: var(--neon-red); 
+            color: #fff; 
+            text-decoration: none; 
+            font-weight: bold; 
+            border-radius: 50px; 
+            box-shadow: 0 0 15px var(--neon-red);
+            transition: 0.3s;
+        }
+
+        .back-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 25px var(--neon-red);
+        }
     </style>
 </head>
 <body>
+
     <div class="bio-container">
-        <img src="6.jpg" alt="Character 1">
-        <h1>CHARACTER NAME 1</h1>
-        <p>pending..</p>
-        <a href="index.html" class="back-btn">GO BACK</a>
+        <img src="6.jpg" alt="The Great Wall of China" class="hero-img">
+        <h1>Great Wall of China</h1>
+        <p class="intro-text">The World's Longest Defensive Fortification</p>
+
+        <div class="history-box">
+            <div class="point-card">
+                <h3><span>1</span> A Wall 2,000 Years in the Making</h3>
+                <p>The wall wasn't built all at once. Construction started as early as the 7th century BC. The most famous portions were built by the first Emperor of China, Qin Shi Huang, and later reinforced by the Ming Dynasty to protect against Mongol invasions.</p>
+            </div>
+
+            <div class="point-card">
+                <h3><span>2</span> Impossible Length</h3>
+                <p>It is the longest man-made structure on Earth. If you measure all its branches and sections, the Great Wall stretches over **21,196 kilometers** (13,171 miles). It winds through mountains, deserts, and grasslands like a giant stone dragon.</p>
+            </div>
+
+            <div class="point-card">
+                <h3><span>3</span> Sticky Rice Secret</h3>
+                <p>Ancient Chinese engineers used a surprising ingredient to hold the bricks together: **Sticky Rice Mortar**. The amylopectin in the rice made the mortar so strong that many sections of the wall are still standing firm after 600 years.</p>
+            </div>
+
+            <div class="point-card">
+                <h3><span>4</span> Smoke & Fire Communication</h3>
+                <p>The wall was more than just a barrier; it was a high-tech communication network. Watchtowers were placed at regular intervals, using smoke signals by day and fire by night to send messages across the empire at incredible speeds.</p>
+            </div>
+
+            <div class="point-card">
+                <h3><span>5</span> The Space Myth</h3>
+                <p>There is a popular myth that the Great Wall is visible from the Moon with the naked eye. However, NASA astronauts have confirmed that it is actually very difficult to see even from low Earth orbit without a camera lens or binoculars.</p>
+            </div>
+
+            <div class="point-card">
+                <h3><span>6</span> UNESCO & New Wonder</h3>
+                <p>Designated a UNESCO World Heritage site in 1987, it was later voted as one of the New Seven Wonders of the World. Today, it stands as a testament to human perseverance and the sheer scale of ancient Chinese engineering.</p>
+            </div>
+        </div>
+
+        <a href="index.html" class="back-btn">← GO BACK</a>
     </div>
+
 </body>
 </html>
