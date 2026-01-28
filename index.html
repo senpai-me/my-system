@@ -2,161 +2,53 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SENSEI CYBER-RUNNER V6</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SENSEI GTA 6 MOBILE/PC</title>
     <style>
-        body, html { margin: 0; padding: 0; overflow: hidden; background: #000; font-family: 'Courier New', Courier, monospace; }
-        canvas { display: block; }
-        #ui {
-            position: absolute; top: 20px; left: 20px;
-            color: #ffcc00; text-shadow: 0 0 10px #ffcc00;
-            pointer-events: none;
+        body { margin: 0; overflow: hidden; background: #000; font-family: 'Segoe UI', sans-serif; touch-action: none; }
+        #ui-container {
+            position: absolute; top: 20px; left: 20px; color: #ff00ff;
+            text-shadow: 0 0 10px #ff00ff; pointer-events: none;
         }
-        #game-over {
-            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-            color: #ffcc00; text-align: center; display: none;
-            background: rgba(0,0,0,0.9); padding: 50px; border: 2px solid #ffcc00;
+        /* Mobile Joystick Styles */
+        #joystick-zone {
+            position: absolute; bottom: 40px; left: 40px;
+            width: 120px; height: 120px; background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%; border: 2px solid #00f2ff; display: none;
         }
-        button {
-            background: #ffcc00; border: none; padding: 10px 20px;
-            font-weight: bold; cursor: pointer; margin-top: 20px;
+        #joystick-stick {
+            position: absolute; top: 50%; left: 50%;
+            width: 50px; height: 50px; background: #ff00ff;
+            border-radius: 50%; transform: translate(-50%, -50%);
         }
+        #nitro-btn {
+            position: absolute; bottom: 60px; right: 40px;
+            width: 80px; height: 80px; background: orange;
+            border-radius: 50%; border: 4px solid white; color: white;
+            font-weight: bold; display: none; align-items: center; justify-content: center;
+        }
+        @media (max-width: 768px) { #joystick-zone, #nitro-btn { display: flex; } }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
 <body>
 
-    <div id="ui">
-        <h1>SENSEI_OS: CYBER-RUNNER</h1>
-        <p>SCORE: <span id="score">0</span></p>
-        <p>USE ARROW KEYS OR WASD</p>
+    <div id="ui-container">
+        <h1 style="margin:0; font-size: 24px;">SENSEI_OS: VICE CITY</h1>
+        <p>SPEED: <span id="speed-val">0</span> KM/H</p>
     </div>
 
-    <div id="game-over">
-        <h1>SYSTEM CRASHED!</h1>
-        <p>FINAL SCORE: <span id="final-score">0</span></p>
-        <button onclick="location.reload()">REBOOT SYSTEM</button>
-    </div>
-
-    <canvas id="gameCanvas"></canvas>
+    <div id="joystick-zone"><div id="joystick-stick"></div></div>
+    <div id="nitro-btn">NITRO</div>
 
     <script>
-        const canvas = document.getElementById('gameCanvas');
-        const ctx = canvas.getContext('2d');
-        const scoreEl = document.getElementById('score');
+        // --- 1. ENGINE SETUP ---
+        const scene = new THREE.Scene();
+        scene.fog = new THREE.Fog(0x050505, 10, 150);
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
 
-        canvas.width = window.innerWidth;
-        canvas.height = window.innerHeight;
-
-        let score = 0;
-        let gameActive = true;
-        let speed = 8;
-        
-        // Player Object
-        const player = {
-            x: canvas.width / 2,
-            y: canvas.height - 100,
-            w: 40,
-            h: 40,
-            color: '#ffcc00'
-        };
-
-        const obstacles = [];
-        const particles = [];
-
-        // Input Handling
-        const keys = {};
-        window.addEventListener('keydown', e => keys[e.code] = true);
-        window.addEventListener('keyup', e => keys[e.code] = false);
-
-        class Obstacle {
-            constructor() {
-                this.w = Math.random() * 100 + 50;
-                this.h = 20;
-                this.x = Math.random() * (canvas.width - this.w);
-                this.y = -50;
-                this.color = `hsl(${Math.random() * 60 + 40}, 100%, 50%)`;
-            }
-            update() {
-                this.y += speed;
-            }
-            draw() {
-                ctx.fillStyle = this.color;
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = this.color;
-                ctx.fillRect(this.x, this.y, this.w, this.h);
-                ctx.shadowBlur = 0;
-            }
-        }
-
-        function spawnObstacle() {
-            if (gameActive && Math.random() < 0.05) {
-                obstacles.push(new Obstacle());
-            }
-        }
-
-        function handlePlayer() {
-            if (keys['ArrowLeft'] || keys['KeyA']) player.x -= 10;
-            if (keys['ArrowRight'] || keys['KeyD']) player.x += 10;
-            
-            // Boundary checks
-            if (player.x < 0) player.x = 0;
-            if (player.x > canvas.width - player.w) player.x = canvas.width - player.w;
-
-            // Draw Player (Cyber Square)
-            ctx.fillStyle = player.color;
-            ctx.shadowBlur = 20;
-            ctx.shadowColor = player.color;
-            ctx.fillRect(player.x, player.y, player.w, player.h);
-            ctx.shadowBlur = 0;
-        }
-
-        function gameLoop() {
-            if (!gameActive) return;
-
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Motion blur effect
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-            handlePlayer();
-            spawnObstacle();
-
-            obstacles.forEach((obs, index) => {
-                obs.update();
-                obs.draw();
-
-                // Collision Detection
-                if (
-                    player.x < obs.x + obs.w &&
-                    player.x + player.w > obs.x &&
-                    player.y < obs.y + obs.h &&
-                    player.y + player.h > obs.y
-                ) {
-                    gameOver();
-                }
-
-                // Remove off-screen obstacles
-                if (obs.y > canvas.height) {
-                    obstacles.splice(index, 1);
-                    score += 10;
-                    scoreEl.innerText = score;
-                    speed += 0.05; // Increase difficulty
-                }
-            });
-
-            requestAnimationFrame(gameLoop);
-        }
-
-        function gameOver() {
-            gameActive = false;
-            document.getElementById('game-over').style.display = 'block';
-            document.getElementById('final-score').innerText = score;
-        }
-
-        window.addEventListener('resize', () => {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        });
-
-        gameLoop();
-    </script>
-</body>
-</html>
+        // --- 2. WORLD DESIGN (Neon City) ---
+        const grid = new
