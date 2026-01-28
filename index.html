@@ -3,167 +3,160 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SENSEI JS-3D ENGINE</title>
+    <title>SENSEI CYBER-RUNNER V6</title>
     <style>
-        :root { --gold: #ffcc00; --neon: #00f2ff; }
-        body { 
-            margin: 0; background: #000; color: white; 
-            font-family: 'Courier New', Courier, monospace; overflow: hidden;
-            perspective: 2000px;
+        body, html { margin: 0; padding: 0; overflow: hidden; background: #000; font-family: 'Courier New', Courier, monospace; }
+        canvas { display: block; }
+        #ui {
+            position: absolute; top: 20px; left: 20px;
+            color: #ffcc00; text-shadow: 0 0 10px #ffcc00;
+            pointer-events: none;
         }
-
-        #canvas-3d {
-            width: 100vw; height: 100vh;
-            display: flex; justify-content: center; align-items: center;
-            transform-style: preserve-3d;
-            transition: transform 0.1s linear;
+        #game-over {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+            color: #ffcc00; text-align: center; display: none;
+            background: rgba(0,0,0,0.9); padding: 50px; border: 2px solid #ffcc00;
         }
-
-        /* Carousel Base */
-        #carousel-js {
-            position: relative;
-            width: 250px; height: 350px;
-            transform-style: preserve-3d;
+        button {
+            background: #ffcc00; border: none; padding: 10px 20px;
+            font-weight: bold; cursor: pointer; margin-top: 20px;
         }
-
-        /* Individual 3D Card Class */
-        .card-js {
-            position: absolute;
-            width: 100%; height: 100%;
-            border: 2px solid var(--gold);
-            border-radius: 10px;
-            overflow: hidden;
-            cursor: pointer;
-            backface-visibility: hidden;
-            transition: filter 0.3s, box-shadow 0.3s;
-            background: #111;
-        }
-
-        .card-js:hover {
-            box-shadow: 0 0 40px var(--gold);
-            filter: brightness(1.4);
-            z-index: 100;
-        }
-
-        .card-js img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* HUD & UI */
-        .overlay {
-            position: fixed; inset: 0; pointer-events: none;
-            border: 2px solid rgba(255, 204, 0, 0.1);
-            background: radial-gradient(circle, transparent 50%, rgba(0,0,0,0.8) 100%);
-        }
-
-        #status-bar {
-            position: fixed; top: 20px; left: 20px;
-            color: var(--gold); font-size: 14px; line-height: 1.5;
-        }
-
-        .controls {
-            position: fixed; bottom: 40px; left: 50%;
-            transform: translateX(-50%);
-            display: flex; gap: 20px; pointer-events: auto;
-        }
-
-        .btn-ui {
-            background: transparent; border: 1px solid var(--gold);
-            color: var(--gold); padding: 10px 20px; cursor: pointer;
-            text-transform: uppercase; font-weight: bold;
-        }
-
-        .btn-ui:hover { background: var(--gold); color: #000; }
     </style>
 </head>
 <body>
 
-    <div class="overlay"></div>
-    <div id="status-bar">
-        SYSTEM: ONLINE<br>
-        ENGINE: JS_3D_V6<br>
-        SCENE_NODES: <span id="node-count">0</span>
+    <div id="ui">
+        <h1>SENSEI_OS: CYBER-RUNNER</h1>
+        <p>SCORE: <span id="score">0</span></p>
+        <p>USE ARROW KEYS OR WASD</p>
     </div>
 
-    <div id="canvas-3d">
-        <div id="carousel-js"></div>
+    <div id="game-over">
+        <h1>SYSTEM CRASHED!</h1>
+        <p>FINAL SCORE: <span id="final-score">0</span></p>
+        <button onclick="location.reload()">REBOOT SYSTEM</button>
     </div>
 
-    <div class="controls">
-        <button class="btn-ui" onclick="rotateManual(-40)">PREV</button>
-        <button class="btn-ui" onclick="rotateManual(40)">NEXT</button>
-    </div>
+    <canvas id="gameCanvas"></canvas>
 
     <script>
-        const carousel = document.getElementById('carousel-js');
-        const nodeDisplay = document.getElementById('node-count');
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const scoreEl = document.getElementById('score');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let score = 0;
+        let gameActive = true;
+        let speed = 8;
         
-        // 1. DATA CONFIGURATION (Images and Links)
-        const gameData = [
-            { img: '1.jpg', link: 'info1.html' },
-            { img: '2.jpg', link: 'info2.html' },
-            { img: '3.jpg', link: 'info3.html' },
-            { img: '4.jpg', link: 'info4.html' },
-            { img: '5.jpg', link: 'info5.html' },
-            { img: '6.jpg', link: 'info6.html' },
-            { img: '7.jpg', link: 'info7.html' }
-        ];
+        // Player Object
+        const player = {
+            x: canvas.width / 2,
+            y: canvas.height - 100,
+            w: 40,
+            h: 40,
+            color: '#ffcc00'
+        };
 
-        let currentRotation = 0;
-        const radius = 450; // 3D Circle ka size
+        const obstacles = [];
+        const particles = [];
 
-        // 2. DYNAMIC CARD GENERATION ENGINE
-        function init3D() {
-            const angleStep = 360 / gameData.length;
-            nodeDisplay.innerText = gameData.length;
+        // Input Handling
+        const keys = {};
+        window.addEventListener('keydown', e => keys[e.code] = true);
+        window.addEventListener('keyup', e => keys[e.code] = false);
 
-            gameData.forEach((game, i) => {
-                const card = document.createElement('div');
-                card.className = 'card-js';
-                
-                // Set 3D Position
-                const angle = i * angleStep;
-                card.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
-                
-                // Add Content
-                card.innerHTML = `<img src="${game.img}" alt="Game ${i+1}">`;
-                
-                // Redirect logic
-                card.onclick = () => window.location.href = game.link;
-                
-                carousel.appendChild(card);
+        class Obstacle {
+            constructor() {
+                this.w = Math.random() * 100 + 50;
+                this.h = 20;
+                this.x = Math.random() * (canvas.width - this.w);
+                this.y = -50;
+                this.color = `hsl(${Math.random() * 60 + 40}, 100%, 50%)`;
+            }
+            update() {
+                this.y += speed;
+            }
+            draw() {
+                ctx.fillStyle = this.color;
+                ctx.shadowBlur = 15;
+                ctx.shadowColor = this.color;
+                ctx.fillRect(this.x, this.y, this.w, this.h);
+                ctx.shadowBlur = 0;
+            }
+        }
+
+        function spawnObstacle() {
+            if (gameActive && Math.random() < 0.05) {
+                obstacles.push(new Obstacle());
+            }
+        }
+
+        function handlePlayer() {
+            if (keys['ArrowLeft'] || keys['KeyA']) player.x -= 10;
+            if (keys['ArrowRight'] || keys['KeyD']) player.x += 10;
+            
+            // Boundary checks
+            if (player.x < 0) player.x = 0;
+            if (player.x > canvas.width - player.w) player.x = canvas.width - player.w;
+
+            // Draw Player (Cyber Square)
+            ctx.fillStyle = player.color;
+            ctx.shadowBlur = 20;
+            ctx.shadowColor = player.color;
+            ctx.fillRect(player.x, player.y, player.w, player.h);
+            ctx.shadowBlur = 0;
+        }
+
+        function gameLoop() {
+            if (!gameActive) return;
+
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.2)'; // Motion blur effect
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            handlePlayer();
+            spawnObstacle();
+
+            obstacles.forEach((obs, index) => {
+                obs.update();
+                obs.draw();
+
+                // Collision Detection
+                if (
+                    player.x < obs.x + obs.w &&
+                    player.x + player.w > obs.x &&
+                    player.y < obs.y + obs.h &&
+                    player.y + player.h > obs.y
+                ) {
+                    gameOver();
+                }
+
+                // Remove off-screen obstacles
+                if (obs.y > canvas.height) {
+                    obstacles.splice(index, 1);
+                    score += 10;
+                    scoreEl.innerText = score;
+                    speed += 0.05; // Increase difficulty
+                }
             });
+
+            requestAnimationFrame(gameLoop);
         }
 
-        // 3. INTERACTION LOGIC
-        function rotateManual(deg) {
-            currentRotation += deg;
-            carousel.style.transition = 'transform 0.8s cubic-bezier(0.2, 0, 0.2, 1)';
-            carousel.style.transform = `rotateY(${currentRotation}deg)`;
+        function gameOver() {
+            gameActive = false;
+            document.getElementById('game-over').style.display = 'block';
+            document.getElementById('final-score').innerText = score;
         }
 
-        // Mouse Move Parallax Effect
-        document.addEventListener('mousemove', (e) => {
-            const x = (window.innerWidth / 2 - e.pageX) / 50;
-            const y = (window.innerHeight / 2 - e.pageY) / 50;
-            document.getElementById('canvas-3d').style.transform = `rotateX(${y}deg) rotateY(${x}deg)`;
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
         });
 
-        // Auto Animation
-        function animate() {
-            if (!isUserInteracting) {
-                currentRotation -= 0.2;
-                carousel.style.transform = `rotateY(${currentRotation}deg)`;
-            }
-            requestAnimationFrame(animate);
-        }
-
-        let isUserInteracting = false;
-        carousel.addEventListener('mouseenter', () => isUserInteracting = true);
-        carousel.addEventListener('mouseleave', () => isUserInteracting = false);
-
-        // Run Engine
-        init3D();
-        animate();
-
+        gameLoop();
     </script>
 </body>
 </html>
