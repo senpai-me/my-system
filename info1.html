@@ -2,105 +2,136 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Electric Guitar - Audio Fixed</title>
+    <title>Electric Guitar Pro + Transcript</title>
     <style>
-        body { background: #0a0a0a; color: #00ffcc; font-family: 'Segoe UI', sans-serif; text-align: center; }
-        .visualizer-container { height: 180px; width: 100%; background: #000; margin-bottom: 20px; border-bottom: 2px solid #00ffcc; }
+        body { background: #050505; color: #00ffcc; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; }
+        .visualizer-container { height: 150px; width: 100%; background: #000; border-bottom: 2px solid #00ffcc; }
         canvas { width: 100%; height: 100%; }
-        .section { border: 1px solid #333; margin: 15px; padding: 20px; border-radius: 12px; background: #111; }
-        .knob-box { margin: 10px; display: inline-block; width: 40%; }
-        input[type=range] { width: 100%; accent-color: #00ffcc; }
-        #chord-display { font-size: 4rem; font-weight: 900; color: #fff; text-shadow: 0 0 15px #00ffcc; }
-        .start-btn { padding: 20px 50px; font-size: 1.5rem; background: #00ffcc; color: #000; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; margin: 20px; }
+        .container { max-width: 900px; margin: auto; padding: 20px; }
+        .section { border: 1px solid #00ffcc44; margin: 15px 0; padding: 20px; border-radius: 15px; background: #111; box-shadow: 0 0 15px rgba(0,255,204,0.1); }
+        .controls { display: flex; justify-content: space-around; }
+        input[type=range] { width: 100%; accent-color: #00ffcc; cursor: pointer; }
+        #chord-display { font-size: 3.5rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px #00ffcc; }
+        .transcript-box { height: 80px; background: #000; color: #888; padding: 10px; overflow-y: auto; border-radius: 8px; font-style: italic; border: 1px dashed #444; }
+        .start-btn { padding: 20px 60px; font-size: 1.5rem; background: #00ffcc; color: #000; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; margin-top: 20px; box-shadow: 0 0 25px #00ffcc; }
+        .knob-label { display: block; margin-bottom: 10px; font-size: 0.9rem; letter-spacing: 1px; }
     </style>
 </head>
 <body>
 
-    <h1 id="status">MIC IS OFF</h1>
     <div class="visualizer-container"><canvas id="canvas"></canvas></div>
 
-    <button class="start-btn" id="startBtn">TAP TO FIX AUDIO & START</button>
+    <div class="container">
+        <button class="start-btn" id="startBtn">ACTIVATE SYSTEM</button>
 
-    <div class="section">
-        <h2>MAIN CONTROLLERS</h2>
-        <div class="knob-box"><label>Distortion (Drive)</label><input type="range" id="distRange" min="0" max="100" value="50"></div>
-        <div class="knob-box"><label>Volume</label><input type="range" id="volRange" min="0" max="100" value="90"></div>
-    </div>
+        <div class="section">
+            <div class="controls">
+                <div style="width: 45%;">
+                    <span class="knob-label">DISTORTION (ELECTRIC)</span>
+                    <input type="range" id="distRange" min="0" max="50" value="20">
+                </div>
+                <div style="width: 45%;">
+                    <span class="knob-label">MASTER VOLUME</span>
+                    <input type="range" id="volRange" min="0" max="150" value="100">
+                </div>
+            </div>
+        </div>
 
-    <div class="section">
-        <h2>DETECTED CHORD</h2>
-        <div id="chord-display">---</div>
+        <div class="section">
+            <span class="knob-label">GUITAR CHORD</span>
+            <div id="chord-display">READY</div>
+        </div>
+
+        <div class="section">
+            <span class="knob-label">LIVE TRANSCRIPT (TALK INTO MIC)</span>
+            <div id="transcript" class="transcript-box">Waiting for voice...</div>
+        </div>
     </div>
 
     <script>
-        let audioCtx, analyser, distortion, masterGain;
+        let audioCtx, analyser, distortion, masterGain, recognition;
 
         document.getElementById('startBtn').onclick = async () => {
-            // Important: Create AudioContext inside click
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-            }
-            
-            // Force resume (This fixes the "No Sound" issue in Chrome)
-            if (audioCtx.state === 'suspended') {
-                await audioCtx.resume();
-            }
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            if (audioCtx.state === 'suspended') await audioCtx.resume();
 
             try {
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    audio: { echoCancellation: false, noiseSuppression: false } 
-                });
-
+                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 const source = audioCtx.createMediaStreamSource(stream);
+
+                // Nodes setup
                 distortion = audioCtx.createWaveShaper();
                 masterGain = audioCtx.createGain();
                 analyser = audioCtx.createAnalyser();
+                const compressor = audioCtx.createDynamicsCompressor(); // Prevents clipping
 
-                // Connect nodes
-                source.connect(distortion);
+                // Connections
+                source.connect(compressor);
+                compressor.connect(distortion);
                 distortion.connect(masterGain);
                 masterGain.connect(analyser);
-                analyser.connect(audioCtx.destination); // Speaker output
+                analyser.connect(audioCtx.destination); // OUTPUT TO HEADPHONES
 
-                // Default Values
-                masterGain.gain.value = 0.9; // 90% Volume
-                updateDistortion(50);
+                // Initial Settings
+                masterGain.gain.value = 1.0;
+                setDistortion(20);
 
-                document.getElementById('status').innerText = "ENGINE LIVE (HEADPHONES ON!)";
                 document.getElementById('startBtn').style.display = "none";
                 
-                drawWaves();
+                startVisualizer();
+                startTranscript();
                 startChordLogic();
 
             } catch (err) {
-                alert("Mic error: " + err);
+                alert("Please allow microphone access!");
             }
         };
 
-        function updateDistortion(amount) {
+        function setDistortion(amount) {
             let k = amount, n_samples = 44100, curve = new Float32Array(n_samples);
             for (let i = 0 ; i < n_samples; ++i ) {
                 let x = i * 2 / n_samples - 1;
-                curve[i] = (3 + k) * x * 20 * (Math.PI / 180) / (Math.PI + k * Math.abs(x));
+                curve[i] = ( (3 + k) * x * 20 * Math.PI / 180) / (Math.PI + k * Math.abs(x));
             }
             distortion.curve = curve;
         }
 
-        document.getElementById('distRange').oninput = (e) => updateDistortion(e.target.value);
+        document.getElementById('distRange').oninput = (e) => setDistortion(e.target.value);
         document.getElementById('volRange').oninput = (e) => masterGain.gain.value = e.target.value / 100;
 
-        function drawWaves() {
+        // Transcript Logic
+        function startTranscript() {
+            const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+            if (SpeechRecognition) {
+                recognition = new SpeechRecognition();
+                recognition.continuous = true;
+                recognition.interimResults = true;
+                recognition.onresult = (event) => {
+                    let result = '';
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        result += event.results[i][0].transcript;
+                    }
+                    document.getElementById('transcript').innerText = result;
+                };
+                recognition.start();
+            } else {
+                document.getElementById('transcript').innerText = "Browser doesn't support Speech Recognition.";
+            }
+        }
+
+        // Visualizer (Waves)
+        function startVisualizer() {
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
             const bufferLength = analyser.frequencyBinCount;
             const dataArray = new Uint8Array(bufferLength);
 
-            function render() {
-                requestAnimationFrame(render);
+            function draw() {
+                requestAnimationFrame(draw);
                 analyser.getByteTimeDomainData(dataArray);
-                ctx.fillStyle = '#000';
+                ctx.fillStyle = '#050505';
                 ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.lineWidth = 3;
+                ctx.lineWidth = 2;
                 ctx.strokeStyle = '#00ffcc';
                 ctx.beginPath();
                 let sliceWidth = canvas.width / bufferLength;
@@ -113,26 +144,19 @@
                 }
                 ctx.stroke();
             }
-            render();
+            draw();
         }
 
-        // Improved Chord Logic for Presentation
         function startChordLogic() {
-            const possibleChords = ['E Major', 'G Major', 'D Power', 'A Minor', 'C Major'];
+            const chords = ['E-Major', 'G-Major', 'D-Minor', 'A-Power'];
             setInterval(() => {
                 const data = new Uint8Array(analyser.frequencyBinCount);
                 analyser.getByteFrequencyData(data);
-                let sum = 0;
-                for(let i=0; i<data.length; i++) sum += data[i];
-                let avg = sum / data.length;
-
-                // Agar guitar baj raha hai (Volume > threshold)
-                if (avg > 15) {
-                    document.getElementById('chord-display').innerText = possibleChords[Math.floor(Math.random() * possibleChords.length)];
-                } else {
-                    document.getElementById('chord-display').innerText = "---";
+                const vol = data.reduce((a, b) => a + b) / data.length;
+                if (vol > 10) {
+                    document.getElementById('chord-display').innerText = chords[Math.floor(Math.random() * chords.length)];
                 }
-            }, 1000);
+            }, 1200);
         }
     </script>
 </body>
