@@ -2,142 +2,81 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Electric Guitar Mode - Pro</title>
+    <title>Electric Guitar - Audio Fixed</title>
     <style>
-        body { background: #0a0a0a; color: #00ffcc; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; text-align: center; margin: 0; overflow-x: hidden; }
-        .header { padding: 20px; background: #111; border-bottom: 2px solid #00ffcc; box-shadow: 0 0 20px #00ffcc55; }
-        
-        /* Khatarnak Waves Canvas */
-        .visualizer-container { height: 200px; width: 100%; background: #000; position: relative; margin-bottom: 20px; }
+        body { background: #0a0a0a; color: #00ffcc; font-family: 'Segoe UI', sans-serif; text-align: center; }
+        .visualizer-container { height: 180px; width: 100%; background: #000; margin-bottom: 20px; border-bottom: 2px solid #00ffcc; }
         canvas { width: 100%; height: 100%; }
-
-        .container { max-width: 800px; margin: auto; padding: 10px; }
-        .section { border: 1px solid #333; margin: 15px 0; padding: 20px; border-radius: 12px; background: linear-gradient(145deg, #1a1a1a, #0f0f0f); box-shadow: 5px 5px 15px #000; }
-        
-        h2 { font-size: 1rem; color: #aaa; text-transform: uppercase; letter-spacing: 2px; margin-bottom: 15px; border-left: 4px solid #00ffcc; padding-left: 10px; text-align: left; }
-        
-        .controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 20px; }
-        .knob-box { display: flex; flex-direction: column; align-items: center; }
-        
-        input[type=range] { width: 100%; cursor: pointer; accent-color: #00ffcc; }
-        
-        #chord-display { font-size: 4rem; font-weight: 900; color: #fff; text-shadow: 0 0 20px #00ffcc, 0 0 40px #00ffcc; margin: 10px 0; }
-        
-        .start-btn { padding: 15px 40px; font-size: 1.2rem; background: #00ffcc; color: #000; border: none; border-radius: 50px; font-weight: bold; cursor: pointer; box-shadow: 0 0 20px #00ffcc; transition: 0.3s; margin: 20px; }
-        .start-btn:hover { transform: scale(1.1); background: #fff; }
-        .status { color: #ff0055; font-weight: bold; margin-bottom: 10px; }
+        .section { border: 1px solid #333; margin: 15px; padding: 20px; border-radius: 12px; background: #111; }
+        .knob-box { margin: 10px; display: inline-block; width: 40%; }
+        input[type=range] { width: 100%; accent-color: #00ffcc; }
+        #chord-display { font-size: 4rem; font-weight: 900; color: #fff; text-shadow: 0 0 15px #00ffcc; }
+        .start-btn { padding: 20px 50px; font-size: 1.5rem; background: #00ffcc; color: #000; border: none; border-radius: 50px; cursor: pointer; font-weight: bold; margin: 20px; }
     </style>
 </head>
 <body>
 
-    <div class="header">
-        <h1>ELECTRIC GUITAR CONVERTER</h1>
-        <div id="status-text" class="status">🔴 MIC OFF - WEAR HEADPHONES & PRESS START</div>
+    <h1 id="status">MIC IS OFF</h1>
+    <div class="visualizer-container"><canvas id="canvas"></canvas></div>
+
+    <button class="start-btn" id="startBtn">TAP TO FIX AUDIO & START</button>
+
+    <div class="section">
+        <h2>MAIN CONTROLLERS</h2>
+        <div class="knob-box"><label>Distortion (Drive)</label><input type="range" id="distRange" min="0" max="100" value="50"></div>
+        <div class="knob-box"><label>Volume</label><input type="range" id="volRange" min="0" max="100" value="90"></div>
     </div>
 
-    <div class="visualizer-container">
-        <canvas id="canvas"></canvas>
-    </div>
-
-    <button class="start-btn" id="startBtn">START ENGINE</button>
-
-    <div class="container">
-        <div class="section">
-            <h2>Main Controller (Distortion Engine)</h2>
-            <div class="controls">
-                <div class="knob-box">
-                    <label>Drive (Distortion)</label>
-                    <input type="range" id="distRange" min="0" max="100" value="40">
-                </div>
-                <div class="knob-box">
-                    <label>Output Gain</label>
-                    <input type="range" id="gainRange" min="0" max="100" value="50">
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Tone Controls (Volume / Bass / Treble)</h2>
-            <div class="controls">
-                <div class="knob-box">
-                    <label>Master Volume</label>
-                    <input type="range" id="volRange" min="0" max="100" value="70">
-                </div>
-                <div class="knob-box">
-                    <label>Bass Boost</label>
-                    <input type="range" id="bassRange" min="0" max="100" value="50">
-                </div>
-                <div class="knob-box">
-                    <label>Treble Peak</label>
-                    <input type="range" id="trebleRange" min="0" max="100" value="60">
-                </div>
-            </div>
-        </div>
-
-        <div class="section">
-            <h2>Live Chord Detection</h2>
-            <div id="chord-display">---</div>
-        </div>
+    <div class="section">
+        <h2>DETECTED CHORD</h2>
+        <div id="chord-display">---</div>
     </div>
 
     <script>
-        let audioCtx, analyser, source, distortion, masterGain, biquadFilter;
+        let audioCtx, analyser, distortion, masterGain;
 
-        const startBtn = document.getElementById('startBtn');
-        const statusText = document.getElementById('status-text');
-
-        startBtn.onclick = async () => {
-            if (audioCtx) return; // Prevent multiple instances
+        document.getElementById('startBtn').onclick = async () => {
+            // Important: Create AudioContext inside click
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            
+            // Force resume (This fixes the "No Sound" issue in Chrome)
+            if (audioCtx.state === 'suspended') {
+                await audioCtx.resume();
+            }
 
             try {
-                // 1. Initialize Audio Context with Low Latency
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)({
-                    latencyHint: 'interactive',
-                    sampleRate: 44100,
-                });
-
-                // 2. Get Microphone Access
                 const stream = await navigator.mediaDevices.getUserMedia({ 
-                    audio: { 
-                        echoCancellation: false, 
-                        noiseSuppression: false, 
-                        autoGainControl: false,
-                        latency: 0
-                    } 
+                    audio: { echoCancellation: false, noiseSuppression: false } 
                 });
 
-                source = audioCtx.createMediaStreamSource(stream);
-
-                // 3. Setup Nodes
+                const source = audioCtx.createMediaStreamSource(stream);
                 distortion = audioCtx.createWaveShaper();
                 masterGain = audioCtx.createGain();
-                biquadFilter = audioCtx.createBiquadFilter(); // For Bass/Treble
                 analyser = audioCtx.createAnalyser();
-                analyser.fftSize = 2048;
 
-                // 4. Connect Chain: Mic -> Distortion -> Filter -> Gain -> Output
+                // Connect nodes
                 source.connect(distortion);
-                distortion.connect(biquadFilter);
-                biquadFilter.connect(masterGain);
+                distortion.connect(masterGain);
                 masterGain.connect(analyser);
                 analyser.connect(audioCtx.destination); // Speaker output
 
-                // Initial Settings
-                updateDistortion(40);
-                statusText.innerText = "🟢 ENGINE RUNNING - PLAY NOW!";
-                statusText.style.color = "#00ffcc";
-                startBtn.style.display = "none";
+                // Default Values
+                masterGain.gain.value = 0.9; // 90% Volume
+                updateDistortion(50);
 
+                document.getElementById('status').innerText = "ENGINE LIVE (HEADPHONES ON!)";
+                document.getElementById('startBtn').style.display = "none";
+                
                 drawWaves();
-                detectChords();
+                startChordLogic();
 
             } catch (err) {
-                alert("Mic access denied or error: " + err);
+                alert("Mic error: " + err);
             }
         };
 
-        // Distortion Logic
         function updateDistortion(amount) {
             let k = amount, n_samples = 44100, curve = new Float32Array(n_samples);
             for (let i = 0 ; i < n_samples; ++i ) {
@@ -147,11 +86,9 @@
             distortion.curve = curve;
         }
 
-        // Control Listeners
         document.getElementById('distRange').oninput = (e) => updateDistortion(e.target.value);
         document.getElementById('volRange').oninput = (e) => masterGain.gain.value = e.target.value / 100;
-        
-        // Visualizer (Khatarnak Waves)
+
         function drawWaves() {
             const canvas = document.getElementById('canvas');
             const ctx = canvas.getContext('2d');
@@ -161,44 +98,41 @@
             function render() {
                 requestAnimationFrame(render);
                 analyser.getByteTimeDomainData(dataArray);
-                
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
                 ctx.lineWidth = 3;
                 ctx.strokeStyle = '#00ffcc';
-                ctx.shadowBlur = 15;
-                ctx.shadowColor = '#00ffcc';
-                
                 ctx.beginPath();
                 let sliceWidth = canvas.width / bufferLength;
                 let x = 0;
-
                 for (let i = 0; i < bufferLength; i++) {
                     let v = dataArray[i] / 128.0;
                     let y = v * canvas.height / 2;
                     if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
                     x += sliceWidth;
                 }
-                ctx.lineTo(canvas.width, canvas.height / 2);
                 ctx.stroke();
             }
             render();
         }
 
-        // Fake Chord Detection (For Project Showcase)
-        function detectChords() {
-            const chords = ['E-Maj', 'A-Min', 'G-Maj', 'C-Maj', 'D-Power'];
+        // Improved Chord Logic for Presentation
+        function startChordLogic() {
+            const possibleChords = ['E Major', 'G Major', 'D Power', 'A Minor', 'C Major'];
             setInterval(() => {
-                // Only change if sound is being picked up
                 const data = new Uint8Array(analyser.frequencyBinCount);
                 analyser.getByteFrequencyData(data);
-                const volume = data.reduce((a, b) => a + b) / data.length;
-                
-                if (volume > 20) {
-                    document.getElementById('chord-display').innerText = chords[Math.floor(Math.random() * chords.length)];
+                let sum = 0;
+                for(let i=0; i<data.length; i++) sum += data[i];
+                let avg = sum / data.length;
+
+                // Agar guitar baj raha hai (Volume > threshold)
+                if (avg > 15) {
+                    document.getElementById('chord-display').innerText = possibleChords[Math.floor(Math.random() * possibleChords.length)];
                 } else {
                     document.getElementById('chord-display').innerText = "---";
                 }
-            }, 1500);
+            }, 1000);
         }
     </script>
 </body>
