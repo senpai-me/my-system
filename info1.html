@@ -2,163 +2,115 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Christ the Redeemer - History</title>
+    <title>Electric Guitar Mode</title>
     <style>
-        :root { 
-            --neon-blue: #00d2ff; 
-            --neon-pink: #ff0055; 
-        }
+        body { background: #0a0a0a; color: #00ffcc; font-family: 'Courier New', Courier, monospace; text-align: center; }
+        .visualizer-container { height: 150px; width: 80%; margin: 20px auto; border: 1px solid #333; position: relative; }
+        canvas { width: 100%; height: 100%; }
         
-        body { 
-            background: #000; 
-            color: #fff; 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0; 
-            padding: 20px; 
-            display: flex;
-            justify-content: center;
-        }
-
-        .bio-container { 
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(0, 210, 255, 0.3);
-            padding: 30px; 
-            border-radius: 30px; 
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 30px rgba(0, 210, 255, 0.1);
-        }
-
-        .hero-img { 
-            width: 100%; 
-            max-height: 400px;
-            object-fit: cover;
-            border-radius: 20px; 
-            border: 2px solid var(--neon-blue); 
-            margin-bottom: 30px; 
-            box-shadow: 0 0 20px var(--neon-blue);
-        }
-
-        h1 { 
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue);
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
-
-        .intro-text {
-            color: var(--neon-pink);
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-        }
-
-        /* History Section Styling */
-        .history-box {
-            text-align: left;
-            margin-top: 20px;
-        }
-
-        .point-card {
-            background: rgba(255, 0, 85, 0.05);
-            border-left: 4px solid var(--neon-pink);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 0 15px 15px 0;
-            transition: 0.3s;
-        }
-
-        .point-card:hover {
-            background: rgba(255, 0, 85, 0.1);
-            transform: translateX(10px);
-        }
-
-        .point-card h3 {
-            margin: 0 0 10px 0;
-            color: var(--neon-blue);
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-        }
-
-        .point-card h3 span {
-            background: var(--neon-pink);
-            color: white;
-            padding: 2px 10px;
-            border-radius: 5px;
-            margin-right: 15px;
-            font-size: 1rem;
-        }
-
-        .point-card p {
-            margin: 0;
-            line-height: 1.6;
-            font-size: 1.05rem;
-            color: #ddd;
-        }
-
-        .back-btn { 
-            display: inline-block; 
-            margin-top: 30px; 
-            padding: 15px 40px; 
-            background: var(--neon-blue); 
-            color: #000; 
-            text-decoration: none; 
-            font-weight: bold; 
-            border-radius: 50px; 
-            box-shadow: 0 0 15px var(--neon-blue);
-            transition: 0.3s;
-        }
-
-        .back-btn:hover {
-            transform: scale(1.1);
-            background: #fff;
-        }
+        .section { border: 2px solid #00ffcc; margin: 20px; padding: 20px; border-radius: 15px; background: #1a1a1a; }
+        .controls { display: flex; justify-content: space-around; flex-wrap: wrap; }
+        .knob { margin: 10px; }
+        
+        #chord-display { font-size: 3rem; font-weight: bold; color: #ff0055; text-shadow: 0 0 10px #ff0055; }
+        button { padding: 10px 20px; background: #00ffcc; border: none; cursor: pointer; font-weight: bold; }
     </style>
 </head>
 <body>
+    <h1>ELECTRIC MODE ACTIVE</h1>
+    <p>⚠️ Please wear headphones to avoid feedback!</p>
+    <button onclick="startProcessing()">START CONVERTER</button>
 
-    <div class="bio-container">
-        <img src="1.jpg" alt="Christ the Redeemer" class="hero-img">
-        <h1>Christ the Redeemer</h1>
-        <p class="intro-text">An Icon of Brazil & Peace</p>
-
-        <div class="history-box">
-            <div class="point-card">
-                <h3><span>1</span> The Early Concept (1850s – 1880s)</h3>
-                <p>The vision began nearly 70 years before construction. A priest named Pedro Maria Boss suggested a monument to honor Princess Isabel. She requested it be dedicated to "Christ the Redeemer" instead. After Brazil became a republic in 1889, the project was paused for decades.</p>
-            </div>
-
-            <div class="point-card">
-                <h3><span>2</span> A Religious Revival (1920 – 1922)</h3>
-                <p>Post-WWI, the Catholic Circle of Rio revived the idea to reclaim the nation's spiritual identity. During "Monument Week," the Brazilian people donated $250,000—making the statue entirely funded by private faith-based contributions.</p>
-            </div>
-
-            <div class="point-card">
-                <h3><span>3</span> Designing the Icon</h3>
-                <p>The original "Christ with a ball" design was simplified into an Art Deco masterpiece by Heitor da Silva Costa and Carlos Oswald. The final design features Christ himself as a cross, symbolizing a blessing of peace over the city.</p>
-            </div>
-
-            <div class="point-card">
-                <h3><span>4</span> International Collaboration</h3>
-                <p>While Brazil led the project, French-Polish sculptor Paul Landowski created the head and hands in Paris. Romanian sculptor Gheorghe Leonida carved the serenity of Christ’s face, creating a global artistic fusion.</p>
-            </div>
-
-            <div class="point-card">
-                <h3><span>5</span> The Construction Phase (1922 – 1931)</h3>
-                <p>Built with reinforced concrete, the statue is covered in 6 million soapstone tiles. These tiles give the monument a soft glow and protect it from extreme weather. Local women spent months gluing these tiles onto sheets for application.</p>
-            </div>
-
-            <div class="point-card">
-                <h3><span>6</span> The Grand Inauguration</h3>
-                <p>On October 12, 1931, the lights were triggered via radio signal. Today, it stands 98 feet tall as one of the New Seven Wonders of the World, surviving 3 to 6 lightning strikes annually.</p>
-            </div>
-        </div>
-
-        <a href="index.html" class="back-btn">← GO BACK</a>
+    <div class="visualizer-container">
+        <canvas id="canvas"></canvas>
     </div>
 
+    <div class="section">
+        <h2>MAIN CONTROLLER</h2>
+        <div class="controls">
+            <div class="knob">Distortion: <input type="range" id="dist" min="0" max="100" value="50"></div>
+            <div class="knob">Gain: <input type="range" id="gain" min="0" max="100" value="70"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>VOLUME / BASS / TREBLE</h2>
+        <div class="controls">
+            <div class="knob">Volume: <input type="range" id="vol" min="0" max="100" value="80"></div>
+            <div class="knob">Bass: <input type="range" id="bass" min="0" max="100" value="50"></div>
+            <div class="knob">Treble: <input type="range" id="treble" min="0" max="100" value="60"></div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h3>DETECTED CHORD</h3>
+        <div id="chord-display">---</div>
+    </div>
+
+    <script>
+        let audioCtx;
+        async function startProcessing() {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: { 
+                echoCancellation: false, 
+                noiseSuppression: false, 
+                autoGainControl: false 
+            } });
+            
+            const source = audioCtx.createMediaStreamSource(stream);
+            
+            // Effect: Distortion (Electric Sound)
+            const distortion = audioCtx.createWaveShaper();
+            function makeDistortionCurve(amount) {
+                let k = typeof amount === 'number' ? amount : 50,
+                    n_samples = 44100,
+                    curve = new Float32Array(n_samples);
+                for (let i = 0 ; i < n_samples; ++i ) {
+                    let x = i * 2 / n_samples - 1;
+                    curve[i] = (3 + k) * x * 20 * (Math.PI / 180) / (Math.PI + k * Math.abs(x));
+                }
+                return curve;
+            }
+            distortion.curve = makeDistortionCurve(100);
+
+            // Visualizer Logic
+            const analyser = audioCtx.createAnalyser();
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            
+            source.connect(distortion);
+            distortion.connect(analyser);
+            analyser.connect(audioCtx.destination);
+
+            function draw() {
+                requestAnimationFrame(draw);
+                const bufferLength = analyser.frequencyBinCount;
+                const dataArray = new Uint8Array(bufferLength);
+                analyser.getByteTimeDomainData(dataArray);
+                
+                ctx.fillStyle = '#0a0a0a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                ctx.lineWidth = 2;
+                ctx.strokeStyle = '#00ffcc';
+                ctx.beginPath();
+                let sliceWidth = canvas.width / bufferLength;
+                let x = 0;
+                for(let i = 0; i < bufferLength; i++) {
+                    let v = dataArray[i] / 128.0;
+                    let y = v * canvas.height/2;
+                    if(i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+                    x += sliceWidth;
+                }
+                ctx.stroke();
+            }
+            draw();
+            
+            // Dummy Chord Detection
+            setInterval(() => {
+                const chords = ['E Major', 'A Minor', 'G Major', 'D Major'];
+                document.getElementById('chord-display').innerText = chords[Math.floor(Math.random() * chords.length)];
+            }, 2000);
+        }
+    </script>
 </body>
 </html>
