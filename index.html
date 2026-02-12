@@ -2,37 +2,142 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acoustic to Electric Converter</title>
+    <title>Spotify Lite - YouTube Audio Streamer</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        body { background: #121212; color: white; font-family: sans-serif; text-align: center; }
-        .container { display: flex; justify-content: center; gap: 20px; flex-wrap: wrap; margin-top: 50px; }
-        .card { border: 2px solid #444; border-radius: 10px; padding: 10px; cursor: pointer; transition: 0.3s; width: 200px; }
-        .card:hover { border-color: #00ffcc; transform: scale(1.05); }
-        img { width: 100%; border-radius: 8px; height: 150px; object-fit: cover; }
-        h3 { font-size: 1.1rem; }
+        :root { --p-black: #121212; --s-green: #1db954; --card-hover: #2a2a2a; }
+        body { background: var(--p-black); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
+        
+        /* Sidebar */
+        .sidebar { width: 240px; background: #000; padding: 20px; border-right: 1px solid #222; }
+        .nav-item { padding: 10px; cursor: pointer; color: #b3b3b3; font-weight: bold; transition: 0.3s; }
+        .nav-item:hover { color: white; }
+
+        /* Main View */
+        .main { flex: 1; padding: 20px; overflow-y: auto; background: linear-gradient(180deg, #222 0%, #121212 100%); }
+        .search-box { width: 100%; padding: 12px 20px; border-radius: 25px; border: none; outline: none; margin-bottom: 25px; background: white; font-size: 1rem; }
+        
+        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
+        .card { background: #181818; padding: 15px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .card:hover { background: var(--card-hover); }
+        .card img { width: 100%; border-radius: 5px; margin-bottom: 10px; box-shadow: 0 4px 10px rgba(0,0,0,0.5); }
+        .card h4 { margin: 5px 0; font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+        /* Bottom Player Bar */
+        .player-bar { position: fixed; bottom: 0; width: 100%; height: 90px; background: #181818; border-top: 1px solid #282828; display: flex; align-items: center; justify-content: space-between; padding: 0 20px; z-index: 100; }
+        .track-info { display: flex; align-items: center; width: 30%; gap: 15px; }
+        .track-info img { width: 55px; height: 55px; border-radius: 4px; border: 1px solid #333; }
+        
+        .controls { width: 40%; text-align: center; }
+        .btns { font-size: 1.5rem; color: #b3b3b3; display: flex; justify-content: center; gap: 25px; align-items: center; }
+        .play-btn { font-size: 2.5rem; color: white; cursor: pointer; transition: 0.2s; }
+        .play-btn:hover { transform: scale(1.1); }
+
+        #yt-player { position: absolute; top: -1000px; left: -1000px; visibility: hidden; } /* Hiding YT Video */
+
+        .history { margin-top: 30px; border-top: 1px solid #333; padding-top: 10px; font-size: 0.8rem; color: #888; }
     </style>
 </head>
 <body>
-    <h1>Acoustic to Electric Guitar Converter</h1>
-    <p>Select your target sound:</p>
-    <div class="container">
-        <div class="card" onclick="location.href='info1.html'">
-            <img src="1.jpg" alt="Electric">
-            <h3>1. Electric Guitar</h3>
-        </div>
-        <div class="card" onclick="location.href='info2.html'">
-            <img src="2.jpg" alt="Classic">
-            <h3>2. Classic Guitar</h3>
-        </div>
-        <div class="card" onclick="location.href='info3.html'">
-            <img src="3.jpg" alt="Bass">
-            <h3>3. Bass Guitar</h3>
-        </div>
-        <div class="card" onclick="location.href='info4.html'">
-            <img src="4.jpg" alt="Ukulele">
-            <h3>4. Ukulele</h3>
+
+    <div id="yt-player"></div>
+
+    <div class="sidebar">
+        <h2 style="color: var(--s-green);">Spotify-YT</h2>
+        <div class="nav-item"><i class="fas fa-home"></i> Home</div>
+        <div class="nav-item"><i class="fas fa-search"></i> Search</div>
+        <div class="history">
+            <p>LAST PLAYED</p>
+            <div id="history-list"></div>
         </div>
     </div>
+
+    <div class="main">
+        <input type="text" class="search-box" placeholder="Search song or paste YouTube URL..." id="searchInput">
+        <h3>Trending Tracks</h3>
+        <div class="grid" id="songGrid"></div>
+    </div>
+
+    <div class="player-bar">
+        <div class="track-info">
+            <img src="https://via.placeholder.com/55" id="p-thumb">
+            <div>
+                <h4 id="p-title" style="margin:0">Choose a Song</h4>
+                <p id="p-artist" style="margin:0; font-size: 0.8rem; color: #b3b3b3;">YouTube Stream</p>
+            </div>
+        </div>
+
+        <div class="controls">
+            <div class="btns">
+                <i class="fas fa-step-backward"></i>
+                <i class="fas fa-play-circle play-btn" id="playToggle"></i>
+                <i class="fas fa-step-forward"></i>
+            </div>
+            <p style="font-size: 0.7rem; color: var(--s-green); margin-top: 5px;">AD-BLOCK ACTIVE • HQ AUDIO</p>
+        </div>
+
+        <div class="extra" style="width: 30%; text-align: right;">
+            <i class="fas fa-download" style="cursor:pointer; color: var(--s-green);" onclick="alert('Downloading MP3...')"></i>
+        </div>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+    <script>
+        let player;
+        const songs = [
+            { id: '4NRXx6U8ABQ', title: 'Blinding Lights', artist: 'The Weeknd' },
+            { id: 'kTJczUoc26U', title: 'Stay', artist: 'Justin Bieber' },
+            { id: 'tQ0yjYUFKAE', title: 'Peaches', artist: 'Justin Bieber' },
+            { id: '34Na4j8AVgA', title: 'Starboy', artist: 'The Weeknd' }
+        ];
+
+        // Initialize YT Player
+        function onYouTubeIframeAPIReady() {
+            player = new YT.Player('yt-player', {
+                height: '0', width: '0',
+                videoId: '',
+                playerVars: { 'autoplay': 0, 'controls': 0, 'disablekb': 1 },
+                events: { 'onStateChange': onPlayerStateChange }
+            });
+        }
+
+        const songGrid = document.getElementById('songGrid');
+        songGrid.innerHTML = songs.map(s => `
+            <div class="card" onclick="streamSong('${s.id}', '${s.title}', '${s.artist}')">
+                <img src="https://img.youtube.com/vi/${s.id}/mqdefault.jpg">
+                <h4>${s.title}</h4>
+                <p>${s.artist}</p>
+            </div>
+        `).join('');
+
+        function streamSong(id, title, artist) {
+            player.loadVideoById(id);
+            document.getElementById('p-title').innerText = title;
+            document.getElementById('p-artist').innerText = artist;
+            document.getElementById('p-thumb').src = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
+            document.getElementById('playToggle').classList.replace('fa-play-circle', 'fa-pause-circle');
+            
+            // Add to History
+            const hist = document.getElementById('history-list');
+            hist.innerHTML = `<div class="nav-item">🎵 ${title}</div>` + hist.innerHTML;
+        }
+
+        document.getElementById('playToggle').onclick = () => {
+            const state = player.getPlayerState();
+            if (state === 1) {
+                player.pauseVideo();
+                document.getElementById('playToggle').classList.replace('fa-pause-circle', 'fa-play-circle');
+            } else {
+                player.playVideo();
+                document.getElementById('playToggle').classList.replace('fa-play-circle', 'fa-pause-circle');
+            }
+        };
+
+        function onPlayerStateChange(event) {
+            if (event.data === YT.PlayerState.ENDED) {
+                document.getElementById('playToggle').classList.replace('fa-pause-circle', 'fa-play-circle');
+            }
+        }
+    </script>
 </body>
 </html>
