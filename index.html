@@ -2,120 +2,126 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>ProStream - Unlimited Music</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ultimate YT Downloader - 4K & MP3 Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        :root { --bg: #0f0f0f; --accent: #1db954; --card: #1a1a1a; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; display: flex; height: 100vh; overflow: hidden; }
-        .sidebar { width: 260px; background: #000; padding: 20px; display: flex; flex-direction: column; border-right: 1px solid #222; }
-        .streak-box { background: #222; padding: 15px; border-radius: 12px; text-align: center; margin-bottom: 20px; border: 1px solid var(--accent); }
-        .main { flex: 1; padding: 25px; overflow-y: auto; background: linear-gradient(180deg, #1e1e1e 0%, #0f0f0f 100%); padding-bottom: 120px; }
-        .search-container { position: relative; width: 100%; max-width: 600px; margin-bottom: 30px; }
-        .search-input { width: 100%; padding: 14px 25px; border-radius: 30px; border: none; outline: none; font-size: 1rem; background: white; color: black; }
-        #suggestions { position: absolute; width: 100%; background: #222; border-radius: 10px; top: 55px; z-index: 1000; display: none; }
-        .suggest-item { padding: 12px 20px; cursor: pointer; border-bottom: 1px solid #333; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 20px; }
-        .card { background: var(--card); padding: 15px; border-radius: 10px; cursor: pointer; transition: 0.3s; }
-        .player-bar { position: fixed; bottom: 0; width: 100%; height: 100px; background: #000; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; border-top: 1px solid #222; }
-        .track-info { display: flex; align-items: center; width: 30%; gap: 15px; }
-        .track-info img { width: 60px; height: 60px; border-radius: 5px; }
-        .play-btn { font-size: 2.8rem; color: white; cursor: pointer; }
-        #yt-engine { position: absolute; top: -5000px; }
+        :root { --bg: #0a0a0a; --accent: #1db954; --card-bg: #121212; --text-gray: #b3b3b3; }
+        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; }
+        
+        .header { padding: 30px; text-align: center; background: linear-gradient(to bottom, #1db95433, transparent); border-bottom: 1px solid #333; }
+        .container { max-width: 1000px; margin: 40px auto; padding: 0 20px; }
+        
+        /* Search Box */
+        .search-container { display: flex; gap: 10px; margin-bottom: 40px; background: #1e1e1e; padding: 10px; border-radius: 50px; border: 1px solid #333; }
+        input { flex: 1; padding: 15px 25px; border-radius: 40px; border: none; background: transparent; color: white; font-size: 1.1rem; outline: none; }
+        .btn-load { background: var(--accent); color: black; border: none; padding: 0 35px; border-radius: 40px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-load:hover { transform: scale(1.05); box-shadow: 0 0 20px var(--accent); }
+
+        /* Video Preview Card */
+        .video-preview { display: none; background: var(--card-bg); border-radius: 20px; overflow: hidden; border: 1px solid #333; box-shadow: 0 20px 40px rgba(0,0,0,0.6); }
+        .iframe-wrapper { position: relative; padding-bottom: 56.25%; height: 0; }
+        .iframe-wrapper iframe { position: absolute; top: 0; left: 0; width: 100%; height: 100%; }
+
+        /* Quality Grid */
+        .download-section { padding: 25px; }
+        .quality-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; margin-top: 20px; }
+        .dl-card { background: #1a1a1a; padding: 20px; border-radius: 15px; border: 1px solid #282828; text-align: center; transition: 0.3s; }
+        .dl-card:hover { border-color: var(--accent); background: #222; }
+        .dl-card h4 { margin: 10px 0 5px; color: #fff; font-size: 1.1rem; }
+        .dl-card p { font-size: 0.8rem; color: var(--text-gray); margin-bottom: 15px; }
+        
+        .dl-btn { display: block; background: #333; color: white; text-decoration: none; padding: 12px; border-radius: 8px; font-weight: bold; font-size: 0.9rem; transition: 0.3s; border: 1px solid #444; }
+        .dl-btn:hover { background: var(--accent); color: black; border-color: var(--accent); }
+        .best-tag { background: var(--accent); color: black; font-size: 0.6rem; padding: 2px 8px; border-radius: 10px; font-weight: bold; vertical-align: middle; }
+
+        /* Footer Link (Gateway) */
+        .gateway-link { text-align: center; margin: 60px 0; }
+        .gateway-link a { color: var(--accent); text-decoration: none; font-weight: bold; font-size: 1.2rem; border: 2px solid var(--accent); padding: 10px 30px; border-radius: 50px; transition: 0.3s; }
+        .gateway-link a:hover { background: var(--accent); color: black; }
     </style>
 </head>
 <body>
-    <div id="yt-engine"></div>
-    <div class="sidebar">
-        <div class="streak-box">
-            <h2>🔥 <span id="hours-played">0.0000</span> hrs</h2>
-            <p style="font-size: 0.7rem; color: #888;">LISTENING STREAK</p>
-        </div>
-        <div style="color:#888; font-size: 0.8rem; margin-bottom: 10px;">HISTORY</div>
-        <div id="history-list"></div>
+
+    <div class="header">
+        <h1 style="margin:0;"><i class="fab fa-youtube" style="color:#ff0000"></i> Pro<span style="color:var(--accent)">Download</span> 4K</h1>
+        <p style="color:var(--text-gray); font-size: 0.9rem; margin-top: 10px;">High Quality MP3 (320kbps) & Ultra HD Video</p>
     </div>
-    <div class="main">
+
+    <div class="container">
         <div class="search-container">
-            <input type="text" class="search-input" placeholder="Search any song (Arjan Vailly, Arijit...)" id="searchInput">
-            <div id="suggestions"></div>
+            <input type="text" id="ytLink" placeholder="Paste YouTube Link here...">
+            <button class="btn-load" onclick="processVideo()">LOAD VIDEO</button>
         </div>
-        <h3>Trending Now</h3>
-        <div class="grid" id="songGrid"></div>
-    </div>
-    <div class="player-bar">
-        <div class="track-info">
-            <img src="https://via.placeholder.com/60" id="p-img">
-            <div><h4 id="p-title" style="margin:0">Select Song</h4><p id="p-artist" style="margin:0; font-size:0.8rem; color:#888;">YouTube Audio</p></div>
-        </div>
-        <div style="text-align: center; width: 40%;">
-            <div style="display: flex; justify-content: center; gap: 25px; align-items: center;">
-                <i class="fas fa-undo-alt" style="cursor:pointer" onclick="seek(-10)"></i>
-                <i class="fas fa-play-circle play-btn" id="masterPlay"></i>
-                <i class="fas fa-redo-alt" style="cursor:pointer" onclick="seek(10)"></i>
+
+        <div id="previewArea" class="video-preview">
+            <div class="iframe-wrapper">
+                <iframe id="videoIframe" src="" frameborder="0" allowfullscreen></iframe>
             </div>
-            <div style="font-size: 0.7rem; color: var(--accent); margin-top:5px;">AD-BLOCKER ENABLED</div>
+            
+            <div class="download-section">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 id="vidTitle" style="margin:0">Video Title Loading...</h3>
+                    <span id="metadata-tag" style="font-size: 0.7rem; color: #888;"><i class="fas fa-info-circle"></i> Metadata (Thumb/Artist) Auto-Injected</span>
+                </div>
+                
+                <div class="quality-grid">
+                    <div class="dl-card">
+                        <i class="fas fa-headphones fa-2x" style="color:var(--accent)"></i>
+                        <h4>Audio MP3 <span class="best-tag">320kbps</span></h4>
+                        <p>Best for Mobile Music Player</p>
+                        <a href="#" id="dl-mp3-high" target="_blank" class="dl-btn">DOWNLOAD HQ MP3</a>
+                    </div>
+
+                    <div class="dl-card">
+                        <i class="fas fa-tv fa-2x" style="color:#ffd700"></i>
+                        <h4>Video 4K / 2160p <span class="best-tag">ULTRA HD</span></h4>
+                        <p>For Big Screens & 4K Phones</p>
+                        <a href="#" id="dl-4k" target="_blank" class="dl-btn">DOWNLOAD 4K MP4</a>
+                    </div>
+
+                    <div class="dl-card">
+                        <i class="fas fa-compact-disc fa-2x" style="color:#00ccff"></i>
+                        <h4>Video 1080p <span class="best-tag">FULL HD</span></h4>
+                        <p>Standard High Quality</p>
+                        <a href="#" id="dl-1080" target="_blank" class="dl-btn">DOWNLOAD 1080P</a>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div style="width: 30%; text-align: right;"><i class="fas fa-download" style="color:var(--accent); cursor:pointer;" onclick="alert('Starting Download...')"></i></div>
+
+        <div class="gateway-link">
+            <a href="info1.html">Gateway</a>
+        </div>
     </div>
 
-    <script src="https://www.youtube.com/iframe_api"></script>
     <script>
-        let player, playTime = 0, timerInterval;
-        const library = [
-            {id: 'q7_D9zInpSg', t: 'Arjan Vailly', a: 'Bhupinder Babbal'},
-            {id: 'mAnYfN-i_78', t: 'Kesariya', a: 'Arijit Singh'},
-            {id: 'V7LwfY5U5WI', t: 'Tum Hi Ho', a: 'Arijit Singh'},
-            {id: '34Na4j8AVgA', t: 'Starboy', a: 'The Weeknd'},
-            {id: 'kTJczUoc26U', t: 'Stay', a: 'Justin Bieber'},
-            {id: 'hHuG7qh0sjM', t: 'Raataan Lambiyan', a: 'Jubin Nautiyal'},
-            {id: '7-x3uD5z1bQ', t: 'Hope', a: 'XXXTentacion'}
-        ];
+        function processVideo() {
+            let url = document.getElementById('ytLink').value;
+            let videoId = "";
 
-        function onYouTubeIframeAPIReady() {
-            player = new YT.Player('yt-engine', { height: '0', width: '0', events: { 'onStateChange': handleState } });
+            if (url.includes("v=")) {
+                videoId = url.split("v=")[1].split("&")[0];
+            } else if (url.includes("youtu.be/")) {
+                videoId = url.split("youtu.be/")[1].split("?")[0];
+            } else {
+                alert("Bhai sahi link dalo!");
+                return;
+            }
+
+            // Show UI
+            document.getElementById('previewArea').style.display = "block";
+            document.getElementById('videoIframe').src = `https://www.youtube.com/embed/${videoId}?autoplay=1`;
+            document.getElementById('vidTitle').innerText = "Video Ready for Processing";
+
+            // Advanced Download Gateways (MP3 with Metadata & 4K support)
+            // Note: 9xbuddy and y2mate services handle metadata injection
+            document.getElementById('dl-mp3-high').href = `https://9xbuddy.com/process?url=${url}`;
+            document.getElementById('dl-4k').href = `https://y2mate.is/en99/?url=${url}`;
+            document.getElementById('dl-1080').href = `https://en.savefrom.net/1-youtube-video-downloader-360/?url=${url}`;
+
+            window.scrollTo({ top: document.getElementById('previewArea').offsetTop - 20, behavior: 'smooth' });
         }
-
-        function render(data) {
-            document.getElementById('songGrid').innerHTML = data.map(s => `
-                <div class="card" onclick="stream('${s.id}','${s.t}','${s.a}')">
-                    <img src="https://img.youtube.com/vi/${s.id}/mqdefault.jpg">
-                    <h4>${s.t}</h4><p>${s.a}</p>
-                </div>`).join('');
-        }
-        render(library);
-
-        document.getElementById('searchInput').oninput = (e) => {
-            const val = e.target.value.toLowerCase();
-            const filtered = library.filter(s => s.t.toLowerCase().includes(val) || s.a.toLowerCase().includes(val));
-            render(filtered);
-            // Dynamic Suggestion
-            const sugg = document.getElementById('suggestions');
-            if(val.length > 0) {
-                sugg.style.display = 'block';
-                sugg.innerHTML = `<div class="suggest-item" onclick="stream('q7_D9zInpSg','${val}','YouTube Stream')">🔍 Play "${val}" from YouTube</div>`;
-            } else sugg.style.display = 'none';
-        };
-
-        function stream(id, t, a) {
-            player.loadVideoById(id);
-            document.getElementById('p-title').innerText = t;
-            document.getElementById('p-artist').innerText = a;
-            document.getElementById('p-img').src = `https://img.youtube.com/vi/${id}/mqdefault.jpg`;
-            document.getElementById('masterPlay').classList.replace('fa-play-circle', 'fa-pause-circle');
-            document.getElementById('history-list').innerHTML = `<div style="color:#ccc; margin-bottom:5px;">🎵 ${t}</div>` + document.getElementById('history-list').innerHTML;
-            document.getElementById('suggestions').style.display = 'none';
-        }
-
-        function handleState(e) {
-            if(e.data == 1) { 
-                if(!timerInterval) timerInterval = setInterval(() => { playTime++; document.getElementById('hours-played').innerText = (playTime/3600).toFixed(4); }, 1000);
-            } else { clearInterval(timerInterval); timerInterval = null; }
-        }
-
-        function seek(s) { player.seekTo(player.getCurrentTime() + s, true); }
-        document.getElementById('masterPlay').onclick = () => {
-            if(player.getPlayerState() == 1) { player.pauseVideo(); document.getElementById('masterPlay').classList.replace('fa-pause-circle', 'fa-play-circle'); }
-            else { player.playVideo(); document.getElementById('masterPlay').classList.replace('fa-play-circle', 'fa-pause-circle'); }
-        };
     </script>
 </body>
 </html>
