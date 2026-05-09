@@ -2,134 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>My Personal ProDownloader</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        :root { --bg: #0a0a0a; --accent: #1db954; --card: #181818; }
-        body { background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: auto; text-align: center; }
-        
-        /* Search Box */
-        .search-area { background: #1e1e1e; padding: 10px; border-radius: 50px; display: flex; border: 1px solid #333; margin: 30px 0; }
-        input { flex: 1; padding: 12px 20px; border: none; background: transparent; color: white; font-size: 1rem; outline: none; }
-        .btn-gen { background: var(--accent); color: black; border: none; padding: 0 30px; border-radius: 40px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-gen:hover { transform: scale(1.05); box-shadow: 0 0 15px var(--accent); }
-
-        /* Results Box */
-        .results-box { display: none; background: var(--card); border-radius: 20px; padding: 25px; border: 1px solid #333; animation: fadeIn 0.5s; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        .thumb-preview { width: 100%; max-width: 400px; border-radius: 10px; margin-bottom: 20px; border: 1px solid #444; }
-
-        /* Action Buttons */
-        .quality-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; margin-top: 20px; }
-        .q-item { background: #222; padding: 15px; border-radius: 12px; border: 1px solid #333; cursor: pointer; transition: 0.2s; }
-        .q-item:hover { border-color: var(--accent); background: #2a2a2a; }
-        .q-item i { display: block; margin-bottom: 8px; font-size: 1.2rem; color: var(--accent); }
-        .q-item span { font-size: 0.85rem; font-weight: bold; }
-
-        /* Video Player Area */
-        #player-section { display: none; margin-top: 30px; background: #000; padding: 15px; border-radius: 15px; border: 1px solid var(--accent); }
-        video { width: 100%; border-radius: 8px; background: #000; }
-
-        .loading-spinner { display: none; margin: 20px auto; width: 40px; height: 40px; border: 4px solid #333; border-top: 4px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite; }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Space Theory | Beyond the Stars</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <div class="container">
-        <h1 style="letter-spacing: -1px;">PRO<span style="color:var(--accent)">DOWNLOADER</span></h1>
-        <p style="color:#888; font-size: 0.9rem;">Paste Link • Choose Quality • Direct Download</p>
+    <!-- Splash Screen -->
+    <div id="splash-screen">
+        <h1 class="glitch" data-text="READY TO GO BEYOND">READY TO GO BEYOND</h1>
+    </div>
 
-        <div class="search-area">
-            <input type="text" id="ytUrl" placeholder="Paste YouTube Video URL here...">
-            <button class="btn-gen" onclick="fetchVideoData()">GENERATE</button>
-        </div>
+    <!-- Main Content -->
+    <main id="main-content" class="hidden">
+        <div class="stars"></div>
+        <div class="twinkling"></div>
 
-        <div class="loading-spinner" id="loader"></div>
+        <section class="hero">
+            <h1 class="main-title">SPACE</h1>
+            <p class="subtitle">Exploring the unseen dimensions of the cosmos.</p>
+        </section>
 
-        <div class="results-box" id="results">
-            <img id="vidThumb" class="thumb-preview" src="">
-            <h3 id="vidTitle" style="margin: 0 0 20px 0; font-size: 1.1rem;"></h3>
-            
-            <div class="quality-grid">
-                <div class="q-item" onclick="loadStream('360')"><i class="fas fa-video"></i><span>360p (MP4)</span></div>
-                <div class="q-item" onclick="loadStream('720')"><i class="fas fa-video"></i><span>720p (HD)</span></div>
-                <div class="q-item" onclick="loadStream('1080')"><i class="fas fa-video"></i><span>1080p (FHD)</span></div>
-                <div class="q-item" onclick="loadStream('mp3')"><i class="fas fa-music"></i><span>Audio (MP3)</span></div>
+        <div class="gallery">
+            <div class="sticky-note" onclick="showHistory('1')">
+                <img src="1.jpg" alt="Galaxy Theory">
+                <p>Singularity</p>
+            </div>
+            <div class="sticky-note" onclick="showHistory('2')">
+                <img src="2.jpg" alt="Black Hole">
+                <p>Event Horizon</p>
+            </div>
+            <div class="sticky-note" onclick="showHistory('3')">
+                <img src="3.jpg" alt="Nebula">
+                <p>Stellar Nursery</p>
+            </div>
+            <div class="sticky-note" onclick="showHistory('4')">
+                <img src="4.jpg" alt="Dark Matter">
+                <p>Dark Energy</p>
             </div>
         </div>
 
-        <div id="player-section">
-            <p style="margin-bottom: 10px; font-size: 0.8rem; color: var(--accent);">
-                <i class="fas fa-info-circle"></i> Click the 3 dots (⋮) on player to <b>Download</b>
-            </p>
-            <video id="mainPlayer" controls poster=""></video>
-            <br>
-            <button onclick="document.getElementById('player-section').style.display='none'" style="margin-top:10px; background:none; border:1px solid #555; color:#888; padding:5px 15px; border-radius:4px; cursor:pointer;">Close</button>
+        <!-- History Modal -->
+        <div id="history-modal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2 id="history-title"></h2>
+                <p id="history-text"></p>
+            </div>
         </div>
-        
-        <div style="margin-top: 50px;">
-            <a href="info1.html" style="color:var(--accent); text-decoration: none; border-bottom: 1px dashed var(--accent);">Go to Gateway</a>
-        </div>
-    </div>
 
-    <script>
-        function extractID(url) {
-            const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-            const match = url.match(regExp);
-            return (match && match[2].length === 11) ? match[2] : null;
-        }
+        <footer>
+            <p>Theory by <strong>_ Aarthav Yadav</strong></p>
+            <p>For connection: <a href="mailto:fahh07-email@example.com">Contact Us</a></p>
+        </footer>
+    </main>
 
-        async function fetchVideoData() {
-            const url = document.getElementById('ytUrl').value;
-            const videoId = extractID(url);
-            
-            if(!videoId) { alert("Bhai sahi YouTube link dalo!"); return; }
-
-            // Show Loader
-            document.getElementById('loader').style.display = "block";
-            document.getElementById('results').style.display = "none";
-            document.getElementById('player-section').style.display = "none";
-
-            // Get Basic Info (Thumbnail)
-            document.getElementById('vidThumb').src = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-            document.getElementById('vidTitle').innerText = "Video Found! Ready to Stream.";
-            
-            // Artificial delay for "Generation" feel
-            setTimeout(() => {
-                document.getElementById('loader').style.display = "none";
-                document.getElementById('results').style.display = "block";
-                window.scrollTo({ top: document.getElementById('results').offsetTop - 20, behavior: 'smooth' });
-            }, 1000);
-        }
-
-        function loadStream(quality) {
-            const url = document.getElementById('ytUrl').value;
-            const playerSection = document.getElementById('player-section');
-            const video = document.getElementById('mainPlayer');
-            
-            playerSection.style.display = "block";
-            video.scrollIntoView({ behavior: 'smooth' });
-
-            // Using Cobalt API or similar Proxy for Independent Streaming
-            // This pulls the raw file link so 3-dots appear.
-            // Note: Since YouTube changes daily, we use a proxy that returns raw .mp4
-            const streamUrl = `https://api.vevioz.com/api/button/videos/${quality}/${extractID(url)}`;
-            
-            // We set the video source to the external stream provider's direct path
-            // This is the "Full Independent" way - No Redirection to their site.
-            video.src = `https://loader.to/api/button/?url=${url}&f=${quality === 'mp3' ? 'mp3' : quality}`;
-            
-            // To enable 3 dots download, we must point to a file source
-            // Let's use a Direct File Link Proxy
-            if(quality === 'mp3') {
-                alert("Loading Audio Stream... Use the player menu to save.");
-            } else {
-                alert("Loading " + quality + " Video... Please wait for buffering, then click 3 dots.");
-            }
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
