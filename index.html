@@ -5,37 +5,69 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Class 9th Notes Hub</title>
 
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
+
 <style>
   /* ==========================================
-     GLOBAL STYLES & NEON VARIABLES
+     GLOBAL VARIABLES & LIGHT AESTHETIC DESIGN
      ========================================== */
   :root {
-    --bg-black: #050508;
-    --card-bg: rgba(22, 22, 30, 0.6);
-    --neon-red: #ff2a5f;
-    --neon-cyan: #00f3ff;
-    --text-main: #ffffff;
-    --text-sub: #a0a0b0;
-    --glass-border: rgba(255, 255, 255, 0.08);
+    --primary-glow: #7c3aed;
+    --accent-cyan: #06b6d4;
+    --accent-pink: #ec4899;
+    --card-bg: rgba(255, 255, 255, 0.65);
+    --card-border: rgba(255, 255, 255, 0.8);
+    --text-dark: #0f172a;
+    --text-muted: #475569;
+    --shadow-soft: 0 20px 40px -15px rgba(0, 0, 0, 0.07);
+    --shadow-glow: 0 10px 30px -5px rgba(124, 58, 237, 0.3);
   }
 
   * {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: 'Poppins', sans-serif;
-    user-select: none;
+    font-family: 'Plus Jakarta Sans', sans-serif;
   }
 
   body {
-    background-color: var(--bg-black);
-    color: var(--text-main);
+    min-height: 100vh;
+    color: var(--text-dark);
     overflow-x: hidden;
-    /* Cyberpunk Grid Background */
-    background-image: 
-      linear-gradient(rgba(255, 42, 95, 0.05) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 42, 95, 0.05) 1px, transparent 1px);
-    background-size: 40px 40px;
+    position: relative;
+    /* Aesthetic Animated Gradient + Soft Pinterest Background Pattern */
+    background: linear-gradient(-45deg, #f3e8ff, #e0e7ff, #fae8ff, #f0f9ff);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+  }
+
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  /* Animated Overlay Image Pattern */
+  body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=2000&q=80');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.12;
+    z-index: -1;
+    pointer-events: none;
+    animation: floatBg 20s ease-in-out infinite alternate;
+  }
+
+  @keyframes floatBg {
+    0% { transform: scale(1) translateY(0); }
+    100% { transform: scale(1.05) translateY(-10px); }
   }
 
   /* ==========================================
@@ -47,83 +79,82 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: radial-gradient(circle at center, #11050c 0%, #000000 100%);
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 9999;
-    transition: opacity 0.8s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.8s;
+    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .enter-title {
-    font-size: 3rem;
-    font-weight: 900;
-    letter-spacing: 5px;
-    margin-bottom: 2.5rem;
-    text-transform: uppercase;
-    color: #fff;
-    text-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red), 0 0 40px var(--neon-red);
-    animation: pulseGlow 2s infinite alternate;
+    font-size: 3.2rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 2rem;
+    background: linear-gradient(135deg, var(--primary-glow), var(--accent-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: pulseTitle 3s ease-in-out infinite;
   }
 
-  @keyframes pulseGlow {
-    0% { text-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red); }
-    100% { text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan); }
+  @keyframes pulseTitle {
+    0%, 100% { transform: scale(1); opacity: 0.9; }
+    50% { transform: scale(1.03); opacity: 1; }
   }
 
   .enter-btn {
-    position: relative;
-    padding: 20px 60px;
-    font-size: 1.4rem;
+    padding: 18px 50px;
+    font-size: 1.2rem;
     font-weight: 800;
     color: #fff;
-    background: rgba(0, 0, 0, 0.5);
-    border: 2px solid var(--neon-red);
+    background: linear-gradient(135deg, var(--primary-glow), var(--accent-pink));
+    border: none;
     border-radius: 50px;
     cursor: pointer;
-    letter-spacing: 3px;
-    backdrop-filter: blur(10px);
-    transition: all 0.4s ease;
-    box-shadow: 0 0 20px rgba(255, 42, 95, 0.4);
+    letter-spacing: 1px;
+    box-shadow: var(--shadow-glow);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
 
   .enter-btn:hover {
-    background: var(--neon-red);
-    color: #000;
-    box-shadow: 0 0 50px var(--neon-red), 0 0 100px var(--neon-red);
-    transform: scale(1.1) translateY(-3px);
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 35px -5px rgba(236, 72, 153, 0.5);
   }
 
   /* ==========================================
-     MAIN CONTENT & HEADER
+     MAIN CONTAINER & HEADER
      ========================================== */
   #main-content {
     opacity: 0;
-    transition: opacity 1s ease-in;
+    transition: opacity 1s ease;
     padding: 3rem 1.5rem;
-    max-width: 1200px;
+    max-width: 1100px;
     margin: 0 auto;
   }
 
   .header-section {
     text-align: center;
-    margin-bottom: 4rem;
+    margin-bottom: 3.5rem;
   }
 
   .header-section h1 {
-    font-size: 3.5rem;
+    font-size: 3.2rem;
     font-weight: 800;
-    background: linear-gradient(90deg, var(--neon-red), var(--neon-cyan));
+    letter-spacing: -1px;
+    background: linear-gradient(135deg, #3b82f6, var(--primary-glow), var(--accent-pink));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     margin-bottom: 0.5rem;
   }
 
   .header-section p {
-    color: var(--text-sub);
+    color: var(--text-muted);
     font-size: 1.1rem;
-    letter-spacing: 1px;
+    font-weight: 600;
   }
 
   /* ==========================================
@@ -131,17 +162,19 @@
      ========================================== */
   .subjects-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-    gap: 2rem;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
   }
 
   .subject-card {
     background: var(--card-bg);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(12px);
-    padding: 1.8rem;
-    border-radius: 16px;
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    padding: 1.5rem 1.8rem;
+    border-radius: 20px;
     cursor: pointer;
+    box-shadow: var(--shadow-soft);
     transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
     display: flex;
     justify-content: space-between;
@@ -150,155 +183,137 @@
     overflow: hidden;
   }
 
-  .subject-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-    transition: 0.5s;
-  }
-
-  .subject-card:hover::before {
-    left: 100%;
-  }
-
   .subject-card:hover {
-    border-color: var(--neon-cyan);
-    transform: translateY(-8px) scale(1.02);
-    box-shadow: 0 10px 30px rgba(0, 243, 255, 0.25);
+    transform: translateY(-8px);
+    background: rgba(255, 255, 255, 0.85);
+    border-color: rgba(124, 58, 237, 0.3);
+    box-shadow: 0 20px 30px -10px rgba(124, 58, 237, 0.2);
   }
 
   .subject-title {
-    font-size: 1.3rem;
+    font-size: 1.15rem;
     font-weight: 700;
-    letter-spacing: 0.5px;
+    color: var(--text-dark);
   }
 
   .plus-icon {
-    font-size: 1.8rem;
+    font-size: 1.4rem;
     font-weight: bold;
-    color: var(--neon-red);
-    transition: transform 0.3s ease, color 0.3s ease;
+    color: var(--primary-glow);
+    transition: transform 0.3s ease;
   }
 
   .subject-card:hover .plus-icon {
-    color: var(--neon-cyan);
-    transform: rotate(90deg);
+    transform: rotate(90deg) scale(1.2);
   }
 
   /* ==========================================
-     CHAPTER SECTION & PREVIEW
+     CHAPTER DISPLAY & PDF SECTION
      ========================================== */
   #chapter-section {
     display: none;
-    margin-top: 4rem;
+    margin-top: 3.5rem;
     background: var(--card-bg);
-    border: 1px solid var(--glass-border);
-    backdrop-filter: blur(16px);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     padding: 2.5rem;
-    border-radius: 20px;
-    animation: fadeIn 0.6s ease-in-out;
+    border-radius: 24px;
+    box-shadow: var(--shadow-soft);
+    animation: slideUp 0.5s ease;
   }
 
-  @keyframes fadeIn {
-    from { opacity: 0; transform: translateY(20px); }
+  @keyframes slideUp {
+    from { opacity: 0; transform: translateY(30px); }
     to { opacity: 1; transform: translateY(0); }
   }
 
   .chapter-list {
     display: flex;
-    gap: 15px;
-    margin: 2rem 0;
+    gap: 12px;
+    margin: 1.8rem 0;
     flex-wrap: wrap;
   }
 
   .chap-btn {
-    padding: 12px 25px;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid var(--glass-border);
-    color: var(--text-main);
-    border-radius: 8px;
-    font-weight: 600;
+    padding: 12px 22px;
+    background: rgba(255, 255, 255, 0.8);
+    border: 1px solid rgba(124, 58, 237, 0.15);
+    color: var(--text-dark);
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 0.95rem;
     cursor: pointer;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
   }
 
   .chap-btn:hover {
-    background: var(--neon-red);
-    border-color: var(--neon-red);
-    box-shadow: 0 0 15px var(--neon-red);
-    color: #000;
+    background: linear-gradient(135deg, var(--primary-glow), var(--accent-pink));
+    color: #fff;
+    border-color: transparent;
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-glow);
   }
 
   .notes-display {
     text-align: center;
-    margin-top: 2.5rem;
+    margin-top: 2rem;
   }
 
-  .notes-display img {
-    max-width: 100%;
-    border-radius: 12px;
-    border: 1px solid var(--glass-border);
-    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
-  }
-
-  /* PDF Viewer Frame Styling */
   .pdf-frame {
     width: 100%;
-    height: 600px;
-    border: 1px solid var(--neon-cyan);
-    border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+    height: 680px;
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    background: #fff;
   }
 
   .download-btn {
     display: inline-block;
-    margin-top: 2rem;
-    padding: 14px 35px;
-    background: linear-gradient(45deg, #00c853, #00e676);
-    color: #000;
+    margin-top: 1.8rem;
+    padding: 14px 32px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
     text-decoration: none;
     border-radius: 50px;
     font-weight: 800;
-    letter-spacing: 1px;
-    box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
+    box-shadow: 0 10px 20px -5px rgba(16, 185, 129, 0.4);
     transition: all 0.3s ease;
   }
 
   .download-btn:hover {
-    transform: scale(1.08);
-    box-shadow: 0 0 35px rgba(0, 230, 118, 0.7);
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 15px 25px -5px rgba(16, 185, 129, 0.6);
   }
 
   /* ==========================================
-     SPIDERMAN PHOTO GALLERY SECTION
+     SPIDERMAN LANDSCAPE GALLERY
      ========================================== */
   .gallery-section {
-    margin-top: 6rem;
-    padding-top: 3rem;
-    border-top: 1px solid var(--glass-border);
+    margin-top: 5rem;
+    padding-top: 2.5rem;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
     text-align: center;
   }
 
   .gallery-title {
-    font-size: 2rem;
-    color: var(--neon-cyan);
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-dark);
     margin-bottom: 1.5rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
+    letter-spacing: -0.5px;
   }
 
   .image-container {
     position: relative;
     width: 100%;
-    max-height: 500px;
+    max-height: 480px;
     overflow: hidden;
-    border-radius: 16px;
-    border: 2px solid var(--neon-red);
-    box-shadow: 0 0 30px rgba(255, 42, 95, 0.3);
+    border-radius: 20px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid var(--card-border);
   }
 
   .image-container img {
@@ -306,29 +321,25 @@
     height: 100%;
     object-fit: cover;
     display: block;
-    transition: transform 0.5s ease;
+    transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .image-container:hover img {
-    transform: scale(1.05);
+    transform: scale(1.03);
   }
 
   .pinterest-link {
     display: inline-block;
-    margin-top: 1.5rem;
-    color: var(--neon-cyan);
-    font-size: 1.1rem;
-    font-weight: 600;
+    margin-top: 1.2rem;
+    color: var(--primary-glow);
+    font-size: 1rem;
+    font-weight: 700;
     text-decoration: none;
-    border-bottom: 2px solid var(--neon-cyan);
-    padding-bottom: 4px;
     transition: all 0.3s ease;
   }
 
   .pinterest-link:hover {
-    color: var(--neon-red);
-    border-color: var(--neon-red);
-    text-shadow: 0 0 10px var(--neon-red);
+    color: var(--accent-pink);
   }
 </style>
 </head>
@@ -337,14 +348,14 @@
   <!-- ENTRY SCREEN OVERLAY -->
   <div id="enter-screen">
     <div class="enter-title">Class 9th Notes Hub</div>
-    <button class="enter-btn" onclick="openWebsite()">ENTER</button>
+    <button class="enter-btn" onclick="openWebsite()">ENTER HUB</button>
   </div>
 
-  <!-- MAIN WEBSITE CONTENT -->
+  <!-- MAIN CONTENT -->
   <div id="main-content">
     <div class="header-section">
       <h1>CLASS 9TH SUBJECTS</h1>
-      <p>Select a subject to open chapter wise notes</p>
+      <p>Select a subject to view chapter notes</p>
     </div>
 
     <!-- SUBJECTS LIST -->
@@ -364,44 +375,57 @@
       <div class="subject-card" onclick="openSubject('computer')"><span class="subject-title">IT / Computer</span><span class="plus-icon">+</span></div>
     </div>
 
-    <!-- CHAPTER DETAILS & PREVIEW SECTION -->
+    <!-- CHAPTER DETAILS & PDF VIEWER -->
     <div id="chapter-section">
-      <h2 id="selected-subject-title" style="color: var(--neon-cyan); font-size: 2rem; text-transform: uppercase;">Subject</h2>
+      <h2 id="selected-subject-title" style="color: var(--primary-glow); font-size: 1.8rem; text-transform: uppercase;">Subject</h2>
       
-      <!-- 5 CHAPTER BUTTONS -->
-      <div class="chapter-list">
-        <button class="chap-btn" onclick="showChapter(1)">Chapter 1</button>
-        <button class="chap-btn" onclick="showChapter(2)">Chapter 2</button>
-        <button class="chap-btn" onclick="showChapter(3)">Chapter 3</button>
-        <button class="chap-btn" onclick="showChapter(4)">Chapter 4</button>
-        <button class="chap-btn" onclick="showChapter(5)">Chapter 5</button>
+      <div class="chapter-list" id="chapter-list-container">
+        <!-- Buttons rendered dynamically via JavaScript -->
       </div>
 
       <div class="notes-display" id="notes-view" style="display:none;">
-        <h3 id="chap-heading" style="margin-bottom: 1rem; color: var(--neon-red);">Chapter 1 Notes</h3>
+        <h3 id="chap-heading" style="margin-bottom: 1.2rem; color: var(--accent-pink);">Chapter Notes</h3>
         
-        <!-- Preview Image (Apne aap filename maths1.png banayega) -->
-        <img id="note-image" src="" alt="Notes Preview" onerror="this.src='https://via.placeholder.com/800x1000/0a0a0c/ff2a5f?text=File+Not+Uploaded+Yet'">
+        <!-- Google Drive Embedded Viewer -->
+        <iframe id="pdf-viewer" class="pdf-frame" src="" allow="autoplay"></iframe>
         
         <br>
-        <a id="download-link" href="#" download class="download-btn">📥 DOWNLOAD FILE</a>
+        <a id="download-link" href="#" target="_blank" class="download-btn">📥 FULLSCREEN / DOWNLOAD PDF</a>
       </div>
     </div>
 
-    <!-- SPIDERMAN LANDSCAPE IMAGE SECTION -->
+    <!-- GALLERY SECTION -->
     <div class="gallery-section">
       <div class="gallery-title">Owner's Vault</div>
       <div class="image-container">
         <img src="https://images.unsplash.com/photo-1635863138275-d9b33299680b?auto=format&fit=crop&w=1200&q=80" alt="Spiderman Landscape Art">
       </div>
-      <a href="https://pinterest.com" target="_blank" class="pinterest-link">🔗 View More Visuals on Pinterest</a>
+      <a href="https://pinterest.com" target="_blank" class="pinterest-link">🔗 Explore Visuals on Pinterest</a>
     </div>
 
   </div>
 
-  <!-- JAVASCRIPT CODE -->
+  <!-- JAVASCRIPT -->
   <script>
-    let currentSubject = 'maths'; // Default subject
+    let currentSubject = 'maths';
+
+    // PDF LINKS DATABASE
+    const pdfDatabase = {
+      'history': {
+        1: 'https://drive.google.com/file/d/1BntkYs4nvBvF_e9KRI0jp4eVjjNdFsqs/preview'
+      },
+      'geography': {
+        1: 'https://drive.google.com/file/d/1WExfdNkRhQorsfz3Y7krL9YSkqSFVBiU/preview'
+      },
+      'maths': {
+        1: 'https://drive.google.com/file/d/1WExfdNkRhQorsfz3Y7krL9YSkqSFVBiU/preview',
+        2: 'https://drive.google.com/file/d/1VdqPlM6yz11Op2Jb8ZNKGHj1xKKgCLkc/preview',
+        3: 'https://drive.google.com/file/d/1s6GI9AnP2WOz_bP2u9D8lEtRPCGsR6Tp/preview'
+      },
+      'hindi': {
+        'combo': 'https://drive.google.com/file/d/1z_vY1QSwxq7H3dP0r6eJ-KKzYv6x7VPh/preview'
+      }
+    };
 
     function openWebsite() {
       const enterScreen = document.getElementById('enter-screen');
@@ -417,13 +441,31 @@
     }
 
     function openSubject(subjectName) {
-      currentSubject = subjectName; // Store selected subject
+      currentSubject = subjectName;
       const chapterSection = document.getElementById('chapter-section');
       const subjectTitle = document.getElementById('selected-subject-title');
       const notesView = document.getElementById('notes-view');
+      const chapterListContainer = document.getElementById('chapter-list-container');
 
       subjectTitle.innerText = subjectName.replace('_', ' ');
       notesView.style.display = 'none';
+
+      // Dynamic Buttons Render Logic
+      if(subjectName === 'hindi') {
+        chapterListContainer.innerHTML = `
+          <button class="chap-btn" onclick="showChapter('combo')">Ch 01 + 02 + 03 + 08 + 09</button>
+          <button class="chap-btn" onclick="showChapter(4)">Chapter 4</button>
+          <button class="chap-btn" onclick="showChapter(5)">Chapter 5</button>
+        `;
+      } else {
+        chapterListContainer.innerHTML = `
+          <button class="chap-btn" onclick="showChapter(1)">Chapter 1</button>
+          <button class="chap-btn" onclick="showChapter(2)">Chapter 2</button>
+          <button class="chap-btn" onclick="showChapter(3)">Chapter 3</button>
+          <button class="chap-btn" onclick="showChapter(4)">Chapter 4</button>
+          <button class="chap-btn" onclick="showChapter(5)">Chapter 5</button>
+        `;
+      }
 
       chapterSection.style.display = 'block';
       chapterSection.scrollIntoView({ behavior: 'smooth' });
@@ -432,17 +474,20 @@
     function showChapter(chapNum) {
       const notesView = document.getElementById('notes-view');
       const chapHeading = document.getElementById('chap-heading');
-      const noteImage = document.getElementById('note-image');
+      const pdfViewer = document.getElementById('pdf-viewer');
       const downloadLink = document.getElementById('download-link');
 
-      // Generates filename automatically e.g., "maths1.png"
-      const fileName = currentSubject + chapNum + '.png'; 
+      let displayTitle = chapNum === 'combo' ? 'Ch 01 + 02 + 03 + 08 + 09' : 'Chapter ' + chapNum;
+      chapHeading.innerText = currentSubject.toUpperCase() + ' - ' + displayTitle;
 
-      chapHeading.innerText = currentSubject.toUpperCase() + ' - Chapter ' + chapNum + ' Notes';
-      
-      // Image ka source aur Download link update kar raha hai
-      noteImage.src = fileName;
-      downloadLink.href = fileName;
+      if (pdfDatabase[currentSubject] && pdfDatabase[currentSubject][chapNum]) {
+        const drivePreviewUrl = pdfDatabase[currentSubject][chapNum];
+        pdfViewer.src = drivePreviewUrl;
+        downloadLink.href = drivePreviewUrl.replace('/preview', '/view');
+      } else {
+        pdfViewer.src = 'about:blank';
+        alert('Is chapter ki PDF abhi upload nahi hui hai!');
+      }
 
       notesView.style.display = 'block';
       notesView.scrollIntoView({ behavior: 'smooth' });
