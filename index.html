@@ -1,62 +1,452 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Space Theory | Beyond the Stars</title>
-    <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Class 9th Notes Hub</title>
+
+<style>
+  /* ==========================================
+     GLOBAL STYLES & NEON VARIABLES
+     ========================================== */
+  :root {
+    --bg-black: #050508;
+    --card-bg: rgba(22, 22, 30, 0.6);
+    --neon-red: #ff2a5f;
+    --neon-cyan: #00f3ff;
+    --text-main: #ffffff;
+    --text-sub: #a0a0b0;
+    --glass-border: rgba(255, 255, 255, 0.08);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Poppins', sans-serif;
+    user-select: none;
+  }
+
+  body {
+    background-color: var(--bg-black);
+    color: var(--text-main);
+    overflow-x: hidden;
+    /* Cyberpunk Grid Background */
+    background-image: 
+      linear-gradient(rgba(255, 42, 95, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 42, 95, 0.05) 1px, transparent 1px);
+    background-size: 40px 40px;
+  }
+
+  /* ==========================================
+     ENTER SCREEN (3D GLOW OVERLAY)
+     ========================================== */
+  #enter-screen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: radial-gradient(circle at center, #11050c 0%, #000000 100%);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.8s cubic-bezier(0.77, 0, 0.175, 1), visibility 0.8s;
+  }
+
+  .enter-title {
+    font-size: 3rem;
+    font-weight: 900;
+    letter-spacing: 5px;
+    margin-bottom: 2.5rem;
+    text-transform: uppercase;
+    color: #fff;
+    text-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red), 0 0 40px var(--neon-red);
+    animation: pulseGlow 2s infinite alternate;
+  }
+
+  @keyframes pulseGlow {
+    0% { text-shadow: 0 0 10px var(--neon-red), 0 0 20px var(--neon-red); }
+    100% { text-shadow: 0 0 20px var(--neon-cyan), 0 0 40px var(--neon-cyan); }
+  }
+
+  .enter-btn {
+    position: relative;
+    padding: 20px 60px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: #fff;
+    background: rgba(0, 0, 0, 0.5);
+    border: 2px solid var(--neon-red);
+    border-radius: 50px;
+    cursor: pointer;
+    letter-spacing: 3px;
+    backdrop-filter: blur(10px);
+    transition: all 0.4s ease;
+    box-shadow: 0 0 20px rgba(255, 42, 95, 0.4);
+  }
+
+  .enter-btn:hover {
+    background: var(--neon-red);
+    color: #000;
+    box-shadow: 0 0 50px var(--neon-red), 0 0 100px var(--neon-red);
+    transform: scale(1.1) translateY(-3px);
+  }
+
+  /* ==========================================
+     MAIN CONTENT & HEADER
+     ========================================== */
+  #main-content {
+    opacity: 0;
+    transition: opacity 1s ease-in;
+    padding: 3rem 1.5rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+
+  .header-section {
+    text-align: center;
+    margin-bottom: 4rem;
+  }
+
+  .header-section h1 {
+    font-size: 3.5rem;
+    font-weight: 800;
+    background: linear-gradient(90deg, var(--neon-red), var(--neon-cyan));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+  }
+
+  .header-section p {
+    color: var(--text-sub);
+    font-size: 1.1rem;
+    letter-spacing: 1px;
+  }
+
+  /* ==========================================
+     SUBJECTS GRID (GLASSMORPHISM CARDS)
+     ========================================== */
+  .subjects-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 2rem;
+  }
+
+  .subject-card {
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(12px);
+    padding: 1.8rem;
+    border-radius: 16px;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .subject-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+    transition: 0.5s;
+  }
+
+  .subject-card:hover::before {
+    left: 100%;
+  }
+
+  .subject-card:hover {
+    border-color: var(--neon-cyan);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 243, 255, 0.25);
+  }
+
+  .subject-title {
+    font-size: 1.3rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+  }
+
+  .plus-icon {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: var(--neon-red);
+    transition: transform 0.3s ease, color 0.3s ease;
+  }
+
+  .subject-card:hover .plus-icon {
+    color: var(--neon-cyan);
+    transform: rotate(90deg);
+  }
+
+  /* ==========================================
+     CHAPTER SECTION & PREVIEW
+     ========================================== */
+  #chapter-section {
+    display: none;
+    margin-top: 4rem;
+    background: var(--card-bg);
+    border: 1px solid var(--glass-border);
+    backdrop-filter: blur(16px);
+    padding: 2.5rem;
+    border-radius: 20px;
+    animation: fadeIn 0.6s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .chapter-list {
+    display: flex;
+    gap: 15px;
+    margin: 2rem 0;
+    flex-wrap: wrap;
+  }
+
+  .chap-btn {
+    padding: 12px 25px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--glass-border);
+    color: var(--text-main);
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+  }
+
+  .chap-btn:hover {
+    background: var(--neon-red);
+    border-color: var(--neon-red);
+    box-shadow: 0 0 15px var(--neon-red);
+    color: #000;
+  }
+
+  .notes-display {
+    text-align: center;
+    margin-top: 2.5rem;
+  }
+
+  .notes-display img {
+    max-width: 100%;
+    border-radius: 12px;
+    border: 1px solid var(--glass-border);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.8);
+  }
+
+  /* PDF Viewer Frame Styling */
+  .pdf-frame {
+    width: 100%;
+    height: 600px;
+    border: 1px solid var(--neon-cyan);
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.2);
+  }
+
+  .download-btn {
+    display: inline-block;
+    margin-top: 2rem;
+    padding: 14px 35px;
+    background: linear-gradient(45deg, #00c853, #00e676);
+    color: #000;
+    text-decoration: none;
+    border-radius: 50px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    box-shadow: 0 0 20px rgba(0, 230, 118, 0.4);
+    transition: all 0.3s ease;
+  }
+
+  .download-btn:hover {
+    transform: scale(1.08);
+    box-shadow: 0 0 35px rgba(0, 230, 118, 0.7);
+  }
+
+  /* ==========================================
+     SPIDERMAN PHOTO GALLERY SECTION
+     ========================================== */
+  .gallery-section {
+    margin-top: 6rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--glass-border);
+    text-align: center;
+  }
+
+  .gallery-title {
+    font-size: 2rem;
+    color: var(--neon-cyan);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+  }
+
+  .image-container {
+    position: relative;
+    width: 100%;
+    max-height: 500px;
+    overflow: hidden;
+    border-radius: 16px;
+    border: 2px solid var(--neon-red);
+    box-shadow: 0 0 30px rgba(255, 42, 95, 0.3);
+  }
+
+  .image-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.5s ease;
+  }
+
+  .image-container:hover img {
+    transform: scale(1.05);
+  }
+
+  .pinterest-link {
+    display: inline-block;
+    margin-top: 1.5rem;
+    color: var(--neon-cyan);
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-decoration: none;
+    border-bottom: 2px solid var(--neon-cyan);
+    padding-bottom: 4px;
+    transition: all 0.3s ease;
+  }
+
+  .pinterest-link:hover {
+    color: var(--neon-red);
+    border-color: var(--neon-red);
+    text-shadow: 0 0 10px var(--neon-red);
+  }
+</style>
 </head>
 <body>
 
-    <!-- Splash Screen -->
-    <div id="splash-screen">
-        <h1 class="fade" data-text="READY TO GO BEYOND">READY TO GO BEYOND</h1>
+  <!-- ENTRY SCREEN OVERLAY -->
+  <div id="enter-screen">
+    <div class="enter-title">Class 9th Notes Hub</div>
+    <button class="enter-btn" onclick="openWebsite()">ENTER</button>
+  </div>
+
+  <!-- MAIN WEBSITE CONTENT -->
+  <div id="main-content">
+    <div class="header-section">
+      <h1>CLASS 9TH SUBJECTS</h1>
+      <p>Select a subject to open chapter wise notes</p>
     </div>
 
-    <!-- Main Content -->
-    <main id="main-content" class="hidden">
-        <div class="stars"></div>
-        <div class="twinkling"></div>
+    <!-- SUBJECTS LIST -->
+    <div class="subjects-grid">
+      <div class="subject-card" onclick="openSubject('maths')"><span class="subject-title">Maths</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" onclick="openSubject('physics')"><span class="subject-title">Physics</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" onclick="openSubject('chemistry')"><span class="subject-title">Chemistry</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" onclick="openSubject('biology')"><span class="subject-title">Biology</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" onclick="openSubject('english')"><span class="subject-title">English</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" onclick="openSubject('english_grammar')"><span class="subject-title">English Grammar</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" onclick="openSubject('hindi')"><span class="subject-title">Hindi</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" onclick="openSubject('hindi_grammar')"><span class="subject-title">Hindi Grammar</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" onclick="openSubject('history')"><span class="subject-title">History</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" onclick="openSubject('civics')"><span class="subject-title">Political Science (Civics)</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" onclick="openSubject('geography')"><span class="subject-title">Geography</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" onclick="openSubject('economics')"><span class="subject-title">Economics</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" onclick="openSubject('computer')"><span class="subject-title">IT / Computer</span><span class="plus-icon">+</span></div>
+    </div>
 
-        <section class="hero">
-            <h1 class="main-title">SPACE</h1>
-            <p class="subtitle">Exploring the unseen dimensions of the cosmos.</p>
-        </section>
+    <!-- CHAPTER DETAILS & PREVIEW SECTION -->
+    <div id="chapter-section">
+      <h2 id="selected-subject-title" style="color: var(--neon-cyan); font-size: 2rem; text-transform: uppercase;">Subject</h2>
+      
+      <!-- 5 CHAPTER BUTTONS -->
+      <div class="chapter-list">
+        <button class="chap-btn" onclick="showChapter(1)">Chapter 1</button>
+        <button class="chap-btn" onclick="showChapter(2)">Chapter 2</button>
+        <button class="chap-btn" onclick="showChapter(3)">Chapter 3</button>
+        <button class="chap-btn" onclick="showChapter(4)">Chapter 4</button>
+        <button class="chap-btn" onclick="showChapter(5)">Chapter 5</button>
+      </div>
 
-        <div class="gallery">
-            <div class="sticky-note" onclick="info1.html('1')">
-                <img src="1.jpg" alt="Galaxy Theory">
-                <p>Singularity</p>
-            </div>
-            <div class="sticky-note" onclick="info2.html('2')">
-                <img src="2.jpg" alt="Black Hole">
-                <p>Event Horizon</p>
-            </div>
-            <div class="sticky-note" onclick="info3.html('3')">
-                <img src="3.jpg" alt="Nebula">
-                <p>Stellar Nursery</p>
-            </div>
-            <div class="sticky-note" onclick="info4.html('4')">
-                <img src="4.jpg" alt="Dark Matter">
-                <p>Dark Energy</p>
-            </div>
-        </div>
+      <div class="notes-display" id="notes-view" style="display:none;">
+        <h3 id="chap-heading" style="margin-bottom: 1rem; color: var(--neon-red);">Chapter 1 Notes</h3>
+        
+        <!-- Preview Image (Apne aap filename maths1.png banayega) -->
+        <img id="note-image" src="" alt="Notes Preview" onerror="this.src='https://via.placeholder.com/800x1000/0a0a0c/ff2a5f?text=File+Not+Uploaded+Yet'">
+        
+        <br>
+        <a id="download-link" href="#" download class="download-btn">📥 DOWNLOAD FILE</a>
+      </div>
+    </div>
 
-        <!-- History Modal -->
-        <div id="history-modal" class="modal">
-            <div class="modal-content">
-                <span class="close" onclick="closeModal()">&times;</span>
-                <h2 id="history-title"></h2>
-                <p id="history-text"></p>
-            </div>
-        </div>
+    <!-- SPIDERMAN LANDSCAPE IMAGE SECTION -->
+    <div class="gallery-section">
+      <div class="gallery-title">Owner's Vault</div>
+      <div class="image-container">
+        <img src="https://images.unsplash.com/photo-1635863138275-d9b33299680b?auto=format&fit=crop&w=1200&q=80" alt="Spiderman Landscape Art">
+      </div>
+      <a href="https://pinterest.com" target="_blank" class="pinterest-link">🔗 View More Visuals on Pinterest</a>
+    </div>
 
-        <footer>
-            <p>Theory by <strong>_ Aarthav Yadav</strong></p>
-            <p>For connection: <a href="mailto:fahh07-email@example.com">Contact Us</a></p>
-        </footer>
-    </main>
+  </div>
 
-    <script src="script.js"></script>
+  <!-- JAVASCRIPT CODE -->
+  <script>
+    let currentSubject = 'maths'; // Default subject
+
+    function openWebsite() {
+      const enterScreen = document.getElementById('enter-screen');
+      const mainContent = document.getElementById('main-content');
+      
+      enterScreen.style.opacity = '0';
+      enterScreen.style.pointerEvents = 'none';
+
+      setTimeout(() => {
+        enterScreen.style.display = 'none';
+        mainContent.style.opacity = '1';
+      }, 800);
+    }
+
+    function openSubject(subjectName) {
+      currentSubject = subjectName; // Store selected subject
+      const chapterSection = document.getElementById('chapter-section');
+      const subjectTitle = document.getElementById('selected-subject-title');
+      const notesView = document.getElementById('notes-view');
+
+      subjectTitle.innerText = subjectName.replace('_', ' ');
+      notesView.style.display = 'none';
+
+      chapterSection.style.display = 'block';
+      chapterSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showChapter(chapNum) {
+      const notesView = document.getElementById('notes-view');
+      const chapHeading = document.getElementById('chap-heading');
+      const noteImage = document.getElementById('note-image');
+      const downloadLink = document.getElementById('download-link');
+
+      // Generates filename automatically e.g., "maths1.png"
+      const fileName = currentSubject + chapNum + '.png'; 
+
+      chapHeading.innerText = currentSubject.toUpperCase() + ' - Chapter ' + chapNum + ' Notes';
+      
+      // Image ka source aur Download link update kar raha hai
+      noteImage.src = fileName;
+      downloadLink.href = fileName;
+
+      notesView.style.display = 'block';
+      notesView.scrollIntoView({ behavior: 'smooth' });
+    }
+  </script>
 </body>
 </html>
