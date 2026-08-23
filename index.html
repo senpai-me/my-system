@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Class 9th Notes Hub</title>
+<title>Class 9th Notes Hub - Ultimate Edition</title>
 
 <!-- Google Fonts -->
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -57,11 +57,9 @@
   /* ENTER SCREEN */
   #enter-screen {
     position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(15, 23, 42, 0.75);
+    top: 0; left: 0;
+    width: 100vw; height: 100vh;
+    background: rgba(15, 23, 42, 0.85);
     backdrop-filter: blur(25px);
     display: flex;
     flex-direction: column;
@@ -78,16 +76,10 @@
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.15);
     box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-    animation: floatCenterBox 4s ease-in-out infinite alternate;
-  }
-
-  @keyframes floatCenterBox {
-    0% { transform: translateY(0) scale(1); }
-    100% { transform: translateY(-12px) scale(1.02); }
   }
 
   .enter-title {
-    font-size: 3.8rem;
+    font-size: 3.5rem;
     font-weight: 800;
     letter-spacing: -1.5px;
     margin-bottom: 2rem;
@@ -123,8 +115,9 @@
   .top-toolbar {
     display: flex;
     justify-content: flex-end;
-    gap: 15px;
+    gap: 12px;
     margin-bottom: 1.5rem;
+    flex-wrap: wrap;
   }
 
   .tool-icon-btn {
@@ -132,14 +125,47 @@
     border: 1px solid var(--card-border);
     backdrop-filter: blur(10px);
     color: var(--text-dark);
-    padding: 10px 18px;
+    padding: 10px 16px;
     border-radius: 30px;
     font-weight: 700;
     cursor: pointer;
     box-shadow: var(--shadow-soft);
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    text-decoration: none;
+    font-size: 0.95rem;
+  }
+
+  .gradient-selector {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 8px 14px;
+    border-radius: 30px;
+    color: var(--text-dark);
+    font-weight: 700;
+    cursor: pointer;
+    outline: none;
+  }
+
+  .header-section {
+    text-align: center;
+    margin-bottom: 2.5rem;
+  }
+
+  .header-section h1 {
+    font-size: 3.2rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #3b82f6, var(--primary-glow), var(--accent-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+  }
+
+  .header-section p {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-weight: 700;
   }
 
   .search-container {
@@ -160,26 +186,6 @@
     color: var(--text-dark);
     box-shadow: var(--shadow-soft);
     outline: none;
-  }
-
-  .header-section {
-    text-align: center;
-    margin-bottom: 2.5rem;
-  }
-
-  .header-section h1 {
-    font-size: 3.5rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #3b82f6, var(--primary-glow), var(--accent-pink));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 0.5rem;
-  }
-
-  .header-section p {
-    color: var(--text-muted);
-    font-size: 1.2rem;
-    font-weight: 700;
   }
 
   .subjects-grid {
@@ -209,7 +215,7 @@
   }
 
   .subject-title {
-    font-size: 1.20rem;
+    font-size: 1.15rem;
     font-weight: 800;
     color: var(--text-dark);
   }
@@ -220,10 +226,109 @@
     color: var(--primary-glow);
   }
 
-  /* CHAPTER SECTION */
+  /* STYLISH AESTHETIC MUSIC PLAYER */
+  .music-player-section {
+    margin-top: 3.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(20px);
+    padding: 2rem 2.5rem;
+    border-radius: 26px;
+    box-shadow: var(--shadow-soft);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+  }
+
+  .music-info {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+
+  .vinyl-disc {
+    width: 65px;
+    height: 65px;
+    background: radial-gradient(circle, #0f172a 35%, var(--primary-glow) 36%, #1e1b4b 100%);
+    border-radius: 50%;
+    border: 3px solid rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+    position: relative;
+  }
+
+  .vinyl-disc::after {
+    content: '';
+    width: 18px;
+    height: 18px;
+    background: var(--accent-pink);
+    border-radius: 50%;
+    border: 2px solid #fff;
+  }
+
+  .vinyl-spinning {
+    animation: spinVinyl 3s linear infinite;
+    animation-play-state: paused;
+  }
+
+  @keyframes spinVinyl {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .music-details h3 {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 3px;
+  }
+
+  .music-details p {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+  }
+
+  .music-controls {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+
+  .music-play-btn {
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, var(--primary-glow), var(--accent-pink));
+    border: none;
+    border-radius: 50%;
+    color: #fff;
+    font-size: 1.2rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: var(--shadow-glow);
+    transition: transform 0.3s ease;
+  }
+
+  .music-play-btn:hover {
+    transform: scale(1.1);
+  }
+
+  .volume-slider {
+    width: 100px;
+    accent-color: var(--primary-glow);
+    cursor: pointer;
+  }
+
+  /* CHAPTER SECTION & PDF VIEWER */
   #chapter-section {
     display: none;
-    margin-top: 3.5rem;
+    margin-top: 3rem;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     backdrop-filter: blur(20px);
@@ -233,37 +338,36 @@
   }
 
   .section-label {
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     font-weight: 800;
     color: var(--accent-cyan);
-    margin-top: 1.5rem;
+    margin-top: 1.2rem;
     margin-bottom: 0.8rem;
   }
 
   .chapter-list {
     display: flex;
-    gap: 12px;
+    gap: 10px;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
   }
 
   .chap-btn {
-    padding: 14px 22px;
+    padding: 12px 18px;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     color: var(--text-dark);
-    border-radius: 14px;
+    border-radius: 12px;
     font-weight: 800;
-    font-size: 0.95rem;
+    font-size: 0.9rem;
     cursor: pointer;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.03);
   }
 
   .chap-btn:hover, .chap-btn.active {
     background: linear-gradient(135deg, var(--primary-glow), var(--accent-pink));
     color: #fff;
     border-color: transparent;
-    transform: translateY(-3px);
+    transform: translateY(-2px);
   }
 
   .notes-display {
@@ -273,7 +377,7 @@
 
   .pdf-frame {
     width: 100%;
-    height: 680px;
+    height: 650px;
     border: 1px solid var(--card-border);
     border-radius: 18px;
     background: #fff;
@@ -281,134 +385,130 @@
 
   .download-btn {
     display: inline-block;
-    margin-top: 1.8rem;
-    padding: 16px 36px;
+    margin-top: 1.5rem;
+    padding: 14px 32px;
     background: linear-gradient(135deg, #10b981, #059669);
     color: #fff;
     text-decoration: none;
     border-radius: 50px;
     font-weight: 800;
-    font-size: 1.1rem;
   }
 
-  /* FEATURES DOCK */
-  .features-dock {
-    margin-top: 4rem;
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 1.5rem;
-  }
-
-  .feature-box {
+  /* VIDEO PLAYER SECTION */
+  .video-section {
+    margin-top: 3.5rem;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     backdrop-filter: blur(16px);
-    padding: 2rem;
-    border-radius: 22px;
+    padding: 2.5rem;
+    border-radius: 26px;
     box-shadow: var(--shadow-soft);
-    text-align: center;
   }
 
-  .feature-box h3 {
-    font-size: 1.4rem;
-    font-weight: 800;
-    color: var(--primary-glow);
-    margin-bottom: 0.8rem;
+  .video-container {
+    position: relative;
+    width: 100%;
+    padding-bottom: 56.25%;
+    height: 0;
+    border-radius: 18px;
+    overflow: hidden;
+    border: 1px solid var(--card-border);
+    background: #000;
+    margin-top: 1.5rem;
   }
 
-  .feature-box p {
-    color: var(--text-muted);
-    font-size: 0.95rem;
+  .video-container iframe {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+  }
+
+  /* INTERACTIVE COMMENT SECTION */
+  .comment-section {
+    margin-top: 3.5rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(16px);
+    padding: 2.5rem;
+    border-radius: 26px;
+    box-shadow: var(--shadow-soft);
+  }
+
+  .comment-form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 1.5rem;
+  }
+
+  .comment-input, .comment-textarea {
+    width: 100%;
+    padding: 14px 18px;
+    border-radius: 14px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    color: var(--text-dark);
     font-weight: 600;
-    margin-bottom: 1.2rem;
+    outline: none;
   }
 
-  .action-mini-btn {
-    padding: 10px 22px;
-    background: linear-gradient(135deg, #3b82f6, #2563eb);
+  .comment-textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  .submit-comment-btn {
+    padding: 12px 28px;
+    background: linear-gradient(135deg, var(--primary-glow), var(--accent-pink));
     color: #fff;
     border: none;
     border-radius: 30px;
     font-weight: 800;
     cursor: pointer;
+    align-self: flex-start;
   }
 
-  /* MODALS */
-  #quiz-modal, #admin-modal {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; width: 100vw; height: 100vh;
-    background: rgba(0,0,0,0.7);
-    backdrop-filter: blur(10px);
-    z-index: 100000;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .quiz-card {
-    background: var(--card-bg);
-    border: 1px solid var(--card-border);
-    padding: 2.5rem;
-    border-radius: 24px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 25px 50px rgba(0,0,0,0.3);
-  }
-
-  .quiz-options {
+  .comments-list {
+    margin-top: 2rem;
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    margin: 1.5rem 0;
+    gap: 15px;
   }
 
-  .quiz-opt-btn {
-    padding: 12px 18px;
+  .comment-card {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    color: var(--text-dark);
-    font-weight: 700;
-    border-radius: 12px;
-    cursor: pointer;
-    text-align: left;
+    padding: 15px 20px;
+    border-radius: 14px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.02);
   }
 
-  .quiz-opt-btn:hover {
-    background: var(--primary-glow);
-    color: #fff;
+  .comment-author {
+    font-weight: 800;
+    color: var(--primary-glow);
+    margin-bottom: 5px;
   }
 
-  .admin-input {
-    width: 100%;
-    padding: 12px;
-    margin: 8px 0 16px 0;
-    border-radius: 10px;
-    border: 1px solid var(--card-border);
-    background: var(--card-bg);
+  .comment-text {
+    font-size: 0.95rem;
     color: var(--text-dark);
-    font-weight: 600;
   }
 
   /* GALLERY */
   .gallery-section {
-    margin-top: 5rem;
-    padding-top: 2.5rem;
+    margin-top: 4rem;
+    padding-top: 2rem;
     border-top: 1px solid var(--card-border);
     text-align: center;
-  }
-
-  .gallery-title {
-    font-size: 1.8rem;
-    font-weight: 800;
-    margin-bottom: 1.5rem;
   }
 
   .image-container {
     position: relative;
     width: 100%;
-    max-height: 480px;
+    max-height: 450px;
     overflow: hidden;
-    border-radius: 24px;
+    border-radius: 20px;
     box-shadow: var(--shadow-soft);
     border: 1px solid var(--card-border);
   }
@@ -422,7 +522,7 @@
 
   .owner-signature {
     display: inline-block;
-    margin-top: 1.2rem;
+    margin-top: 1rem;
     color: var(--primary-glow);
     font-size: 1.1rem;
     font-weight: 800;
@@ -430,6 +530,9 @@
 </style>
 </head>
 <body data-theme="light">
+
+  <!-- BACKGROUND AUDIO ELEMENT -->
+  <audio id="bgMusic" src="music1.mp3" loop></audio>
 
   <!-- ENTRY SCREEN -->
   <div id="enter-screen">
@@ -443,9 +546,20 @@
   <div id="main-content">
     
     <div class="top-toolbar">
-      <button class="tool-icon-btn" onclick="openAdminModal()" style="background: linear-gradient(135deg, var(--primary-glow), var(--accent-pink)); color: #fff;">
-        ⚙️ Add/Update Link
-      </button>
+      <!-- INFO 1 BUTTON -->
+      <a href="info1.html" class="tool-icon-btn" style="background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff;">
+        ℹ️ Info Hub
+      </a>
+      
+      <!-- GRADIENT THEME SELECTOR -->
+      <select class="gradient-selector" id="gradientSelector" onchange="changeGradientTheme()">
+        <option value="pastel">🎨 Pastel Dream</option>
+        <option value="sunset">🌅 Sunset Glow</option>
+        <option value="neon">⚡ Cyber Neon</option>
+        <option value="emerald">🌲 Emerald Forest</option>
+      </select>
+
+      <!-- DARK / LIGHT MODE TOGGLE -->
       <button class="tool-icon-btn" onclick="toggleTheme()">
         <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
       </button>
@@ -453,12 +567,12 @@
 
     <div class="header-section">
       <h1>CLASS 9TH SUBJECTS</h1>
-      <p>Select a subject to view chapter notes instantly</p>
+      <p>Select a subject to view notes, video lectures & discussions</p>
     </div>
 
-    <!-- ADVANCED SMART SEARCH -->
+    <!-- SEARCH BAR -->
     <div class="search-container">
-      <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search subject (e.g. math 1, physics, computer)..." onkeyup="smartSearchSubjects()">
+      <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search subject (e.g. math, science, history)..." onkeyup="smartSearchSubjects()">
     </div>
 
     <!-- SUBJECTS GRID -->
@@ -468,157 +582,93 @@
       <div class="subject-card" data-name="chemistry sci" onclick="openSubject('chemistry', 'Chemistry')"><span class="subject-title">Chemistry</span><span class="plus-icon">+</span></div>
       <div class="subject-card" data-name="biology bio sci" onclick="openSubject('biology', 'Biology')"><span class="subject-title">Biology</span><span class="plus-icon">+</span></div>
       <div class="subject-card" data-name="english eng" onclick="openSubject('english', 'English')"><span class="subject-title">English</span><span class="plus-icon">+</span></div>
-      <div class="subject-card" data-name="english grammar" onclick="openSubject('english_grammar', 'English Grammar')"><span class="subject-title">English Grammar</span><span class="plus-icon">+</span></div>
       <div class="subject-card" data-name="hindi" onclick="openSubject('hindi', 'Hindi')"><span class="subject-title">Hindi</span><span class="plus-icon">+</span></div>
-      <div class="subject-card" data-name="hindi grammar" onclick="openSubject('hindi_grammar', 'Hindi Grammar')"><span class="subject-title">Hindi Grammar</span><span class="plus-icon">+</span></div>
       <div class="subject-card" data-name="history sst" onclick="openSubject('history', 'History')"><span class="subject-title">History</span><span class="plus-icon">+</span></div>
-      <div class="subject-card" data-name="political science civics sst" onclick="openSubject('civics', 'Political Science (Civics)')"><span class="subject-title">Political Science (Civics)</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" data-name="civics political science sst" onclick="openSubject('civics', 'Political Science (Civics)')"><span class="subject-title">Political Science (Civics)</span><span class="plus-icon">+</span></div>
       <div class="subject-card" data-name="geography sst" onclick="openSubject('geography', 'Geography')"><span class="subject-title">Geography</span><span class="plus-icon">+</span></div>
       <div class="subject-card" data-name="economics sst" onclick="openSubject('economics', 'Economics')"><span class="subject-title">Economics</span><span class="plus-icon">+</span></div>
-      <div class="subject-card" data-name="it computer computer science" onclick="openSubject('computer', 'IT / Computer')"><span class="subject-title">IT / Computer</span><span class="plus-icon">+</span></div>
+      <div class="subject-card" data-name="computer it" onclick="openSubject('computer', 'IT / Computer')"><span class="subject-title">IT / Computer</span><span class="plus-icon">+</span></div>
+    </div>
+
+    <!-- STYLISH AESTHETIC MUSIC PLAYER WIDGET -->
+    <div class="music-player-section">
+      <div class="music-info">
+        <div class="vinyl-disc vinyl-spinning" id="vinylDisc"></div>
+        <div class="music-details">
+          <h3>Study Vibe Radio 🎧</h3>
+          <p id="musicStatus">Paused - music1.mp3</p>
+        </div>
+      </div>
+      <div class="music-controls">
+        <input type="range" class="volume-slider" min="0" max="1" step="0.05" value="0.8" oninput="adjustVolume(this)">
+        <button class="music-play-btn" id="playPauseBtn" onclick="toggleMusic()">▶</button>
+      </div>
     </div>
 
     <!-- CHAPTER DETAILS & PDF VIEWER -->
     <div id="chapter-section">
-      <h2 id="selected-subject-title" style="color: var(--primary-glow); font-size: 2rem; font-weight: 800;">Subject</h2>
-      
+      <h2 id="selected-subject-title" style="color: var(--primary-glow); font-size: 1.8rem; font-weight: 800;">Subject</h2>
       <div id="chapter-list-container"></div>
 
       <div class="notes-display" id="notes-view" style="display:none;">
-        <h3 id="chap-heading" style="margin-bottom: 1.2rem; color: var(--accent-pink); font-size: 1.4rem; font-weight: 800;">Chapter Notes</h3>
-        <iframe id="pdf-viewer" class="pdf-frame" src="" allow="autoplay"></iframe>
+        <h3 id="chap-heading" style="margin-bottom: 1rem; color: var(--accent-pink); font-size: 1.3rem; font-weight: 800;">Chapter Notes</h3>
+        <iframe id="pdf-viewer" class="pdf-frame" src=""></iframe>
         <br>
         <a id="download-link" href="#" target="_blank" class="download-btn">📥 FULLSCREEN / DOWNLOAD PDF</a>
       </div>
     </div>
 
-    <!-- FEATURES DOCK -->
-    <div class="features-dock">
-      <div class="feature-box">
-        <h3>⚡ Hardcore Exam Quiz</h3>
-        <p>Test your Class 9 concept mastery with advanced competitive-level questions.</p>
-        <button class="action-mini-btn" onclick="startQuiz()">Start Hard Quiz</button>
+    <!-- VIDEO PLAYER SECTION -->
+    <div class="video-section">
+      <h2 style="color: var(--primary-glow); font-size: 1.6rem; font-weight: 800;">🎥 Featured Video Lecture</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; font-weight: 600; margin-top: 5px;">Concept explanation & problem-solving sessions.</p>
+      
+      <div class="video-container">
+        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Class 9 Lecture" allowfullscreen></iframe>
       </div>
-      <div class="feature-box">
-        <h3>🎯 Study Progress Tracker</h3>
-        <p>Track your chapter completion rate and revision streak.</p>
-        <button class="action-mini-btn" onclick="alert('Streak: 5 Days Active! Keep it up!')">View Streak</button>
+    </div>
+
+    <!-- COMMENT SECTION -->
+    <div class="comment-section">
+      <h2 style="color: var(--primary-glow); font-size: 1.6rem; font-weight: 800;">💬 Student Discussions & Doubts</h2>
+      <p style="color: var(--text-muted); font-size: 0.95rem; font-weight: 600; margin-top: 5px;">Apne doubts ya feedback share karo!</p>
+      
+      <div class="comment-form">
+        <input type="text" id="commentName" class="comment-input" placeholder="Aapka Naam (e.g. Rahul)">
+        <textarea id="commentMsg" class="comment-textarea" placeholder="Apna doubt ya message likhein..."></textarea>
+        <button class="submit-comment-btn" onclick="postComment()">Post Comment 🚀</button>
       </div>
+
+      <div class="comments-list" id="commentsList"></div>
     </div>
 
     <!-- GALLERY SECTION -->
     <div class="gallery-section">
-      <div class="gallery-title">Owner's Vault</div>
       <div class="image-container">
-        <img src="kip01.jpg" alt="Owner Vault Artwork kip01" onerror="this.src='https://images.unsplash.com/photo-1635863138275-d9b33299680b?auto=format&fit=crop&w=1200&q=80'">
+        <img src="kip01.jpg" alt="Owner Vault Artwork" onerror="this.src='https://images.unsplash.com/photo-1635863138275-d9b33299680b?auto=format&fit=crop&w=1200&q=80'">
       </div>
       <div class="owner-signature">☠️ made by Aarthav ☠️</div>
     </div>
 
   </div>
 
-  <!-- ADMIN LINK UPDATER MODAL -->
-  <div id="admin-modal">
-    <div class="quiz-card">
-      <h2 style="color: var(--primary-glow); font-size: 1.4rem; margin-bottom: 1rem;">⚙️ Quick Link Manager</h2>
-      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Yahan se bina code edit kiye naye links save kar sakte hain jo browser me store ho jayenge.</p>
-      
-      <label style="font-weight: 700; font-size: 0.9rem;">Subject Key (jaise: maths, physics, civics):</label>
-      <input type="text" id="adminSubject" class="admin-input" placeholder="e.g. maths">
-
-      <label style="font-weight: 700; font-size: 0.9rem;">Chapter Number (jaise: 1, 2 ya a1, b1):</label>
-      <input type="text" id="adminChap" class="admin-input" placeholder="e.g. 1">
-
-      <label style="font-weight: 700; font-size: 0.9rem;">Google Drive Link:</label>
-      <input type="text" id="adminLink" class="admin-input" placeholder="https://drive.google.com/.../preview">
-
-      <div style="display: flex; gap: 10px; margin-top: 1rem;">
-        <button class="action-mini-btn" onclick="saveCustomLink()" style="flex: 1;">Save Link</button>
-        <button class="action-mini-btn" onclick="closeAdminModal()" style="background:#64748b; flex: 1;">Close</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ADVANCED QUIZ MODAL -->
-  <div id="quiz-modal">
-    <div class="quiz-card">
-      <h2 id="quiz-question-title" style="color: var(--primary-glow); font-size: 1.3rem; font-weight: 800;">Question</h2>
-      <div class="quiz-options" id="quiz-options-box"></div>
-      <button class="action-mini-btn" onclick="closeQuiz()" style="background:#64748b;">Close Quiz</button>
-    </div>
-  </div>
-
   <!-- JAVASCRIPT LOGIC -->
   <script>
     let currentSubjectKey = '';
 
-    /* DEFAULT PDF DATABASE */
     const defaultPdfDatabase = {
-      'maths': {
-        1: 'https://drive.google.com/file/d/1WExfdNkRhQorsfz3Y7krL9YSkqSFVBiU/preview',
-        2: 'https://drive.google.com/file/d/1VdqPlM6yz11Op2Jb8ZNKGHj1xKKgCLkc/preview',
-        3: 'https://drive.google.com/file/d/1s6GI9AnP2WOz_bP2u9D8lEtRPCGsR6Tp/preview',
-        4: '', 5: '', 6: '', 7: ''
-      },
-      'history': {
-        1: 'https://drive.google.com/file/d/1BntkYs4nvBvF_e9KRI0jp4eVjjNdFsqs/preview',
-        2: '', 3: '', 4: '', 5: '', 6: '', 7: ''
-      },
-      'geography': {
-        1: 'https://drive.google.com/file/d/1WZ-vjUFFMYeBYHRNIb7_78hk7STL6FRd/preview',
-        2: '', 3: '', 4: '', 5: '', 6: '', 7: ''
-      },
-      'physics': { 1:'', 2:'', 3:'', 4:'', 5:'', 6:'', 7:'' },
-      'chemistry': { 1:'', 2:'', 3:'', 4:'', 5:'', 6:'', 7:'' },
-      'biology': { 1:'', 2:'', 3:'', 4:'', 5:'', 6:'', 7:'' },
-      'english': { 1:'', 2:'', 3:'', 4:'', 5:'', 6:'', 7:'' },
-      'english_grammar': { 1:'', 2:'', 3:'', 4:'', 5:'', 6:'', 7:'' },
-      'hindi': { 1:'', 2:'', 3:'', 4:'', 5:'', 6:'', 7:'' },
-      'hindi_grammar': { 1:'', 2:'', 3:'', 4:'', 5:'', 6:'', 7:'' },
-      'civics': { 1:'https://drive.google.com/file/d/1gP1XVcQUI3YNYC93EwGAmj8nWL4mrtqk/view?usp=drivesdk', 2:'', 3:'', 4:'', 5:'', 6:'', 7:'' },
-      'economics': { 1:'', 2:'', 3:'', 4:'', 5:'', 6:'', 7:'' },
-      'computer': { 
-        'a1':'', 'a2':'', 'a3':'', 'a4':'', 'a5':'',
-        'b1':'', 'b2':'', 'b3':'', 'b4':'', 'b5':'', 'b6':'', 'b7':'', 'b8':'', 'b9':'', 'b10':'', 'b11':'', 'b12':''
-      }
+      'maths': { 1: 'https://drive.google.com/file/d/1WExfdNkRhQorsfz3Y7krL9YSkqSFVBiU/preview', 2: 'https://drive.google.com/file/d/1VdqPlM6yz11Op2Jb8ZNKGHj1xKKgCLkc/preview' },
+      'history': { 1: 'https://drive.google.com/file/d/1BntkYs4nvBvF_e9KRI0jp4eVjjNdFsqs/preview' },
+      'geography': { 1: 'https://drive.google.com/file/d/1WZ-vjUFFMYeBYHRNIb7_78hk7STL6FRd/preview' },
+      'civics': { 1: 'https://drive.google.com/file/d/1gP1XVcQUI3YNYC93EwGAmj8nWL4mrtqk/view?usp=drivesdk' }
     };
 
-    let savedLinks = localStorage.getItem('class9_pdf_database');
-    const pdfDatabase = savedLinks ? JSON.parse(savedLinks) : defaultPdfDatabase;
+    let pdfDatabase = localStorage.getItem('class9_pdf_database') ? JSON.parse(localStorage.getItem('class9_pdf_database')) : defaultPdfDatabase;
 
     function openWebsite() {
       const screen = document.getElementById('enter-screen');
       screen.style.opacity = '0';
       screen.style.visibility = 'hidden';
-    }
-
-    function openAdminModal() {
-      document.getElementById('admin-modal').style.display = 'flex';
-    }
-
-    function closeAdminModal() {
-      document.getElementById('admin-modal').style.display = 'none';
-    }
-
-    function saveCustomLink() {
-      let subj = document.getElementById('adminSubject').value.trim().toLowerCase();
-      let chap = document.getElementById('adminChap').value.trim();
-      let link = document.getElementById('adminLink').value.trim();
-
-      if(!subj || !chap || !link) {
-        alert('Please fill all fields properly!');
-        return;
-      }
-
-      if(!pdfDatabase[subj]) {
-        pdfDatabase[subj] = {};
-      }
-
-      pdfDatabase[subj][chap] = link;
-      localStorage.setItem('class9_pdf_database', JSON.stringify(pdfDatabase));
-      
-      alert('Link successfully saved to your browser! 🎉');
-      closeAdminModal();
     }
 
     function toggleTheme() {
@@ -629,115 +679,8 @@
       document.getElementById('theme-text').innerText = isLight ? 'Light Mode' : 'Dark Mode';
     }
 
-    function smartSearchSubjects() {
-      let query = document.getElementById('searchInput').value.toLowerCase().trim();
-      let cards = document.querySelectorAll('.subject-card');
-
-      cards.forEach(card => {
-        let nameKeywords = card.getAttribute('data-name');
-        if (nameKeywords.includes(query) || (query.length > 2 && nameKeywords.includes(query.substring(0, query.length - 1)))) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    }
-
-    function openSubject(subjectKey, subjectTitle) {
-      currentSubjectKey = subjectKey;
-      const chapterSection = document.getElementById('chapter-section');
-      document.getElementById('selected-subject-title').innerText = subjectTitle;
-      document.getElementById('notes-view').style.display = 'none';
-      const container = document.getElementById('chapter-list-container');
-      container.innerHTML = '';
-
-      if (subjectKey === 'computer') {
-        container.innerHTML += `<div class="section-label">PART A: Employability Skills</div><div class="chapter-list">`;
-        for(let i=1; i<=5; i++) {
-          container.querySelector('.chapter-list:last-of-type').innerHTML += `<button class="chap-btn" onclick="showChapter('a${i}', 'Part A - Chapter ${i}', this)">Ch ${i}</button>`;
-        }
-        container.innerHTML += `</div><div class="section-label">PART B: Subject Specific Skills</div><div class="chapter-list">`;
-        for(let i=1; i<=12; i++) {
-          container.querySelector('.chapter-list:last-of-type').innerHTML += `<button class="chap-btn" onclick="showChapter('b${i}', 'Part B - Chapter ${i}', this)">Ch ${i}</button>`;
-        }
-        container.innerHTML += `</div>`;
-      } else {
-        let html = `<div class="chapter-list">`;
-        for(let i=1; i<=7; i++) {
-          html += `<button class="chap-btn" onclick="showChapter(${i}, 'Chapter ${i}', this)">Chapter ${i}</button>`;
-        }
-        html += `</div>`;
-        container.innerHTML = html;
-      }
-
-      chapterSection.style.display = 'block';
-      chapterSection.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function showChapter(chapKey, chapLabel, btnElement) {
-      document.querySelectorAll('.chap-btn').forEach(b => b.classList.remove('active'));
-      if(btnElement) btnElement.classList.add('active');
-
-      const notesView = document.getElementById('notes-view');
-      document.getElementById('chap-heading').innerText = chapLabel + ' Notes';
-      const pdfViewer = document.getElementById('pdf-viewer');
-      const downloadLink = document.getElementById('download-link');
-
-      let url = pdfDatabase[currentSubjectKey] ? pdfDatabase[currentSubjectKey][chapKey] : '';
-
-      if (url && url.trim() !== '') {
-        pdfViewer.src = url;
-        downloadLink.href = url.replace('/preview', '/view');
-      } else {
-        pdfViewer.src = 'about:blank';
-        alert('Is chapter ki PDF abhi add nahi hui hai! Aap upar diye gaye "⚙️ Add/Update Link" button se link daal sakte hain.');
-      }
-
-      notesView.style.display = 'block';
-      notesView.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    const quizQuestions = [
-      { q: "What is the coefficient of x² in polynomial 2 - x² + x3?", opts: ["-1", "1", "2", "0"], ans: 0 },
-      { q: "Which of the following is an irrational number?", opts: ["√4", "3.1416", "√23", "5/4"], ans: 2 },
-      { q: "The angle subtended by an arc at the center is ___ the angle subtended by it at any point on the remaining part of the circle.", opts: ["Equal", "Half", "Double", "Four times"], ans: 2 }
-    ];
-    let currentQuizIndex = 0;
-
-    function startQuiz() {
-      currentQuizIndex = 0;
-      document.getElementById('quiz-modal').style.display = 'flex';
-      loadQuizQuestion();
-    }
-
-    function loadQuizQuestion() {
-      if(currentQuizIndex >= quizQuestions.length) {
-        alert('Quiz Completed! Excellent analytical performance.');
-        closeQuiz();
-        return;
-      }
-      let qData = quizQuestions[currentQuizIndex];
-      document.getElementById('quiz-question-title').innerText = `Q${currentQuizIndex+1}: ${qData.q}`;
-      let optBox = document.getElementById('quiz-options-box');
-      optBox.innerHTML = '';
-      qData.opts.forEach((opt, idx) => {
-        optBox.innerHTML += `<button class="quiz-opt-btn" onclick="checkQuizAnswer(${idx}, ${qData.ans})">${opt}</button>`;
-      });
-    }
-
-    function checkQuizAnswer(selected, correct) {
-      if(selected === correct) {
-        alert('Correct Answer! 🎉');
-      } else {
-        alert('Incorrect! Review your concept notes.');
-      }
-      currentQuizIndex++;
-      loadQuizQuestion();
-    }
-
-    function closeQuiz() {
-      document.getElementById('quiz-modal').style.display = 'none';
-    }
-  </script>
-</body>
-</html>
+    function changeGradientTheme() {
+      let val = document.getElementById('gradientSelector').value;
+      let rootStyle = document.documentElement.style;
+      if(val === 'sunset') {
+        rootStyle.setProperty('--body-gradient', 'linear-gradient(-45deg, #ffedd5, #fed7aa, #fbcfe8, #e
