@@ -294,7 +294,7 @@
     font-size: 1.1rem;
   }
 
-  /* ADVANCED QUIZ MODAL */
+  /* FEATURES DOCK */
   .features-dock {
     margin-top: 4rem;
     display: grid;
@@ -336,7 +336,8 @@
     cursor: pointer;
   }
 
-  #quiz-modal {
+  /* MODALS */
+  #quiz-modal, #admin-modal {
     display: none;
     position: fixed;
     top: 0; left: 0; width: 100vw; height: 100vh;
@@ -378,6 +379,17 @@
   .quiz-opt-btn:hover {
     background: var(--primary-glow);
     color: #fff;
+  }
+
+  .admin-input {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 16px 0;
+    border-radius: 10px;
+    border: 1px solid var(--card-border);
+    background: var(--card-bg);
+    color: var(--text-dark);
+    font-weight: 600;
   }
 
   /* GALLERY */
@@ -434,6 +446,9 @@
   <div id="main-content">
     
     <div class="top-toolbar">
+      <button class="tool-icon-btn" onclick="openAdminModal()" style="background: linear-gradient(135deg, var(--primary-glow), var(--accent-pink)); color: #fff;">
+        ⚙️ Add/Update Link
+      </button>
       <button class="tool-icon-btn" onclick="toggleTheme()">
         <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
       </button>
@@ -449,7 +464,7 @@
       <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search subject (e.g. math 1, physics, computer)..." onkeyup="smartSearchSubjects()">
     </div>
 
-    <!-- SUBJECTS GRID (13 Subjects) -->
+    <!-- SUBJECTS GRID -->
     <div class="subjects-grid" id="subjectsGrid">
       <div class="subject-card" data-name="maths math mathematics" onclick="openSubject('maths', 'Maths')"><span class="subject-title">Maths</span><span class="plus-icon">+</span></div>
       <div class="subject-card" data-name="physics sci" onclick="openSubject('physics', 'Physics')"><span class="subject-title">Physics</span><span class="plus-icon">+</span></div>
@@ -505,6 +520,28 @@
 
   </div>
 
+  <!-- ADMIN LINK UPDATER MODAL -->
+  <div id="admin-modal">
+    <div class="quiz-card">
+      <h2 style="color: var(--primary-glow); font-size: 1.4rem; margin-bottom: 1rem;">⚙️ Quick Link Manager</h2>
+      <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">Yahan se bina code edit kiye naye links save kar sakte hain jo browser me store ho jayenge.</p>
+      
+      <label style="font-weight: 700; font-size: 0.9rem;">Subject Key (jaise: maths, physics, civics):</label>
+      <input type="text" id="adminSubject" class="admin-input" placeholder="e.g. maths">
+
+      <label style="font-weight: 700; font-size: 0.9rem;">Chapter Number (jaise: 1, 2 ya a1, b1):</label>
+      <input type="text" id="adminChap" class="admin-input" placeholder="e.g. 1">
+
+      <label style="font-weight: 700; font-size: 0.9rem;">Google Drive Link:</label>
+      <input type="text" id="adminLink" class="admin-input" placeholder="https://drive.google.com/.../preview">
+
+      <div style="display: flex; gap: 10px; margin-top: 1rem;">
+        <button class="action-mini-btn" onclick="saveCustomLink()" style="flex: 1;">Save Link</button>
+        <button class="action-mini-btn" onclick="closeAdminModal()" style="background:#64748b; flex: 1;">Close</button>
+      </div>
+    </div>
+  </div>
+
   <!-- ADVANCED QUIZ MODAL -->
   <div id="quiz-modal">
     <div class="quiz-card">
@@ -518,11 +555,8 @@
   <script>
     let currentSubjectKey = '';
 
-    /* =========================================================================
-       PDF LINKS DATABASE (YAHAN AAP APNI LINK RE-PASTE KAR SAKTE HAIN)
-       Format: 'subject_key': { 1: 'link/preview', 2: 'link/preview', ... }
-       ========================================================================= */
-    const pdfDatabase = {
+    /* DEFAULT PDF DATABASE */
+    const defaultPdfDatabase = {
       'maths': {
         1: 'https://drive.google.com/file/d/1WExfdNkRhQorsfz3Y7krL9YSkqSFVBiU/preview',
         2: 'https://drive.google.com/file/d/1VdqPlM6yz11Op2Jb8ZNKGHj1xKKgCLkc/preview',
@@ -547,11 +581,43 @@
       'civics': { 1:'https://drive.google.com/file/d/1gP1XVcQUI3YNYC93EwGAmj8nWL4mrtqk/view?usp=drivesdk', 2:'', 3:'', 4:'', 5:'', 6:'', 7:'' },
       'economics': { 1:'', 2:'', 3:'', 4:'', 5:'', 6:'', 7:'' },
       'computer': { 
-        // IT Special: Part A (1-5) and Part B (1-12)
         'a1':'', 'a2':'', 'a3':'', 'a4':'', 'a5':'',
         'b1':'', 'b2':'', 'b3':'', 'b4':'', 'b5':'', 'b6':'', 'b7':'', 'b8':'', 'b9':'', 'b10':'', 'b11':'', 'b12':''
       }
     };
+
+    // Load saved links from LocalStorage if available
+    let savedLinks = localStorage.getItem('class9_pdf_database');
+    const pdfDatabase = savedLinks ? JSON.parse(savedLinks) : defaultPdfDatabase;
+
+    function openAdminModal() {
+      document.getElementById('admin-modal').style.display = 'flex';
+    }
+
+    function closeAdminModal() {
+      document.getElementById('admin-modal').style.display = 'none';
+    }
+
+    function saveCustomLink() {
+      let subj = document.getElementById('adminSubject').value.trim().toLowerCase();
+      let chap = document.getElementById('adminChap').value.trim();
+      let link = document.getElementById('adminLink').value.trim();
+
+      if(!subj || !chap || !link) {
+        alert('Please fill all fields properly!');
+        return;
+      }
+
+      if(!pdfDatabase[subj]) {
+        pdfDatabase[subj] = {};
+      }
+
+      pdfDatabase[subj][chap] = link;
+      localStorage.setItem('class9_pdf_database', JSON.stringify(pdfDatabase));
+      
+      alert('Link successfully saved to your browser! 🎉');
+      closeAdminModal();
+    }
 
     function openWebsite() {
       document.getElementById('enter-screen').style.opacity = '0';
@@ -564,126 +630,4 @@
 
     function toggleTheme() {
       const body = document.body;
-      const isLight = body.getAttribute('data-theme') === 'light';
-      body.setAttribute('data-theme', isLight ? 'dark' : 'light');
-      document.getElementById('theme-icon').innerText = isLight ? '☀️' : '🌙';
-      document.getElementById('theme-text').innerText = isLight ? 'Light Mode' : 'Dark Mode';
-    }
-
-    // Smart Spelling & Partial Search
-    function smartSearchSubjects() {
-      let query = document.getElementById('searchInput').value.toLowerCase().trim();
-      let cards = document.querySelectorAll('.subject-card');
-
-      cards.forEach(card => {
-        let nameKeywords = card.getAttribute('data-name');
-        // Match partial letters or simple spelling deviations (e.g. "math 1" will match maths)
-        if (nameKeywords.includes(query) || (query.length > 2 && nameKeywords.includes(query.substring(0, query.length - 1)))) {
-          card.style.display = 'flex';
-        } else {
-          card.style.display = 'none';
-        }
-      });
-    }
-
-    function openSubject(subjectKey, subjectTitle) {
-      currentSubjectKey = subjectKey;
-      const chapterSection = document.getElementById('chapter-section');
-      document.getElementById('selected-subject-title').innerText = subjectTitle;
-      document.getElementById('notes-view').style.display = 'none';
-      const container = document.getElementById('chapter-list-container');
-      container.innerHTML = '';
-
-      if (subjectKey === 'computer') {
-        // IT / Computer Special Layout: Part A & Part B
-        container.innerHTML += `<div class="section-label">PART A: Employability Skills</div><div class="chapter-list">`;
-        for(let i=1; i<=5; i++) {
-          container.querySelector('.chapter-list:last-of-type').innerHTML += `<button class="chap-btn" onclick="showChapter('a${i}', 'Part A - Chapter ${i}', this)">Ch ${i}</button>`;
-        }
-        container.innerHTML += `</div><div class="section-label">PART B: Subject Specific Skills</div><div class="chapter-list">`;
-        for(let i=1; i<=12; i++) {
-          container.querySelector('.chapter-list:last-of-type').innerHTML += `<button class="chap-btn" onclick="showChapter('b${i}', 'Part B - Chapter ${i}', this)">Ch ${i}</button>`;
-        }
-        container.innerHTML += `</div>`;
-      } else {
-        // Standard 7 Chapters Layout
-        let html = `<div class="chapter-list">`;
-        for(let i=1; i<=7; i++) {
-          html += `<button class="chap-btn" onclick="showChapter(${i}, 'Chapter ${i}', this)">Chapter ${i}</button>`;
-        }
-        html += `</div>`;
-        container.innerHTML = html;
-      }
-
-      chapterSection.style.display = 'block';
-      chapterSection.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    function showChapter(chapKey, chapLabel, btnElement) {
-      document.querySelectorAll('.chap-btn').forEach(b => b.classList.remove('active'));
-      if(btnElement) btnElement.classList.add('active');
-
-      const notesView = document.getElementById('notes-view');
-      document.getElementById('chap-heading').innerText = chapLabel + ' Notes';
-      const pdfViewer = document.getElementById('pdf-viewer');
-      const downloadLink = document.getElementById('download-link');
-
-      let url = pdfDatabase[currentSubjectKey] ? pdfDatabase[currentSubjectKey][chapKey] : '';
-
-      if (url && url.trim() !== '') {
-        pdfViewer.src = url;
-        downloadLink.href = url.replace('/preview', '/view');
-      } else {
-        pdfViewer.src = 'about:blank';
-        alert('Is chapter ki PDF abhi upload nahi hui hai! Aap code mein link daal sakte hain.');
-      }
-
-      notesView.style.display = 'block';
-      notesView.scrollIntoView({ behavior: 'smooth' });
-    }
-
-    // Complicated Advanced Quiz System
-    const quizQuestions = [
-      { q: "What is the coefficient of x² in polynomial 2 - x² + x3?", opts: ["-1", "1", "2", "0"], ans: 0 },
-      { q: "Which of the following is an irrational number?", opts: ["√4", "3.1416", "√23", "5/4"], ans: 2 },
-      { q: "The angle subtended by an arc at the center is ___ the angle subtended by it at any point on the remaining part of the circle.", opts: ["Equal", "Half", "Double", "Four times"], ans: 2 }
-    ];
-    let currentQuizIndex = 0;
-
-    function startQuiz() {
-      currentQuizIndex = 0;
-      document.getElementById('quiz-modal').style.display = 'flex';
-      loadQuizQuestion();
-    }
-
-    function loadQuizQuestion() {
-      if(currentQuizIndex >= quizQuestions.length) {
-        alert('Quiz Completed! Excellent analytical performance.');
-        closeQuiz();
-        return;
-      }
-      let qData = quizQuestions[currentQuizIndex];
-      document.getElementById('quiz-question-title').innerText = `Q${currentQuizIndex+1}: ${qData.q}`;
-      let optBox = document.getElementById('quiz-options-box');
-      optBox.innerHTML = '';
-      qData.opts.forEach((opt, idx) => {
-        optBox.innerHTML += `<button class="quiz-opt-btn" onclick="checkQuizAnswer(${idx}, ${qData.ans})">${opt}</button>`;
-      });
-    }
-
-    function checkQuizAnswer(selected, correct) {
-      if(selected === correct) {
-        alert('Correct Answer! 🎉');
-      } else {
-        alert('Incorrect! Review your concept notes.');
-      }
-      currentQuizIndex++;
-      loadQuizQuestion();
-    }
-
-    function closeQuiz() {
-      document.getElementById('quiz-modal').style.display = 'none';
-    }
-  </script>
-</body>
-</html>
+    
