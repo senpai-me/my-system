@@ -36,7 +36,6 @@
     margin: 0;
     padding: 0;
     font-family: 'Plus Jakarta Sans', sans-serif;
-    transition: background 0.3s ease, color 0.3s ease;
   }
 
   body {
@@ -62,14 +61,14 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(15, 23, 42, 0.6);
+    background: rgba(15, 23, 42, 0.75);
     backdrop-filter: blur(25px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    z-index: 9999;
-    transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+    z-index: 99999;
+    transition: opacity 0.6s ease, visibility 0.6s ease;
   }
 
   .enter-box {
@@ -116,8 +115,6 @@
 
   /* MAIN LAYOUT */
   #main-content {
-    opacity: 0;
-    transition: opacity 1s ease;
     padding: 2.5rem 1.5rem;
     max-width: 1100px;
     margin: 0 auto;
@@ -343,7 +340,7 @@
     top: 0; left: 0; width: 100vw; height: 100vh;
     background: rgba(0,0,0,0.7);
     backdrop-filter: blur(10px);
-    z-index: 10000;
+    z-index: 100000;
     justify-content: center;
     align-items: center;
   }
@@ -586,9 +583,14 @@
       }
     };
 
-    // Load saved links from LocalStorage if available
     let savedLinks = localStorage.getItem('class9_pdf_database');
     const pdfDatabase = savedLinks ? JSON.parse(savedLinks) : defaultPdfDatabase;
+
+    function openWebsite() {
+      const screen = document.getElementById('enter-screen');
+      screen.style.opacity = '0';
+      screen.style.visibility = 'hidden';
+    }
 
     function openAdminModal() {
       document.getElementById('admin-modal').style.display = 'flex';
@@ -619,15 +621,123 @@
       closeAdminModal();
     }
 
-    function openWebsite() {
-      document.getElementById('enter-screen').style.opacity = '0';
-      document.getElementById('enter-screen').style.pointerEvents = 'none';
-      setTimeout(() => {
-        document.getElementById('enter-screen').style.display = 'none';
-        document.getElementById('main-content').style.opacity = '1';
-      }, 800);
-    }
-
     function toggleTheme() {
       const body = document.body;
-    
+      const isLight = body.getAttribute('data-theme') === 'light';
+      body.setAttribute('data-theme', isLight ? 'dark' : 'light');
+      document.getElementById('theme-icon').innerText = isLight ? '☀️' : '🌙';
+      document.getElementById('theme-text').innerText = isLight ? 'Light Mode' : 'Dark Mode';
+    }
+
+    function smartSearchSubjects() {
+      let query = document.getElementById('searchInput').value.toLowerCase().trim();
+      let cards = document.querySelectorAll('.subject-card');
+
+      cards.forEach(card => {
+        let nameKeywords = card.getAttribute('data-name');
+        if (nameKeywords.includes(query) || (query.length > 2 && nameKeywords.includes(query.substring(0, query.length - 1)))) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
+      });
+    }
+
+    function openSubject(subjectKey, subjectTitle) {
+      currentSubjectKey = subjectKey;
+      const chapterSection = document.getElementById('chapter-section');
+      document.getElementById('selected-subject-title').innerText = subjectTitle;
+      document.getElementById('notes-view').style.display = 'none';
+      const container = document.getElementById('chapter-list-container');
+      container.innerHTML = '';
+
+      if (subjectKey === 'computer') {
+        container.innerHTML += `<div class="section-label">PART A: Employability Skills</div><div class="chapter-list">`;
+        for(let i=1; i<=5; i++) {
+          container.querySelector('.chapter-list:last-of-type').innerHTML += `<button class="chap-btn" onclick="showChapter('a${i}', 'Part A - Chapter ${i}', this)">Ch ${i}</button>`;
+        }
+        container.innerHTML += `</div><div class="section-label">PART B: Subject Specific Skills</div><div class="chapter-list">`;
+        for(let i=1; i<=12; i++) {
+          container.querySelector('.chapter-list:last-of-type').innerHTML += `<button class="chap-btn" onclick="showChapter('b${i}', 'Part B - Chapter ${i}', this)">Ch ${i}</button>`;
+        }
+        container.innerHTML += `</div>`;
+      } else {
+        let html = `<div class="chapter-list">`;
+        for(let i=1; i<=7; i++) {
+          html += `<button class="chap-btn" onclick="showChapter(${i}, 'Chapter ${i}', this)">Chapter ${i}</button>`;
+        }
+        html += `</div>`;
+        container.innerHTML = html;
+      }
+
+      chapterSection.style.display = 'block';
+      chapterSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function showChapter(chapKey, chapLabel, btnElement) {
+      document.querySelectorAll('.chap-btn').forEach(b => b.classList.remove('active'));
+      if(btnElement) btnElement.classList.add('active');
+
+      const notesView = document.getElementById('notes-view');
+      document.getElementById('chap-heading').innerText = chapLabel + ' Notes';
+      const pdfViewer = document.getElementById('pdf-viewer');
+      const downloadLink = document.getElementById('download-link');
+
+      let url = pdfDatabase[currentSubjectKey] ? pdfDatabase[currentSubjectKey][chapKey] : '';
+
+      if (url && url.trim() !== '') {
+        pdfViewer.src = url;
+        downloadLink.href = url.replace('/preview', '/view');
+      } else {
+        pdfViewer.src = 'about:blank';
+        alert('Is chapter ki PDF abhi add nahi hui hai! Aap upar diye gaye "⚙️ Add/Update Link" button se link daal sakte hain.');
+      }
+
+      notesView.style.display = 'block';
+      notesView.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    const quizQuestions = [
+      { q: "What is the coefficient of x² in polynomial 2 - x² + x3?", opts: ["-1", "1", "2", "0"], ans: 0 },
+      { q: "Which of the following is an irrational number?", opts: ["√4", "3.1416", "√23", "5/4"], ans: 2 },
+      { q: "The angle subtended by an arc at the center is ___ the angle subtended by it at any point on the remaining part of the circle.", opts: ["Equal", "Half", "Double", "Four times"], ans: 2 }
+    ];
+    let currentQuizIndex = 0;
+
+    function startQuiz() {
+      currentQuizIndex = 0;
+      document.getElementById('quiz-modal').style.display = 'flex';
+      loadQuizQuestion();
+    }
+
+    function loadQuizQuestion() {
+      if(currentQuizIndex >= quizQuestions.length) {
+        alert('Quiz Completed! Excellent analytical performance.');
+        closeQuiz();
+        return;
+      }
+      let qData = quizQuestions[currentQuizIndex];
+      document.getElementById('quiz-question-title').innerText = `Q${currentQuizIndex+1}: ${qData.q}`;
+      let optBox = document.getElementById('quiz-options-box');
+      optBox.innerHTML = '';
+      qData.opts.forEach((opt, idx) => {
+        optBox.innerHTML += `<button class="quiz-opt-btn" onclick="checkQuizAnswer(${idx}, ${qData.ans})">${opt}</button>`;
+      });
+    }
+
+    function checkQuizAnswer(selected, correct) {
+      if(selected === correct) {
+        alert('Correct Answer! 🎉');
+      } else {
+        alert('Incorrect! Review your concept notes.');
+      }
+      currentQuizIndex++;
+      loadQuizQuestion();
+    }
+
+    function closeQuiz() {
+      document.getElementById('quiz-modal').style.display = 'none';
+    }
+  </script>
+</body>
+</html>
