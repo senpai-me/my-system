@@ -59,14 +59,14 @@
     position: fixed;
     top: 0; left: 0;
     width: 100vw; height: 100vh;
-    background: rgba(15, 23, 42, 0.85);
+    background: rgba(15, 23, 42, 0.9);
     backdrop-filter: blur(25px);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     z-index: 99999;
-    transition: opacity 0.6s ease, visibility 0.6s ease;
+    transition: opacity 0.5s ease, visibility 0.5s ease;
   }
 
   .enter-box {
@@ -118,6 +118,7 @@
     gap: 12px;
     margin-bottom: 1.5rem;
     flex-wrap: wrap;
+    align-items: center;
   }
 
   .tool-icon-btn {
@@ -135,17 +136,23 @@
     gap: 6px;
     text-decoration: none;
     font-size: 0.95rem;
+    transition: transform 0.2s;
+  }
+
+  .tool-icon-btn:hover {
+    transform: translateY(-2px);
   }
 
   .gradient-selector {
     background: var(--card-bg);
     border: 1px solid var(--card-border);
-    padding: 8px 14px;
+    padding: 10px 14px;
     border-radius: 30px;
     color: var(--text-dark);
     font-weight: 700;
     cursor: pointer;
     outline: none;
+    box-shadow: var(--shadow-soft);
   }
 
   .header-section {
@@ -226,7 +233,7 @@
     color: var(--primary-glow);
   }
 
-  /* STYLISH AESTHETIC MUSIC PLAYER */
+  /* ADVANCED MODERN AESTHETIC MUSIC PLAYER */
   .music-player-section {
     margin-top: 3.5rem;
     background: var(--card-bg);
@@ -258,7 +265,6 @@
     align-items: center;
     justify-content: center;
     box-shadow: 0 8px 20px rgba(0,0,0,0.15);
-    position: relative;
   }
 
   .vinyl-disc::after {
@@ -297,30 +303,38 @@
     display: flex;
     align-items: center;
     gap: 15px;
+    flex-wrap: wrap;
   }
 
-  .music-play-btn {
-    width: 50px;
-    height: 50px;
+  .music-btn {
+    padding: 10px 18px;
     background: linear-gradient(135deg, var(--primary-glow), var(--accent-pink));
     border: none;
-    border-radius: 50%;
+    border-radius: 20px;
     color: #fff;
-    font-size: 1.2rem;
+    font-weight: 800;
     cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center;
     box-shadow: var(--shadow-glow);
-    transition: transform 0.3s ease;
+    transition: transform 0.2s;
+    font-size: 0.9rem;
   }
 
-  .music-play-btn:hover {
-    transform: scale(1.1);
+  .music-btn:hover {
+    transform: scale(1.05);
+  }
+
+  .volume-control-box {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,0,0,0.04);
+    padding: 6px 12px;
+    border-radius: 20px;
+    border: 1px solid var(--card-border);
   }
 
   .volume-slider {
-    width: 100px;
+    width: 90px;
     accent-color: var(--primary-glow);
     cursor: pointer;
   }
@@ -335,14 +349,6 @@
     padding: 2.5rem;
     border-radius: 26px;
     box-shadow: var(--shadow-soft);
-  }
-
-  .section-label {
-    font-size: 1.1rem;
-    font-weight: 800;
-    color: var(--accent-cyan);
-    margin-top: 1.2rem;
-    margin-bottom: 0.8rem;
   }
 
   .chapter-list {
@@ -538,7 +544,7 @@
   <div id="enter-screen">
     <div class="enter-box">
       <div class="enter-title">Class 9th Notes Hub</div>
-      <button class="enter-btn" onclick="openWebsite()">ENTER HUB ✨</button>
+      <button class="enter-btn" id="enterBtn">ENTER HUB ✨</button>
     </div>
   </div>
 
@@ -548,11 +554,11 @@
     <div class="top-toolbar">
       <!-- INFO 1 BUTTON -->
       <a href="info1.html" class="tool-icon-btn" style="background: linear-gradient(135deg, #06b6d4, #3b82f6); color: #fff;">
-        ℹ️ Info Hub
+        ℹ️ Info Hub (info1.html)
       </a>
       
       <!-- GRADIENT THEME SELECTOR -->
-      <select class="gradient-selector" id="gradientSelector" onchange="changeGradientTheme()">
+      <select class="gradient-selector" id="gradientSelector">
         <option value="pastel">🎨 Pastel Dream</option>
         <option value="sunset">🌅 Sunset Glow</option>
         <option value="neon">⚡ Cyber Neon</option>
@@ -560,7 +566,7 @@
       </select>
 
       <!-- DARK / LIGHT MODE TOGGLE -->
-      <button class="tool-icon-btn" onclick="toggleTheme()">
+      <button class="tool-icon-btn" id="themeToggleBtn">
         <span id="theme-icon">🌙</span> <span id="theme-text">Dark Mode</span>
       </button>
     </div>
@@ -572,7 +578,7 @@
 
     <!-- SEARCH BAR -->
     <div class="search-container">
-      <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search subject (e.g. math, science, history)..." onkeyup="smartSearchSubjects()">
+      <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search subject (e.g. math, science, history)...">
     </div>
 
     <!-- SUBJECTS GRID -->
@@ -590,18 +596,22 @@
       <div class="subject-card" data-name="computer it" onclick="openSubject('computer', 'IT / Computer')"><span class="subject-title">IT / Computer</span><span class="plus-icon">+</span></div>
     </div>
 
-    <!-- STYLISH AESTHETIC MUSIC PLAYER WIDGET -->
+    <!-- ADVANCED MODERN MUSIC PLAYER -->
     <div class="music-player-section">
       <div class="music-info">
         <div class="vinyl-disc vinyl-spinning" id="vinylDisc"></div>
         <div class="music-details">
-          <h3>Study Vibe Radio 🎧</h3>
-          <p id="musicStatus">Paused - music1.mp3</p>
+          <h3>Study Vibe Radio (music1.mp3) 🎧</h3>
+          <p id="musicStatus">Status: Paused</p>
         </div>
       </div>
       <div class="music-controls">
-        <input type="range" class="volume-slider" min="0" max="1" step="0.05" value="0.8" oninput="adjustVolume(this)">
-        <button class="music-play-btn" id="playPauseBtn" onclick="toggleMusic()">▶</button>
+        <button class="music-btn" id="playBtn">▶ Play</button>
+        <button class="music-btn" id="muteBtn">🔇 Mute</button>
+        <div class="volume-control-box">
+          <span style="font-size:0.8rem; font-weight:700;">Vol</span>
+          <input type="range" class="volume-slider" id="volumeSlider" min="0" max="1" step="0.05" value="0.8">
+        </div>
       </div>
     </div>
 
@@ -636,7 +646,7 @@
       <div class="comment-form">
         <input type="text" id="commentName" class="comment-input" placeholder="Aapka Naam (e.g. Rahul)">
         <textarea id="commentMsg" class="comment-textarea" placeholder="Apna doubt ya message likhein..."></textarea>
-        <button class="submit-comment-btn" onclick="postComment()">Post Comment 🚀</button>
+        <button class="submit-comment-btn" id="postCommentBtn">Post Comment 🚀</button>
       </div>
 
       <div class="comments-list" id="commentsList"></div>
@@ -652,7 +662,7 @@
 
   </div>
 
-  <!-- JAVASCRIPT LOGIC -->
+  <!-- JAVASCRIPT LOGIC (ROBUST EVENT LISTENERS) -->
   <script>
     let currentSubjectKey = '';
 
@@ -665,22 +675,155 @@
 
     let pdfDatabase = localStorage.getItem('class9_pdf_database') ? JSON.parse(localStorage.getItem('class9_pdf_database')) : defaultPdfDatabase;
 
-    function openWebsite() {
+    // 1. Enter Screen Handler
+    document.getElementById('enterBtn').addEventListener('click', function() {
       const screen = document.getElementById('enter-screen');
       screen.style.opacity = '0';
-      screen.style.visibility = 'hidden';
-    }
+      setTimeout(() => {
+        screen.style.display = 'none';
+      }, 500);
+    });
 
-    function toggleTheme() {
+    // 2. Dark/Light Mode Toggle
+    document.getElementById('themeToggleBtn').addEventListener('click', function() {
       const body = document.body;
       const isLight = body.getAttribute('data-theme') === 'light';
       body.setAttribute('data-theme', isLight ? 'dark' : 'light');
       document.getElementById('theme-icon').innerText = isLight ? '☀️' : '🌙';
       document.getElementById('theme-text').innerText = isLight ? 'Light Mode' : 'Dark Mode';
-    }
+    });
 
-    function changeGradientTheme() {
-      let val = document.getElementById('gradientSelector').value;
+    // 3. Gradient Theme Selector Logic
+    document.getElementById('gradientSelector').addEventListener('change', function(e) {
+      let val = e.target.value;
       let rootStyle = document.documentElement.style;
       if(val === 'sunset') {
-        rootStyle.setProperty('--body-gradient', 'linear-gradient(-45deg, #ffedd5, #fed7aa, #fbcfe8, #e
+        rootStyle.setProperty('--body-gradient', 'linear-gradient(-45deg, #ffedd5, #fed7aa, #fbcfe8, #e0e7ff)');
+      } else if(val === 'neon') {
+        rootStyle.setProperty('--body-gradient', 'linear-gradient(-45deg, #020617, #311042, #0f172a, #042f2e)');
+      } else if(val === 'emerald') {
+        rootStyle.setProperty('--body-gradient', 'linear-gradient(-45deg, #ecfdf5, #d1fae5, #e0f2fe, #f0fdf4)');
+      } else {
+        rootStyle.setProperty('--body-gradient', 'linear-gradient(-45deg, #f3e8ff, #e0e7ff, #fae8ff, #f0f9ff)');
+      }
+    });
+
+    // 4. Smart Search Subject
+    document.getElementById('searchInput').addEventListener('keyup', function(e) {
+      let query = e.target.value.toLowerCase().trim();
+      let cards = document.querySelectorAll('.subject-card');
+      cards.forEach(card => {
+        let nameKeywords = card.getAttribute('data-name');
+        card.style.display = nameKeywords.includes(query) ? 'flex' : 'none';
+      });
+    });
+
+    // 5. MP3 Player Logic (Play, Mute, Volume Control)
+    const audio = document.getElementById('bgMusic');
+    const playBtn = document.getElementById('playBtn');
+    const muteBtn = document.getElementById('muteBtn');
+    const volumeSlider = document.getElementById('volumeSlider');
+    const musicStatus = document.getElementById('musicStatus');
+    const vinylDisc = document.getElementById('vinylDisc');
+
+    playBtn.addEventListener('click', function() {
+      if (audio.paused) {
+        audio.play().then(() => {
+          playBtn.innerText = '⏸ Pause';
+          musicStatus.innerText = 'Status: Playing music1.mp3';
+          vinylDisc.style.animationPlayState = 'running';
+        }).catch(err => {
+          alert('Audio play karne mein error aaya! Check karein ki "music1.mp3" file same folder mein hai ya nahi.');
+        });
+      } else {
+        audio.pause();
+        playBtn.innerText = '▶ Play';
+        musicStatus.innerText = 'Status: Paused';
+        vinylDisc.style.animationPlayState = 'paused';
+      }
+    });
+
+    muteBtn.addEventListener('click', function() {
+      if (audio.muted) {
+        audio.muted = false;
+        muteBtn.innerText = '🔇 Mute';
+      } else {
+        audio.muted = true;
+        muteBtn.innerText = '🔊 Unmute';
+      }
+    });
+
+    volumeSlider.addEventListener('input', function(e) {
+      audio.volume = e.target.value;
+    });
+
+    audio.volume = volumeSlider.value;
+
+    // 6. Chapter Viewer Logic
+    window.openSubject = function(subjectKey, subjectTitle) {
+      currentSubjectKey = subjectKey;
+      const chapterSection = document.getElementById('chapter-section');
+      document.getElementById('selected-subject-title').innerText = subjectTitle;
+      document.getElementById('notes-view').style.display = 'none';
+      const container = document.getElementById('chapter-list-container');
+      container.innerHTML = `<div class="chapter-list">` + 
+        [1,2,3,4,5,6,7].map(i => `<button class="chap-btn" onclick="showChapter(${i}, 'Chapter ${i}', this)">Chapter ${i}</button>`).join('') + 
+        `</div>`;
+      chapterSection.style.display = 'block';
+      chapterSection.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    window.showChapter = function(chapKey, chapLabel, btnElement) {
+      document.querySelectorAll('.chap-btn').forEach(b => b.classList.remove('active'));
+      if(btnElement) btnElement.classList.add('active');
+
+      const notesView = document.getElementById('notes-view');
+      document.getElementById('chap-heading').innerText = chapLabel + ' Notes';
+      const pdfViewer = document.getElementById('pdf-viewer');
+      const downloadLink = document.getElementById('download-link');
+
+      let url = pdfDatabase[currentSubjectKey] ? pdfDatabase[currentSubjectKey][chapKey] : '';
+      if (url && url.trim() !== '') {
+        pdfViewer.src = url;
+        downloadLink.href = url.replace('/preview', '/view');
+      } else {
+        pdfViewer.src = 'about:blank';
+        alert('Is chapter ki PDF abhi available nahi hai.');
+      }
+      notesView.style.display = 'block';
+      notesView.scrollIntoView({ behavior: 'smooth' });
+    };
+
+    // 7. Comment Section Logic
+    let comments = JSON.parse(localStorage.getItem('class9_comments')) || [
+      { name: "Aarthav", msg: "Welcome to Notes Hub! Enjoy learning." }
+    ];
+
+    function renderComments() {
+      let list = document.getElementById('commentsList');
+      list.innerHTML = comments.map(c => `
+        <div class="comment-card">
+          <div class="comment-author">${c.name}</div>
+          <div class="comment-text">${c.msg}</div>
+        </div>
+      `).join('');
+    }
+
+    document.getElementById('postCommentBtn').addEventListener('click', function() {
+      let name = document.getElementById('commentName').value.trim();
+      let msg = document.getElementById('commentMsg').value.trim();
+      if(!name || !msg) {
+        alert('Kripya naam aur message dono bharein!');
+        return;
+      }
+      comments.unshift({ name, msg });
+      localStorage.setItem('class9_comments', JSON.stringify(comments));
+      document.getElementById('commentName').value = '';
+      document.getElementById('commentMsg').value = '';
+      renderComments();
+    });
+
+    renderComments();
+  </script>
+</body>
+</html>
