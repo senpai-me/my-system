@@ -1,165 +1,308 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Taj Mahal </title>
-    <style>
-        :root { 
-            --neon-blue: #00d2ff; 
-            --neon-pink: #ff0055; 
-        }
-        
-        body { 
-            background: #000; 
-            color: #fff; 
-            font-family: 'Segoe UI', sans-serif; 
-            margin: 0; 
-            padding: 20px; 
-            display: flex;
-            justify-content: center;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Info 2 - Code Vault & Nether Portal</title>
 
-        .bio-container { 
-            max-width: 800px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid rgba(255, 0, 85, 0.3);
-            padding: 30px; 
-            border-radius: 30px; 
-            backdrop-filter: blur(10px);
-            box-shadow: 0 0 30px rgba(255, 0, 85, 0.1);
-        }
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
 
-        .hero-img { 
-            width: 100%; 
-            max-height: 400px;
-            object-fit: cover;
-            border-radius: 20px; 
-            border: 2px solid var(--neon-blue); 
-            margin-bottom: 30px; 
-            box-shadow: 0 0 20px var(--neon-blue);
-        }
+<style>
+  :root {
+    --primary-glow: #7c3aed;
+    --accent-cyan: #06b6d4;
+    --accent-pink: #ec4899;
+    --card-bg: rgba(15, 23, 42, 0.85);
+    --card-border: rgba(255, 255, 255, 0.12);
+    --text-dark: #f8fafc;
+    --text-muted: #94a3b8;
+    --code-bg: #090d16;
+    --shadow-soft: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    --shadow-glow: 0 10px 30px -5px rgba(124, 58, 237, 0.4);
+    --nether-glow: 0 10px 30px -5px rgba(239, 68, 68, 0.5);
+  }
 
-        h1 { 
-            color: var(--neon-blue);
-            text-shadow: 0 0 10px var(--neon-blue);
-            font-size: 2.5rem;
-            margin-bottom: 10px;
-        }
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
 
-        .intro-text {
-            color: var(--neon-pink);
-            font-weight: bold;
-            letter-spacing: 2px;
-            margin-bottom: 30px;
-            text-transform: uppercase;
-        }
+  body {
+    min-height: 100vh;
+    color: var(--text-dark);
+    background: linear-gradient(-45deg, #0f172a, #1e1b4b, #2e1065, #020617);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    padding: 2.5rem 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
 
-        .history-box {
-            text-align: left;
-            margin-top: 20px;
-        }
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
 
-        .point-card {
-            background: rgba(0, 210, 255, 0.05);
-            border-left: 4px solid var(--neon-blue);
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 0 15px 15px 0;
-            transition: 0.3s;
-        }
+  .container {
+    max-width: 900px;
+    width: 100%;
+  }
 
-        .point-card:hover {
-            background: rgba(0, 210, 255, 0.1);
-            transform: translateX(10px);
-        }
+  /* NAVIGATION BAR TOP */
+  .nav-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 2rem;
+  }
 
-        .point-card h3 {
-            margin: 0 0 10px 0;
-            color: var(--neon-pink);
-            font-size: 1.3rem;
-            display: flex;
-            align-items: center;
-        }
+  .back-btn {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(10px);
+    color: var(--text-dark);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s;
+  }
 
-        .point-card h3 span {
-            background: var(--neon-blue);
-            color: black;
-            padding: 2px 10px;
-            border-radius: 5px;
-            margin-right: 15px;
-            font-size: 1rem;
-        }
+  .back-btn:hover {
+    transform: translateY(-2px);
+  }
 
-        .point-card p {
-            margin: 0;
-            line-height: 1.6;
-            font-size: 1.05rem;
-            color: #ddd;
-        }
+  .page-title {
+    font-size: 2.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #60a5fa, var(--accent-cyan), var(--accent-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
 
-        .back-btn { 
-            display: inline-block; 
-            margin-top: 30px; 
-            padding: 15px 40px; 
-            background: var(--neon-pink); 
-            color: #fff; 
-            text-decoration: none; 
-            font-weight: bold; 
-            border-radius: 50px; 
-            box-shadow: 0 0 15px var(--neon-pink);
-            transition: 0.3s;
-        }
+  .page-subtitle {
+    color: var(--text-muted);
+    text-align: center;
+    font-weight: 600;
+    margin-bottom: 2.5rem;
+  }
 
-        .back-btn:hover {
-            transform: scale(1.1);
-            box-shadow: 0 0 25px var(--neon-pink);
-        }
-    </style>
+  /* SECTION CARDS */
+  .vault-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(20px);
+    border-radius: 24px;
+    padding: 2rem;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 2rem;
+  }
+
+  .section-heading {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--accent-cyan);
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  /* CODE BOX STYLING */
+  .code-container {
+    position: relative;
+    background: var(--code-bg);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    max-height: 350px;
+    overflow-y: auto;
+    padding: 1.5rem;
+  }
+
+  .code-container pre {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.85rem;
+    color: #38bdf8;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    background: linear-gradient(135deg, var(--primary-glow), var(--accent-cyan));
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.85rem;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+
+  .copy-btn:hover {
+    opacity: 0.9;
+  }
+
+  /* MEDIA / DRIVE EMBED CONTAINER */
+  .media-box {
+    width: 100%;
+    height: 300px;
+    border-radius: 16px;
+    overflow: hidden;
+    background: #000;
+    border: 1px solid var(--card-border);
+  }
+
+  .media-box iframe {
+    width: 100%;
+    height: 100%;
+    border: none;
+  }
+
+  /* MUSIC PLAYER BAR */
+  .music-player-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 12px 20px;
+    border-radius: 14px;
+    border: 1px solid var(--card-border);
+  }
+
+  .music-info {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--text-dark);
+  }
+
+  /* NETHER WORLD FOOTER BUTTON */
+  .nether-container {
+    text-align: center;
+    margin: 3rem 0 2rem 0;
+  }
+
+  .nether-world-btn {
+    display: inline-block;
+    padding: 18px 50px;
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, #dc2626, #b91c1c, #7f1d1d);
+    border: 1px solid rgba(255, 100, 100, 0.3);
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: var(--nether-glow);
+    transition: all 0.4s ease;
+  }
+
+  .nether-world-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 15px 35px rgba(239, 68, 68, 0.7);
+  }
+</style>
 </head>
 <body>
 
-    <div class="bio-container">
-        <img src="2.jpg" alt="Taj Mahal" class="hero-img">
-        <h1>Taj Mahal</h1>
-        <p class="intro-text">The Crown of Palaces & Eternal Love</p>
-
-        <div class="history-box">
-            <div class="point-card">
-                <h3><span>1</span> The Origin of Love (1631)</h3>
-                <p>Mughal Emperor Shah Jahan commissioned the Taj Mahal in memory of his favorite wife, Mumtaz Mahal, who died during childbirth. Devastated by her death, Shah Jahan vowed to build a tomb so beautiful that the world would never forget their love.</p>
-            </div>
-
-            <div class="point-card">
-                <h3><span>2</span> Architect & Construction</h3>
-                <p>Led by chief architect Ustad Ahmad Lahori, the project took approximately 22 years (1632–1653) to complete. Over 20,000 artisans and workers from India, Persia, and the Ottoman Empire were brought to Agra to create this masterpiece.</p>
-            </div>
-
-            <div class="point-card">
-                <h3><span>3</span> Materials & Logistics</h3>
-                <p>The white marble was brought from Makrana, Rajasthan, nearly 400km away. More than 1,000 elephants were used to transport construction materials. 28 types of precious and semi-precious stones, like Lapis Lazuli and Jade, were inlaid into the marble.</p>
-            </div>
-            
-            
-
-            <div class="point-card">
-                <h3><span>4</span> Optical Illusions & Symmetry</h3>
-                <p>The Taj Mahal is famous for its perfect symmetry. However, to prevent the four minarets from falling on the main dome during an earthquake, they were built leaning slightly outward. Also, as you move closer to the gate, the Taj seems to get smaller—a deliberate optical illusion.</p>
-            </div>
-
-            <div class="point-card">
-                <h3><span>5</span> The Charbagh Garden</h3>
-                <p>The tomb is set in a 300-meter square "Charbagh" (Mughal garden). The garden uses raised pathways that divide each of the four quarters of the garden into 16 sunken flowerbeds, representing the paradise described in ancient texts.</p>
-            </div>
-
-            <div class="point-card">
-                <h3><span>6</span> UNESCO & Legacy</h3>
-                <p>In 1983, the Taj Mahal became a UNESCO World Heritage Site. Today, it attracts 7 to 8 million visitors annually and stands as one of the New Seven Wonders of the World, symbolizing India's rich history and architectural brilliance.</p>
-            </div>
-        </div>
-
-        <a href="index.html" class="back-btn">← GO BACK</a>
+  <div class="container">
+    
+    <!-- TOP NAV -->
+    <div class="nav-header">
+      <a href="info1.html" class="back-btn">← Back to Info 1</a>
     </div>
 
+    <h1 class="page-title">The Code Vault ⚡</h1>
+    <p class="page-subtitle">Interactive index.html Viewer & Secret Media Hub</p>
+
+    <!-- 1. CODE VIEWER SECTION -->
+    <div class="vault-card">
+      <div class="section-heading">
+        <span>📄 index.html Source Code (Ready to Copy)</span>
+        <button class="copy-btn" onclick="copyCode()">📋 Copy Code</button>
+      </div>
+      <div class="code-container">
+        <pre id="sourceCodeToCopy">&lt;!DOCTYPE html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+&lt;meta charset="UTF-8"&gt;
+&lt;meta name="viewport" content="width=device-width, initial-scale=1.0"&gt;
+&lt;title&gt;Aarthav's Class 9 Hub&lt;/title&gt;
+&lt;style&gt;
+  /* Main Custom Theme Styling */
+  body { background: #0f172a; color: #f8fafc; font-family: sans-serif; padding: 20px; }
+  .card { background: rgba(255,255,255,0.05); padding: 20px; border-radius: 12px; }
+&gt;/style&gt;
+&lt;/head&gt;
+&lt;body&gt;
+  &lt;div class="card"&gt;
+    &lt;h1&gt;Welcome to Class 9 Ultimate Hub&lt;/h1&gt;
+    &lt;p&gt;All subjects notes and resources are available here.&lt;/p&gt;
+  &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+      </div>
+    </div>
+
+    <!-- 2. DRIVE VIDEO / MEDIA SECTION -->
+    <div class="vault-card">
+      <div class="section-heading">
+        <span>🎬 Embedded Drive / Media Link Preview</span>
+      </div>
+      <div class="media-box">
+        <!-- Yahan apni Google Drive video ka preview link daal dena -->
+        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" allowfullscreen></iframe>
+      </div>
+    </div>
+
+    <!-- 3. BACKGROUND MUSIC SECTION -->
+    <div class="vault-card">
+      <div class="section-heading">
+        <span>🎵 Vibe Music Stream</span>
+      </div>
+      <div class="music-player-bar">
+        <span class="music-info">🎧 Background Lofi / Cyberpunk Track</span>
+        <!-- Audio element (Yahan apne music file ka path de sakta hai) -->
+        <audio controls style="height: 35px;">
+          <source src="music1.mp3" type="audio/mp3">
+          Your browser does not support the audio element.
+        </audio>
+      </div>
+    </div>
+
+    <!-- 4. NETHER WORLD REDIRECT BUTTON -->
+    <div class="nether-container">
+      <a href="info3.html" class="nether-world-btn">Enter The Nether World 🌋🔥</a>
+    </div>
+
+  </div>
+
+  <script>
+    // COPY CODE FUNCTIONALITY
+    function copyCode() {
+      const codeText = document.getElementById("sourceCodeToCopy").innerText;
+      navigator.clipboard.writeText(codeText).then(() => {
+        const btn = document.querySelector(".copy-btn");
+        btn.innerText = "✅ Copied!";
+        setTimeout(() => {
+          btn.innerText = "📋 Copy Code";
+        }, 2000);
+      }).catch(err => {
+        alert("Failed to copy code!");
+      });
+    }
+  </script>
 </body>
 </html>
