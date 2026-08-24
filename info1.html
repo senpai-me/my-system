@@ -1,162 +1,265 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Electric Guitar - Sound Output Fixed</title>
-    <style>
-        body { background: #050505; color: #00ffcc; font-family: 'Segoe UI', sans-serif; text-align: center; margin: 0; }
-        .visualizer-container { height: 160px; width: 100%; background: #000; border-bottom: 2px solid #00ffcc; }
-        canvas { width: 100%; height: 100%; }
-        .container { max-width: 700px; margin: auto; padding: 15px; }
-        .section { border: 1px solid #00ffcc44; margin: 10px 0; padding: 15px; border-radius: 12px; background: #111; }
-        input[type=range] { width: 100%; accent-color: #00ffcc; cursor: pointer; }
-        #chord-display { font-size: 3rem; font-weight: 900; color: #fff; text-shadow: 0 0 10px #00ffcc; }
-        .btn { padding: 15px 40px; font-size: 1.2rem; background: #ff0055; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-weight: bold; margin-top: 10px; box-shadow: 0 0 20px #ff0055; }
-        #volume-meter { width: 100%; height: 15px; background: #222; margin-top: 10px; border-radius: 5px; border: 1px solid #444; }
-        #volume-bar { width: 0%; height: 100%; background: linear-gradient(to right, #00ffcc, #ff0055); transition: 0.05s; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Info Hub - Countdown & Vibe</title>
+
+<!-- Google Fonts -->
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --primary-glow: #7c3aed;
+    --accent-cyan: #06b6d4;
+    --accent-pink: #ec4899;
+    --card-bg: rgba(255, 255, 255, 0.75);
+    --card-border: rgba(255, 255, 255, 0.9);
+    --text-dark: #0f172a;
+    --text-muted: #475569;
+    --shadow-soft: 0 20px 40px -15px rgba(0, 0, 0, 0.08);
+    --shadow-glow: 0 10px 30px -5px rgba(124, 58, 237, 0.3);
+    --body-gradient: linear-gradient(-45deg, #f3e8ff, #e0e7ff, #fae8ff, #f0f9ff);
+  }
+
+  [data-theme="dark"] {
+    --card-bg: rgba(15, 23, 42, 0.75);
+    --card-border: rgba(255, 255, 255, 0.1);
+    --text-dark: #f8fafc;
+    --text-muted: #94a3b8;
+    --shadow-soft: 0 20px 40px -15px rgba(0, 0, 0, 0.5);
+    --body-gradient: linear-gradient(-45deg, #0f172a, #1e1b4b, #311042, #020617);
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  body {
+    min-height: 100vh;
+    color: var(--text-dark);
+    background: var(--body-gradient);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2.5rem 1.5rem;
+  }
+
+  @keyframes gradientBG {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+
+  .container {
+    max-width: 800px;
+    width: 100%;
+    text-align: center;
+    margin: auto;
+  }
+
+  /* BACK TO HOME BUTTON */
+  .back-home-btn {
+    align-self: flex-start;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(10px);
+    color: var(--text-dark);
+    padding: 10px 20px;
+    border-radius: 30px;
+    font-weight: 700;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: var(--shadow-soft);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 2rem;
+    transition: transform 0.2s;
+  }
+
+  .back-home-btn:hover {
+    transform: translateY(-2px);
+  }
+
+  /* EDITABLE MAIN TITLE */
+  .main-heading {
+    font-size: 3rem;
+    font-weight: 800;
+    letter-spacing: -1px;
+    margin-bottom: 1rem;
+    background: linear-gradient(135deg, #3b82f6, var(--primary-glow), var(--accent-pink));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .sub-text {
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 3rem;
+  }
+
+  /* COUNTDOWN TIMER BOX */
+  .countdown-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    backdrop-filter: blur(20px);
+    padding: 3rem 2rem;
+    border-radius: 30px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 3rem;
+  }
+
+  .countdown-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--accent-cyan);
+    margin-bottom: 2rem;
+  }
+
+  .timer-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 15px;
+  }
+
+  .timer-box {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--card-border);
+    padding: 20px 10px;
+    border-radius: 20px;
+    box-shadow: inset 0 2px 5px rgba(255,255,255,0.2);
+  }
+
+  .timer-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: var(--text-dark);
+    margin-bottom: 5px;
+  }
+
+  .timer-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+
+  /* FOR NEXT WORLD BUTTON */
+  .next-world-btn {
+    display: inline-block;
+    padding: 18px 45px;
+    font-size: 1.2rem;
+    font-weight: 800;
+    color: #fff;
+    background: linear-gradient(135deg, var(--primary-glow), var(--accent-pink));
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    text-decoration: none;
+    box-shadow: var(--shadow-glow);
+    transition: all 0.4s ease;
+  }
+
+  .next-world-btn:hover {
+    transform: translateY(-5px) scale(1.05);
+  }
+
+  .footer-sig {
+    margin-top: 3rem;
+    color: var(--text-muted);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+</style>
 </head>
-<body>
+<body data-theme="light">
 
-    <div class="visualizer-container"><canvas id="canvas"></canvas></div>
+  <div class="container" style="text-align: left;">
+    <!-- BACK TO MAIN HUB -->
+    <a href="index.html" class="back-home-btn">← Back to Hub</a>
+  </div>
 
-    <div class="container">
-        <h2 id="msg">SYSTEM READY</h2>
-        <button class="btn" id="startBtn">ACTIVATE AUDIO OUTPUT</button>
+  <div class="container">
+    
+    <!-- EDITABLE HEADING ("PREOIDC TEST 2 ") -->
+    <h1 class="main-heading">P.T.2</h1>
+    <p class="sub-text">Upcoming Test / Exam Live Countdown Tracker</p>
 
-        <div id="volume-meter"><div id="volume-bar"></div></div>
-        <p style="font-size: 0.8rem; color: #888;">Input Level (Check if moving)</p>
-
-        <div class="section">
-            <label>ELECTRIC DRIVE (Distortion)</label>
-            <input type="range" id="distRange" min="1" max="100" value="40">
+    <!-- COUNTDOWN TIMER CONTAINER -->
+    <div class="countdown-card">
+      <div class="countdown-title" id="eventTitle">⏳ Time Left For Next Exam</div>
+      <div class="timer-grid">
+        <div class="timer-box">
+          <div class="timer-number" id="days">00</div>
+          <div class="timer-label">Days</div>
         </div>
-
-        <div class="section">
-            <label>MASTER OUTPUT VOLUME</label>
-            <input type="range" id="volRange" min="0" max="200" value="100">
+        <div class="timer-box">
+          <div class="timer-number" id="hours">00</div>
+          <div class="timer-label">Hours</div>
         </div>
-
-        <div class="section">
-            <h3>CHORD</h3>
-            <div id="chord-display">---</div>
+        <div class="timer-box">
+          <div class="timer-number" id="minutes">00</div>
+          <div class="timer-label">Mins</div>
         </div>
-
-        <div class="section">
-            <h3>TRANSCRIPT</h3>
-            <div id="transcript" style="font-style: italic; color: #888;">Speak to see text...</div>
+        <div class="timer-box">
+          <div class="timer-number" id="seconds">00</div>
+          <div class="timer-label">Secs</div>
         </div>
+      </div>
     </div>
 
-    <script>
-        let audioCtx, analyser, distortion, masterGain;
+    <!-- FOR NEXT WORLD BUTTON -->
+    <a href="info2.html" class="next-world-btn">For Next World 🚀</a>
 
-        document.getElementById('startBtn').onclick = async () => {
-            // Context Initialization
-            audioCtx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
-            
-            // Resume Context (Mandatory for Chrome/Edge)
-            if (audioCtx.state === 'suspended') {
-                await audioCtx.resume();
-            }
+    <div class="footer-sig">
+      ☠️ Developed for Aarthav's Vault ☠️
+    </div>
 
-            try {
-                const stream = await navigator.mediaDevices.getUserMedia({ 
-                    audio: { 
-                        echoCancellation: false, 
-                        noiseSuppression: false, 
-                        autoGainControl: false 
-                    } 
-                });
+  </div>
 
-                const source = audioCtx.createMediaStreamSource(stream);
-                
-                // Nodes
-                distortion = audioCtx.createWaveShaper();
-                masterGain = audioCtx.createGain();
-                analyser = audioCtx.createAnalyser();
+  <script>
+    // ==========================================
+    // TARGET DATE CONFIGURATION (Yahan apni date change kar le!)
+    // Format: "Month Day, Year HH:MM:SS" (e.g., "March 15, 2026 09:00:00")
+    // ==========================================
+    const targetDate = new Date("August 31, 2026 12:00:00").getTime();
 
-                // Connecting: Mic -> Distortion -> Master Gain -> Analyser -> Speakers
-                source.connect(distortion);
-                distortion.connect(masterGain);
-                masterGain.connect(analyser);
-                analyser.connect(audioCtx.destination); // YE HAI MAIN OUTPUT
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const difference = targetDate - now;
 
-                // Set initial sound parameters
-                setDist(40);
-                masterGain.gain.setTargetAtTime(1.0, audioCtx.currentTime, 0.01); // Set gain to 100%
+      if (difference <= 0) {
+        document.getElementById("eventTitle").innerText = "🎉 The Event / Exam Has Started!";
+        document.getElementById("days").innerText = "00";
+        document.getElementById("hours").innerText = "00";
+        document.getElementById("minutes").innerText = "00";
+        document.getElementById("seconds").innerText = "00";
+        return;
+      }
 
-                document.getElementById('msg').innerText = "LIVE: SOUND SHOULD BE ON";
-                document.getElementById('startBtn').style.background = "#00ffcc";
-                document.getElementById('startBtn').innerText = "AUDIO ACTIVE";
-                
-                runUI();
-                startTranscript();
+      const days = Math.floor(difference / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((difference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((difference % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((difference % (1000 * 60)) / 1000);
 
-            } catch (err) {
-                alert("Please check Mic Permissions in Browser Settings!");
-            }
-        };
+      document.getElementById("days").innerText = String(days).padStart(2, '0');
+      document.getElementById("hours").innerText = String(hours).padStart(2, '0');
+      document.getElementById("minutes").innerText = String(minutes).padStart(2, '0');
+      document.getElementById("seconds").innerText = String(seconds).padStart(2, '0');
+    }
 
-        function setDist(amount) {
-            const n = 44100;
-            const curve = new Float32Array(n);
-            for (let i = 0; i < n; ++i) {
-                const x = i * 2 / n - 1;
-                // Soft clipping formula for electric sound
-                curve[i] = (Math.PI + amount) * x / (Math.PI + amount * Math.abs(x));
-            }
-            distortion.curve = curve;
-        }
-
-        document.getElementById('distRange').oninput = (e) => setDist(e.target.value);
-        document.getElementById('volRange').oninput = (e) => masterGain.gain.value = e.target.value / 100;
-
-        function runUI() {
-            const canvas = document.getElementById('canvas');
-            const ctx = canvas.getContext('2d');
-            const dataArray = new Uint8Array(analyser.frequencyBinCount);
-            const chords = ['E-Maj', 'G-Maj', 'D-Pow', 'A-Min'];
-
-            function render() {
-                requestAnimationFrame(render);
-                analyser.getByteTimeDomainData(dataArray);
-                
-                // Draw Waves
-                ctx.fillStyle = '#050505';
-                ctx.fillRect(0, 0, canvas.width, canvas.height);
-                ctx.lineWidth = 3; ctx.strokeStyle = '#ff0055';
-                ctx.beginPath();
-                let x = 0;
-                for (let i = 0; i < dataArray.length; i++) {
-                    let y = (dataArray[i] / 128.0) * canvas.height / 2;
-                    if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
-                    x += canvas.width / dataArray.length;
-                }
-                ctx.stroke();
-
-                // Volume Bar Logic
-                let sum = 0;
-                for(let i=0; i<dataArray.length; i++) sum += Math.abs(dataArray[i]-128);
-                let vol = (sum / dataArray.length) * 5;
-                document.getElementById('volume-bar').style.width = Math.min(vol, 100) + "%";
-                
-                if(vol > 20 && Math.random() > 0.97) {
-                    document.getElementById('chord-display').innerText = chords[Math.floor(Math.random()*chords.length)];
-                }
-            }
-            render();
-        }
-
-        function startTranscript() {
-            const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-            if (SR) {
-                const rec = new SR();
-                rec.continuous = true;
-                rec.onresult = (e) => document.getElementById('transcript').innerText = e.results[e.results.length-1][0].transcript;
-                rec.start();
-            }
-        }
-    </script>
+    // Run every second
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+  </script>
 </body>
 </html>
