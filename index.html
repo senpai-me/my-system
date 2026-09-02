@@ -662,18 +662,112 @@
 
   </div>
 
-  <!-- JAVASCRIPT LOGIC (ROBUST EVENT LISTENERS) -->
+  <!-- JAVASCRIPT LOGIC -->
   <script>
     let currentSubjectKey = '';
 
-    const defaultPdfDatabase = {
-      'maths': { 1: 'https://drive.google.com/file/d/1WExfdNkRhQorsfz3Y7krL9YSkqSFVBiU/preview', 2: 'https://drive.google.com/file/d/1VdqPlM6yz11Op2Jb8ZNKGHj1xKKgCLkc/preview' },
-      'history': { 1: 'https://drive.google.com/file/d/1BntkYs4nvBvF_e9KRI0jp4eVjjNdFsqs/preview' },
-      'geography': { 1: 'https://drive.google.com/file/d/1WZ-vjUFFMYeBYHRNIb7_78hk7STL6FRd/preview' },
-      'civics': { 1: 'https://drive.google.com/file/d/1gP1XVcQUI3YNYC93EwGAmj8nWL4mrtqk/view?usp=drivesdk' }
+    // SARE SUBJECTS KE LIYE 7-7 CHAPTERS KO ARRAY FORMAT MEIN SET KAR DIYA HAI
+    const pdfDatabase = {
+      'maths': [
+        'https://drive.google.com/file/d/1WExfdNkRhQorsfz3Y7krL9YSkqSFVBiU/preview', // Chapter 1
+        'https://drive.google.com/file/d/1VdqPlM6yz11Op2Jb8ZNKGHj1xKKgCLkc/preview', // Chapter 2
+        'paste link here', // Chapter 3
+        'paste link here', // Chapter 4
+        'paste link here', // Chapter 5
+        'paste link here', // Chapter 6
+        'paste link here'  // Chapter 7
+      ],
+      'physics': [
+        'paste link here', // Chapter 1
+        'paste link here', // Chapter 2
+        'paste link here', // Chapter 3
+        'paste link here', // Chapter 4
+        'paste link here', // Chapter 5
+        'paste link here', // Chapter 6
+        'paste link here'  // Chapter 7
+      ],
+      'chemistry': [
+        'paste link here', // Chapter 1
+        'paste link here', // Chapter 2
+        'paste link here', // Chapter 3
+        'paste link here', // Chapter 4
+        'paste link here', // Chapter 5
+        'paste link here', // Chapter 6
+        'paste link here'  // Chapter 7
+      ],
+      'biology': [
+        'paste link here', // Chapter 1
+        'paste link here', // Chapter 2
+        'paste link here', // Chapter 3
+        'paste link here', // Chapter 4
+        'paste link here', // Chapter 5
+        'paste link here', // Chapter 6
+        'paste link here'  // Chapter 7
+      ],
+      'english': [
+        'paste link here', // Chapter 1
+        'https://drive.google.com/file/d/1dDnO4SyKWaEKQsUtLYzPKwtyMkusckp5/view?usp=drivesdk', // Chapter 2
+        'https://drive.google.com/file/d/1O-TRqXnoVWP9N42raMRrngesWZQsRVuI/view?usp=drivesdk', // Chapter 3
+        'https://drive.google.com/file/d/1d4o5oQoqv_JnpLRALJ-utWassrVaD6yF/view?usp=drivesdk', // Chapter 4
+        'paste link here', // Chapter 5
+        'paste link here', // Chapter 6
+        'paste link here'  // Chapter 7
+      ],
+      'hindi': [
+        'paste link here', // Chapter 1
+        'paste link here', // Chapter 2
+        'paste link here', // Chapter 3
+        'paste link here', // Chapter 4
+        'paste link here', // Chapter 5
+        'paste link here', // Chapter 6
+        'paste link here'  // Chapter 7
+      ],
+      'history': [
+        'https://drive.google.com/file/d/1BntkYs4nvBvF_e9KRI0jp4eVjjNdFsqs/preview', // Chapter 1
+        'paste link here', // Chapter 2
+        'paste link here', // Chapter 3
+        'paste link here', // Chapter 4
+        'paste link here', // Chapter 5
+        'paste link here', // Chapter 6
+        'paste link here'  // Chapter 7
+      ],
+      'civics': [
+        'https://drive.google.com/file/d/1gP1XVcQUI3YNYC93EwGAmj8nWL4mrtqk/view?usp=drivesdk', // Chapter 1
+        'paste link here', // Chapter 2
+        'paste link here', // Chapter 3
+        'paste link here', // Chapter 4
+        'paste link here', // Chapter 5
+        'paste link here', // Chapter 6
+        'paste link here'  // Chapter 7
+      ],
+      'geography': [
+        'https://drive.google.com/file/d/1WZ-vjUFFMYeBYHRNIb7_78hk7STL6FRd/preview', // Chapter 1
+        'paste link here', // Chapter 2
+        'paste link here', // Chapter 3
+        'paste link here', // Chapter 4
+        'paste link here', // Chapter 5
+        'paste link here', // Chapter 6
+        'paste link here'  // Chapter 7
+      ],
+      'economics': [
+        'paste link here', // Chapter 1
+        'paste link here', // Chapter 2
+        'paste link here', // Chapter 3
+        'paste link here', // Chapter 4
+        'paste link here', // Chapter 5
+        'paste link here', // Chapter 6
+        'paste link here'  // Chapter 7
+      ],
+      'computer': [
+        'paste link here', // Chapter 1
+        'paste link here', // Chapter 2
+        'paste link here', // Chapter 3
+        'paste link here', // Chapter 4
+        'paste link here', // Chapter 5
+        'paste link here', // Chapter 6
+        'paste link here'  // Chapter 7
+      ]
     };
-
-    let pdfDatabase = localStorage.getItem('class9_pdf_database') ? JSON.parse(localStorage.getItem('class9_pdf_database')) : defaultPdfDatabase;
 
     // 1. Enter Screen Handler
     document.getElementById('enterBtn').addEventListener('click', function() {
@@ -689,141 +783,136 @@
       const body = document.body;
       const isLight = body.getAttribute('data-theme') === 'light';
       body.setAttribute('data-theme', isLight ? 'dark' : 'light');
-      document.getElementById('theme-icon').innerText = isLight ? '☀️' : '🌙';
-      document.getElementById('theme-text').innerText = isLight ? 'Light Mode' : 'Dark Mode';
+      
+      document.getElementById('theme-icon').textContent = isLight ? '☀️' : '🌙';
+      document.getElementById('theme-text').textContent = isLight ? 'Light Mode' : 'Dark Mode';
     });
 
-    // 3. Gradient Theme Selector Logic
-    document.getElementById('gradientSelector').addEventListener('change', function(e) {
-      let val = e.target.value;
-      let rootStyle = document.documentElement.style;
-      if(val === 'sunset') {
-        rootStyle.setProperty('--body-gradient', 'linear-gradient(-45deg, #ffedd5, #fed7aa, #fbcfe8, #e0e7ff)');
-      } else if(val === 'neon') {
-        rootStyle.setProperty('--body-gradient', 'linear-gradient(-45deg, #020617, #311042, #0f172a, #042f2e)');
-      } else if(val === 'emerald') {
-        rootStyle.setProperty('--body-gradient', 'linear-gradient(-45deg, #ecfdf5, #d1fae5, #e0f2fe, #f0fdf4)');
-      } else {
-        rootStyle.setProperty('--body-gradient', 'linear-gradient(-45deg, #f3e8ff, #e0e7ff, #fae8ff, #f0f9ff)');
+    // 3. Open Subject Function
+    function openSubject(key, title) {
+      currentSubjectKey = key;
+      const chapterSection = document.getElementById('chapter-section');
+      const titleElem = document.getElementById('selected-subject-title');
+      const listContainer = document.getElementById('chapter-list-container');
+      const notesView = document.getElementById('notes-view');
+
+      titleElem.textContent = title + " - Select Chapter";
+      chapterSection.style.display = 'block';
+      notesView.style.display = 'none';
+
+      let html = '<div class="chapter-list">';
+      const chapters = pdfDatabase[key] || [];
+      const totalChaps = chapters.length || 7;
+
+      for (let i = 1; i <= totalChaps; i++) {
+        html += `<button class="chap-btn" onclick="loadChapter(${i}, this)">Chapter ${i}</button>`;
       }
-    });
+      html += '</div>';
 
-    // 4. Smart Search Subject
-    document.getElementById('searchInput').addEventListener('keyup', function(e) {
-      let query = e.target.value.toLowerCase().trim();
-      let cards = document.querySelectorAll('.subject-card');
+      listContainer.innerHTML = html;
+      chapterSection.scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 4. Load Chapter PDF
+    function loadChapter(num, btn) {
+      document.querySelectorAll('.chap-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const pdfViewer = document.getElementById('pdf-viewer');
+      const downloadLink = document.getElementById('download-link');
+      const notesView = document.getElementById('notes-view');
+      const chapHeading = document.getElementById('chap-heading');
+
+      chapHeading.textContent = `Chapter ${num} Notes`;
+
+      const subjectPdfs = pdfDatabase[currentSubjectKey];
+      const linkIndex = num - 1; // Array 0-index based hota hai
+      
+      if (subjectPdfs && subjectPdfs[linkIndex] && subjectPdfs[linkIndex] !== 'paste link here') {
+        const url = subjectPdfs[linkIndex];
+        pdfViewer.src = url;
+        downloadLink.href = url.replace('/preview', '/view');
+      } else {
+        pdfViewer.src = '';
+        alert(`Chapter ${num} ke notes jald hi add honge!`);
+      }
+
+      notesView.style.display = 'block';
+    }
+
+    // 5. Search Functionality
+    document.getElementById('searchInput').addEventListener('input', function(e) {
+      const term = e.target.value.toLowerCase();
+      const cards = document.querySelectorAll('.subject-card');
+
       cards.forEach(card => {
-        let nameKeywords = card.getAttribute('data-name');
-        card.style.display = nameKeywords.includes(query) ? 'flex' : 'none';
+        const name = card.getAttribute('data-name').toLowerCase();
+        const title = card.querySelector('.subject-title').textContent.toLowerCase();
+        if (name.includes(term) || title.includes(term)) {
+          card.style.display = 'flex';
+        } else {
+          card.style.display = 'none';
+        }
       });
     });
 
-    // 5. MP3 Player Logic (Play, Mute, Volume Control)
-    const audio = document.getElementById('bgMusic');
+    // 6. Music Controls
+    const bgMusic = document.getElementById('bgMusic');
     const playBtn = document.getElementById('playBtn');
     const muteBtn = document.getElementById('muteBtn');
     const volumeSlider = document.getElementById('volumeSlider');
-    const musicStatus = document.getElementById('musicStatus');
     const vinylDisc = document.getElementById('vinylDisc');
+    const musicStatus = document.getElementById('musicStatus');
 
     playBtn.addEventListener('click', function() {
-      if (audio.paused) {
-        audio.play().then(() => {
-          playBtn.innerText = '⏸ Pause';
-          musicStatus.innerText = 'Status: Playing music1.mp3';
-          vinylDisc.style.animationPlayState = 'running';
-        }).catch(err => {
-          alert('Audio play karne mein error aaya! Check karein ki "music1.mp3" file same folder mein hai ya nahi.');
-        });
+      if (bgMusic.paused) {
+        bgMusic.play();
+        playBtn.textContent = '⏸ Pause';
+        musicStatus.textContent = 'Status: Playing 🎶';
+        vinylDisc.style.animationPlayState = 'running';
       } else {
-        audio.pause();
-        playBtn.innerText = '▶ Play';
-        musicStatus.innerText = 'Status: Paused';
+        bgMusic.pause();
+        playBtn.textContent = '▶ Play';
+        musicStatus.textContent = 'Status: Paused';
         vinylDisc.style.animationPlayState = 'paused';
       }
     });
 
     muteBtn.addEventListener('click', function() {
-      if (audio.muted) {
-        audio.muted = false;
-        muteBtn.innerText = '🔇 Mute';
-      } else {
-        audio.muted = true;
-        muteBtn.innerText = '🔊 Unmute';
-      }
+      bgMusic.muted = !bgMusic.muted;
+      muteBtn.textContent = bgMusic.muted ? '🔊 Unmute' : '🔇 Mute';
     });
 
     volumeSlider.addEventListener('input', function(e) {
-      audio.volume = e.target.value;
+      bgMusic.volume = e.target.value;
     });
 
-    audio.volume = volumeSlider.value;
+    // 7. Comments System
+    const postCommentBtn = document.getElementById('postCommentBtn');
+    const commentName = document.getElementById('commentName');
+    const commentMsg = document.getElementById('commentMsg');
+    const commentsList = document.getElementById('commentsList');
 
-    // 6. Chapter Viewer Logic
-    window.openSubject = function(subjectKey, subjectTitle) {
-      currentSubjectKey = subjectKey;
-      const chapterSection = document.getElementById('chapter-section');
-      document.getElementById('selected-subject-title').innerText = subjectTitle;
-      document.getElementById('notes-view').style.display = 'none';
-      const container = document.getElementById('chapter-list-container');
-      container.innerHTML = `<div class="chapter-list">` + 
-        [1,2,3,4,5,6,7].map(i => `<button class="chap-btn" onclick="showChapter(${i}, 'Chapter ${i}', this)">Chapter ${i}</button>`).join('') + 
-        `</div>`;
-      chapterSection.style.display = 'block';
-      chapterSection.scrollIntoView({ behavior: 'smooth' });
-    };
+    postCommentBtn.addEventListener('click', function() {
+      const name = commentName.value.trim();
+      const msg = commentMsg.value.trim();
 
-    window.showChapter = function(chapKey, chapLabel, btnElement) {
-      document.querySelectorAll('.chap-btn').forEach(b => b.classList.remove('active'));
-      if(btnElement) btnElement.classList.add('active');
-
-      const notesView = document.getElementById('notes-view');
-      document.getElementById('chap-heading').innerText = chapLabel + ' Notes';
-      const pdfViewer = document.getElementById('pdf-viewer');
-      const downloadLink = document.getElementById('download-link');
-
-      let url = pdfDatabase[currentSubjectKey] ? pdfDatabase[currentSubjectKey][chapKey] : '';
-      if (url && url.trim() !== '') {
-        pdfViewer.src = url;
-        downloadLink.href = url.replace('/preview', '/view');
-      } else {
-        pdfViewer.src = 'about:blank';
-        alert('Is chapter ki PDF abhi available nahi hai.');
-      }
-      notesView.style.display = 'block';
-      notesView.scrollIntoView({ behavior: 'smooth' });
-    };
-
-    // 7. Comment Section Logic
-    let comments = JSON.parse(localStorage.getItem('class9_comments')) || [
-      { name: "Aarthav", msg: "Welcome to Notes Hub! Enjoy learning." }
-    ];
-
-    function renderComments() {
-      let list = document.getElementById('commentsList');
-      list.innerHTML = comments.map(c => `
-        <div class="comment-card">
-          <div class="comment-author">${c.name}</div>
-          <div class="comment-text">${c.msg}</div>
-        </div>
-      `).join('');
-    }
-
-    document.getElementById('postCommentBtn').addEventListener('click', function() {
-      let name = document.getElementById('commentName').value.trim();
-      let msg = document.getElementById('commentMsg').value.trim();
-      if(!name || !msg) {
+      if (!name || !msg) {
         alert('Kripya naam aur message dono bharein!');
         return;
       }
-      comments.unshift({ name, msg });
-      localStorage.setItem('class9_comments', JSON.stringify(comments));
-      document.getElementById('commentName').value = '';
-      document.getElementById('commentMsg').value = '';
-      renderComments();
-    });
 
-    renderComments();
+      const card = document.createElement('div');
+      card.className = 'comment-card';
+      card.innerHTML = `
+        <div class="comment-author">${name}</div>
+        <div class="comment-text">${msg}</div>
+      `;
+
+      commentsList.prepend(card);
+      commentName.value = '';
+      commentMsg.value = '';
+    });
   </script>
 </body>
 </html>
